@@ -13,47 +13,43 @@ public class MemberUI {
 		int ch;
 		
 		while(true) {
-			System.out.println("\n✦ 재료 메뉴 ✦");
+			System.out.println("\n✦ 회원 메뉴 ✦");
 			try {
 				do {
-					System.out.print("1.재고확인 2.재고추가주문 3.입고내역 4.새로운재료추가 5.납품업체확인 6.종료 => ");
+					System.out.print("\n1.회원정보확인 2.회원리스트 3.회원정보수정 4.회원탈퇴 5.종료 => ");
 					ch = Integer.parseInt(br.readLine());
-				} while(ch<1||ch>6);
+				} while(ch<1||ch>5);
 				
-				if(ch==6) {
+				if(ch==5) {
+					System.out.println();
 					DBConn.close();
 					return;
 				}
 				
 				switch (ch) {
-				case 1 : check_ingredient(); break;
-				case 2 : order_ingredietn(); break;
-				case 3 : receiving_history(); break;
-				case 4 : add_ingredient(); break;
-				case 5 : check_vendor(); break;
+				case 1 : readMember(); break;
+				case 2 : listMember(); break;
+				case 3 : updateMember(); break;
+				case 4 : deleteMember(); break;
 				}
 			} catch (Exception e) {
 			}
 		}
 	}
 	
-	public void check_ingredient() {
-		System.out.println("\n✦ 재료 확인 ︎✦");
+	public void readMember() {
+		System.out.println("\n✦ 회원 정보 확인 ︎✦");
 	}
 	
-	public void order_ingredietn() {
-		System.out.println("\n✦ 재고 추가 주문 ︎✦");
+	public void listMember() {
+		System.out.println("\n✦ 회원 리스트 ︎✦");
 	}
 	
-	public void receiving_history() {
-		System.out.println("\n✦ 입고 내역 ︎✦");
+	public void updateMember() {
+		System.out.println("\n✦ 회원 정보 수정 ︎✦");
 	}
 
-	public void add_ingredient() {
-		System.out.println("\n✦ 새로운 재료 추가 ︎✦");
-	}
-	
-	public void check_vendor() {
-		System.out.println("\n✦ 납품업체 확인 ︎✦");
+	public void deleteMember() {
+		System.out.println("\n✦ 회원 탈퇴 ︎✦");
 	}
 }

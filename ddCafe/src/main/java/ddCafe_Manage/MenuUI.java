@@ -14,14 +14,15 @@ public class MenuUI {
 		
 		int ch;
 		while(true) {
-			System.out.println("\n✦ 재료 메뉴 ✦");
+			System.out.println("\n✦ 메뉴 관리 ✦");
 			try {
 				do {
-					System.out.print("1.메뉴추가 2.품절처리 3.메뉴삭제 4.종료 => ");
+					System.out.print("\n1.메뉴추가 2.품절처리 3.메뉴삭제 4.종료 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while(ch<1||ch>4);
 				
 				if(ch==4) {
+					System.out.println();
 					DBConn.close();
 					return;
 				}
