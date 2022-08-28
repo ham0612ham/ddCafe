@@ -50,10 +50,12 @@ public class MemberUI {
 			
 			List<MemberDTO> list = dao.readMemberByName(name);
 			
-			if(list.size() == 0) {
+			if(list.size() != 0) {
 				System.out.println("등록된 회원 정보가 없습니다.\n");
 				return;
 			}
+		
+
 			
 			System.out.println();
 			System.out.println("회원번호\t회원이름\t전화번호\t\t회원등록일");
@@ -184,14 +186,17 @@ public class MemberUI {
 		String p = "010-\\d{4}-\\d{4}";
 		
 		try {
+			
+		
 			System.out.println("삭제할 이름을 입력해 주세요.");
 			name = br.readLine();
-			
+				
 			System.out.println("삭제할 전화번호를 입력해 주세요.");
 			tel = br.readLine();
 			
 			if(!tel.matches(p)) {
 				System.out.println("입력 형식이 일치하지 않습니다[010-0000-0000]");
+				
 			}
 			
 			int result = dao.deleteMember(name, tel);
@@ -199,9 +204,9 @@ public class MemberUI {
 			if(result == 0) {
 				System.out.println("등록된 회원 정보가 없습니다.\n");
 				return;
-			} else {
-				System.out.println("회원 탈퇴가 완료되었습니다.");
 			}
+			System.out.println("회원 탈퇴가 완료되었습니다.");
+			
 			
 		} catch (Exception e) {
 			System.out.println("회원 탈퇴에 실패했습니다.");
