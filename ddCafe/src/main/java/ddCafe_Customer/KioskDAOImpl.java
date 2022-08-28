@@ -108,8 +108,12 @@ public class KioskDAOImpl implements KioskDAO{
 		return list;
 	}
 	
+	/**
+	 * 포인트 개수 쌓이게 만들어야 함.
+	 * 포인트 사용하면, 포인트를 차감, 차감하는 것 * 3000만큼 금액이 빠지도록 설정해야 함
+	 */
 	@Override
-	public int orderMenues(List<MenuDTO> list, String takeout_togo,int member_code) throws SQLException{
+	public int orderMenues(List<MenuDTO> list, String takeout_togo,int member_code, String payment_method, int usable_stamp) throws SQLException{
 		PreparedStatement pstmt = null;
 		String sql;
 		int result=0;
@@ -138,6 +142,27 @@ public class KioskDAOImpl implements KioskDAO{
 				pstmt.setInt(2, dto.getMenu_detail_code());
 				
 				result += pstmt.executeUpdate();
+			}
+			pstmt.close();
+			pstmt = null;
+			
+			sql = "INSERT INTO payment "
+					+ "(payment_num, order_num, payment_method, payment_price, stampUse_price) "
+					+ "VALUES (payment_seq.NEXTVAL, order_num.CURRVAL, ?, ?, ?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, payment_method);
+			pstmt.setInt(2, totalPrice(list)-usable_stamp);
+			pstmt.setInt(3, usable_stamp); // 이 부분 나중에 수정될 가능성 있음
+			result += pstmt.executeUpdate();
+			
+			pstmt.close();
+			pstmt = null;
+			
+			if(usable_stamp!=0) {
+				sql = "INSERT INTO stamp (stamp_num, order_num, stampUse_date, stamp_count) "
+						+ " VALUES (stamp_seq, order_num.CURRVAL, SYSDATE, ?) ";
+				
+				
 			}
 			
 			conn.commit();
@@ -242,7 +267,7 @@ public class KioskDAOImpl implements KioskDAO{
 		
 		try {
 			sql = "SELECT member_code, member_name, member_date FROM member WHERE member_tel = ?";
-			pstmt = conn.prepareCall(sql);
+			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, tel);
 			
@@ -254,6 +279,8 @@ public class KioskDAOImpl implements KioskDAO{
 				dto.setMember_date(rs.getDate("member_date").toString());
 				dto.setMemeber_tel(tel);
 			}
+			pstmt.close();
+			pstmt = null;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -278,22 +305,83 @@ public class KioskDAOImpl implements KioskDAO{
 	}
 
 	@Override
-	public boolean useStamp(boolean a) throws SQLException {
-		return false;
+	public int usableStamp(int member_code) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+		ResultSet rs = null;
+		int usable_stamp = 0, used_stamp = 0;
+		
+		try {
+			sql = "SELECT SUM(order_qty) sum "
+					+ "FROM order_detail d "
+					+ "JOIN menu_order mo ON d.order_num = mo.order_num "
+					+ "JOIN member m ON m.member_code = mo.member_code "
+					+ "WHERE m.member_code = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, member_code);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				usable_stamp += rs.getInt("sum");
+			};
+			pstmt.close();
+			pstmt = null;
+			rs.close();
+			rs = null;
+			
+			sql = "SELECT SUM(stampUse_price) used_price "
+					+ "FROM payment p "
+					+ "JOIN menu_order mo ON p.order_num = mo.order_num "
+					+ "JOIN member m ON mo.member_code = m.member_code "
+					+ "WHERE m.member_code = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, member_code);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				used_stamp += rs.getInt("used_price");
+			}
+			
+			usable_stamp = usable_stamp - (used_stamp/3000);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return usable_stamp;
 	}
 
 	@Override
-	public List<String> showPaymentMethod(int choice) {
+	public List<String> showPaymentMethod() {
 		PreparedStatement pstmt = null;
 		String sql;
 		ResultSet rs = null;
 		List<String> list = new ArrayList<>();
 		
 		try {
-			sql = "SELECT ";
+			sql = "SELECT payment_method FROM payment_method";
 			
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				list.add(rs.getString("payment_method"));
+			}
 		} catch (Exception e) {
 		}
 		return list;

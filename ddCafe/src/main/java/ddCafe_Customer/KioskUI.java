@@ -17,7 +17,7 @@ public class KioskUI {
 	private KioskDAO dao = new KioskDAOImpl();
 	MenuDTO dto = new MenuDTO();
 	int choice, category_num, menu_num, qty, size_num, price;
-	String takeoutTogo, category, menu, size;
+	String takeoutTogo, category, menu, size, payment_method;
 	
 	public void menu() {
 		System.out.println("\n𓂃𓂃𓂃𓂃𓊝𓄹𓄺𓂃𓂃𓆞𓂃𓂃𓂃");
@@ -257,6 +257,8 @@ public class KioskUI {
 				beforePay();
 			}
 			System.out.println("환영합니다 " + dto.getMember_name() + " 님!");
+			System.out.println("\n적립된 스탬프 : " + dao.usableStamp(dto.getMember_code())+ " 개");
+			System.out.println("스탬프 20개를 사용하면 3000원이 할인됩니다.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -290,6 +292,26 @@ public class KioskUI {
 	
 	public void pay() {
 		System.out.println("\n🜚 결제 🜚");
+		List<String> list = new ArrayList<>();
+		int ch;
 		
+		try {
+			list = dao.showPaymentMethod();
+			int n = 1;
+			for(String s : list) {
+				System.out.print(n+"."+s+" ");
+			}
+			System.out.println();
+			try {
+				do {
+					System.out.print("결제 수단 => ");
+					ch = Integer.parseInt(br.readLine());
+				} while(ch<1||ch>list.size());
+				payment_method = list.get(ch-1);
+				
+			} catch (Exception e) {
+			}
+		} catch (Exception e) {
+		}
 	}
 }

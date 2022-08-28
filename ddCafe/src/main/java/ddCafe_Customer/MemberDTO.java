@@ -8,6 +8,7 @@ public class MemberDTO {
 	private int stamp_num;
 	private int order_num;
 	private int stampUse_date;
+	private int usable_stamp;
 	
 	public int getMember_code() {
 		return member_code;
@@ -50,6 +51,18 @@ public class MemberDTO {
 	}
 	public void setStampUse_date(int stampUse_date) {
 		this.stampUse_date = stampUse_date;
+	}
+	public String getMember_tel() {
+		return member_tel;
+	}
+	public void setMember_tel(String member_tel) {
+		this.member_tel = member_tel;
+	}
+	public int getStamp_count() {
+		return usable_stamp;
+	}
+	public void setStamp_count(int stamp_count) {
+		this.usable_stamp = stamp_count;
 	}
 	
 }
