@@ -16,7 +16,8 @@ public class KioskUI {
 	NumberFormat nf = NumberFormat.getCurrencyInstance();
 	private KioskDAO dao = new KioskDAOImpl();
 	MenuDTO dto = new MenuDTO();
-	int choice, category_num, menu_num, qty, size_num, price;
+	MemberDTO mdto = new MemberDTO();
+	int choice, category_num, menu_num, qty, size_num, price, stampUse_price;
 	String takeoutTogo, category, menu, size, payment_method;
 	
 	public void menu() {
@@ -172,6 +173,7 @@ public class KioskUI {
 			System.out.println(n +". "+ dto.getMenu()+" / "+dto.getSize()+" / "+dto.getQty()+"개");
 			n++;
 		}
+		System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 		try {
 			do {
 				System.out.print("삭제할 메뉴 [카테고리 : 0] => ");
@@ -194,6 +196,7 @@ public class KioskUI {
 			System.out.println(n +". "+ dto.getMenu()+" / "+dto.getSize()+" / "+dto.getQty()+"개");
 			n++;
 		}
+		System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 		try {
 			do {
 				System.out.print("수정할 메뉴 [카테고리 : 0] => ");
@@ -207,7 +210,7 @@ public class KioskUI {
 			dto.setQty(qty);
 			shoppingList.add(dto);
 			shoppingList.remove(ch-1);
-			System.out.println("수정이 완료되었습니다");
+			System.out.println("\n수정이 완료되었습니다");
 			for(MenuDTO dto2 : shoppingList) {
 				System.out.println(dto2.getMenu()+" / "+dto2.getSize()+" / "+dto2.getQty()+"개");
 			}
@@ -240,25 +243,39 @@ public class KioskUI {
 	public void point() {
 		String tel;
 		String p = "010-\\d{4}-\\d{4}";
-		MemberDTO dto = new MemberDTO();
+		MemberDTO dto2 = new MemberDTO();
+		int ch2;
 		try {
 			do {
 				System.out.print("전화번호[종료 : 0] => ");
 				tel = br.readLine();
-				if(tel.equals("0")) beforePay();
-				if(!tel.matches(p)) {
+				if(tel.equals("0")) {
+					beforePay(); break;
+				} else if(!tel.matches(p)) {
 					System.out.println("입력 형식이 일치하지 않습니다[010-0000-0000]");
 				} 
 			} while(!tel.matches(p));
 			
-			dto = dao.findMember(tel);
-			if(dto.getMember_name()==null) {
+			dto2 = dao.findMember(tel);
+			if(dto2.getMember_name()!=null) {
+				System.out.println("\n환영합니다 " + dto2.getMember_name() + " 님!");
+				System.out.println("적립된 스탬프 : " + dao.usableStamp(dto2.getMember_code())+ " 개");
+				System.out.println("스탬프 20개를 사용하면 3000원이 할인됩니다.");
+				if(dao.usableStamp(dto2.getMember_code())>20) {
+					do {
+						System.out.println("포인트를 사용하시겠습니까?[1.예/2.아니오] => ");
+						ch2 = Integer.parseInt(br.readLine());
+					} while(ch2<1||ch2>2);
+					stampUse_price = ch2==1 ? 3000 : 0 ;
+				} else {
+					pay();
+				}
+				mdto = dto2;
+				pay();
+			} else {
 				System.out.println("존재하지 않는 회원입니다.");
 				beforePay();
 			}
-			System.out.println("환영합니다 " + dto.getMember_name() + " 님!");
-			System.out.println("\n적립된 스탬프 : " + dao.usableStamp(dto.getMember_code())+ " 개");
-			System.out.println("스탬프 20개를 사용하면 3000원이 할인됩니다.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -300,17 +317,35 @@ public class KioskUI {
 			int n = 1;
 			for(String s : list) {
 				System.out.print(n+"."+s+" ");
+				n++;
 			}
 			System.out.println();
-			try {
 				do {
 					System.out.print("결제 수단 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while(ch<1||ch>list.size());
 				payment_method = list.get(ch-1);
-				
-			} catch (Exception e) {
-			}
+				for(MenuDTO dto : shoppingList) {
+					System.out.println(dto.getMenu()+" / "+dto.getSize()+" / "+dto.getQty()+"개");
+				}
+				System.out.println("총가격 : " + dao.totalPrice(shoppingList));
+				if(stampUse_price>0) {
+					System.out.println("할인금액 : " + stampUse_price);
+					System.out.println("결제 금액 : " + (dao.totalPrice(shoppingList)-stampUse_price));
+				}
+				do {
+					System.out.print("결제하시겠습니까?[1.예/2.아니오] => ");
+					ch = Integer.parseInt(br.readLine());
+				} while(ch<1||ch>2);
+				if(ch==2) {
+					return;
+				} 
+				int result = dao.orderMenues(shoppingList, takeoutTogo, mdto.getMember_code(), payment_method, stampUse_price);
+				if(result == 0) {
+					System.out.println("결제가 실패되었습니다."); 
+					return;
+				}
+				System.out.println("결제가 완료되었습니다.");
 		} catch (Exception e) {
 		}
 	}

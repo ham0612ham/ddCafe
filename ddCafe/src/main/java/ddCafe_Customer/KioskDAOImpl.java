@@ -113,21 +113,22 @@ public class KioskDAOImpl implements KioskDAO{
 	 * 포인트 사용하면, 포인트를 차감, 차감하는 것 * 3000만큼 금액이 빠지도록 설정해야 함
 	 */
 	@Override
-	public int orderMenues(List<MenuDTO> list, String takeout_togo,int member_code, String payment_method, int usable_stamp) throws SQLException{
+	public int orderMenues(List<MenuDTO> list, String takeout_togo,int member_code, String payment_method, int stampUse_price) throws SQLException{
 		PreparedStatement pstmt = null;
 		String sql;
-		int result=0;
+		int result=0, final_price;
 		
 		try {
 			conn.setAutoCommit(false);
 			sql = "INSERT INTO menu_order "
 					+ "(order_num, order_date, total_price, takeout_togo, member_code) "
-					+ "VALUES (order_seq.NEXTVAL, SYSDATE, ?, ?, ?)";
+					+ "VALUES (order_seq.NEXTVAL, SYSDATE, ?, ?, DECODE(?, 0, null, ?))";
 				
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, totalPrice(list));
 			pstmt.setString(2, takeout_togo);
 			pstmt.setInt(3, member_code);
+			pstmt.setInt(4, member_code);
 				
 			result = pstmt.executeUpdate();
 			
@@ -135,34 +136,37 @@ public class KioskDAOImpl implements KioskDAO{
 			pstmt = null;
 			
 			for(MenuDTO dto : list) {
-				sql = "INSERT INTO order_detail(order_detail_num, order_qty, order_num, menu_detail_code) "
-						+ "(order_detail_seq, ?, order_seq.CURRVAL, ?) ";
+				sql = "INSERT INTO order_detail (order_detail_num, order_qty, order_num, menu_detail_code) "
+						+ "VALUES (order_detail_seq.NEXTVAL, ?, order_seq.CURRVAL, ?) ";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, dto.getQty());
 				pstmt.setInt(2, dto.getMenu_detail_code());
 				
 				result += pstmt.executeUpdate();
+				pstmt.close();
+				pstmt = null;
 			}
-			pstmt.close();
-			pstmt = null;
+			if(stampUse_price > 0) {
+				final_price = totalPrice(list)-stampUse_price < 0 ? 0 : totalPrice(list)-3000;
+			} else final_price = totalPrice(list);
 			
 			sql = "INSERT INTO payment "
 					+ "(payment_num, order_num, payment_method, payment_price, stampUse_price) "
-					+ "VALUES (payment_seq.NEXTVAL, order_num.CURRVAL, ?, ?, ?)";
+					+ "VALUES (payment_seq.NEXTVAL, order_seq.CURRVAL, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, payment_method);
-			pstmt.setInt(2, totalPrice(list)-usable_stamp);
-			pstmt.setInt(3, usable_stamp); // 이 부분 나중에 수정될 가능성 있음
+			pstmt.setInt(2, final_price);
+			pstmt.setInt(3, stampUse_price);
 			result += pstmt.executeUpdate();
 			
 			pstmt.close();
 			pstmt = null;
 			
-			if(usable_stamp!=0) {
-				sql = "INSERT INTO stamp (stamp_num, order_num, stampUse_date, stamp_count) "
-						+ " VALUES (stamp_seq, order_num.CURRVAL, SYSDATE, ?) ";
-				
-				
+			if(stampUse_price!=0) {
+				sql = "INSERT INTO stamp (stamp_num, order_num, stampUse_date) "
+						+ " VALUES (stamp_seq.NEXTVAL, order_seq.CURRVAL, SYSDATE) ";
+				pstmt = conn.prepareStatement(sql);
+				result += pstmt.executeUpdate();
 			}
 			
 			conn.commit();
@@ -342,7 +346,7 @@ public class KioskDAOImpl implements KioskDAO{
 				used_stamp += rs.getInt("used_price");
 			}
 			
-			usable_stamp = usable_stamp - (used_stamp/3000);
+			usable_stamp = usable_stamp - (used_stamp/3000)*20;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
