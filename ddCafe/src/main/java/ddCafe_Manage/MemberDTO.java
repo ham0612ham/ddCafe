@@ -1,11 +1,17 @@
 package ddCafe_Manage;
 
 public class MemberDTO {
+	private int memberNum;
 	private String name;
 	private String tel;
 	private String date;
 	
-	
+	public int getMemberNum() {
+		return memberNum;
+	}
+	public void setMemberNum(int memberNum) {
+		this.memberNum = memberNum;
+	}
 	public String getName() {
 		return name;
 	}
@@ -24,4 +30,5 @@ public class MemberDTO {
 	public void setDate(String date) {
 		this.date = date;
 	}
+	
 }
