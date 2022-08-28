@@ -1,5 +1,7 @@
 package ddCafe_Customer;
 
+import db.util.DBConn;
+
 public class App {
 	public static void main(String[] args) {
 		System.out.println("                                                 /===-_---~~~~~~~~~------____");
@@ -30,8 +32,10 @@ public class App {
 		System.out.println("   ;'( ')/ ,)(                              ~~~~~~~~~~");
 		System.out.println("  ' ') '( (/");
 		System.out.println("    '   '  `");
-		System.out.println("ミ★ Double Dragon Coffee ミ★");
+		System.out.println("ミ★ ᗪOᑌᗷᒪE ᗪᖇᗩGOᑎ ᑕOᖴᖴEE ミ★");
 		
 		new KioskUI().menu();
+		
+		DBConn.close();
 	}
 }

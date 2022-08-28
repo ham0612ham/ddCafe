@@ -5,9 +5,13 @@ public class MenuDTO {
 	private String menu;
 	private int qty;
 	private int price;
-	private boolean best; // 불린으로 해도 되고, int로 해도 될 것 같음
+	private boolean best;
 	private String panmai_date;
-	
+	private String takeout_togo;
+	private int yesOrNo;
+	private String size;
+	private int menu_detail_code;
+	private String status;
 	
 	public String getCategory() {
 		return category;
@@ -45,6 +49,40 @@ public class MenuDTO {
 	public void setPanmai_date(String panmai_date) {
 		this.panmai_date = panmai_date;
 	}
-	
-	
+	public String getMenu() {
+		return menu;
+	}
+	public void setMenu(String menu) {
+		this.menu = menu;
+	}
+	public String getTakeout_togo() {
+		return takeout_togo;
+	}
+	public void setTakeout_togo(String takeout_togo) {
+		this.takeout_togo = takeout_togo;
+	}
+	public int getYesOrNo() {
+		return yesOrNo;
+	}
+	public void setYesOrNo(int yesOrNo) {
+		this.yesOrNo = yesOrNo;
+	}
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
+	}
+	public int getMenu_detail_code() {
+		return menu_detail_code;
+	}
+	public void setMenu_detail_code(int menu_detail_code) {
+		this.menu_detail_code = menu_detail_code;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }
