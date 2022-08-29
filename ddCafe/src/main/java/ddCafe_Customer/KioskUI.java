@@ -25,7 +25,6 @@ public class KioskUI {
 		System.out.println("\n🜚 어서오세요 🜚");
 		
 		choiceTogo();
-		choiceCategory();
 	}
 	
 	public void choiceTogo() {
@@ -41,7 +40,7 @@ public class KioskUI {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		choiceCategory();
 	}
 	
 	public void choiceCategory() {
@@ -61,12 +60,13 @@ public class KioskUI {
 			if(ch==0) {
 				// menu();
 				return;
+			} else {
+				System.out.println();
+				category_num = ch;
+				category = list.get(ch-1);
+				
+				showMenues();
 			}
-			System.out.println();
-			category_num = ch;
-			category = list.get(ch-1);
-			
-			showMenues();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -114,7 +114,6 @@ public class KioskUI {
 				choiceCategory();
 			}
 			dto2 = list.get(ch - 1);
-			// System.out.println("\n🜚 "+dto2.getMenu()+" / "+dto2.getSize()+" / "+qty+"개 🜚");
 			menu_num = dto2.getMenu_detail_code();
 			menu = list2.get(ch - 1);
 			size = dto2.getSize();
