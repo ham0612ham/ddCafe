@@ -256,6 +256,11 @@ public class MemberUI {
 			}
 			
 			do {
+				System.out.print(dto.getName()+ "님(이/가) 맞습니까?[1.예/2.아니오] => ");
+				choice = Integer.parseInt(br.readLine());
+			} while (choice < 0 || choice > 2);
+			
+			do {
 				System.out.println();
 				System.out.print("정말로 삭제하시겠습니까?[1.예/2.아니오] =>  ");
 				choice = Integer.parseInt(br.readLine());
