@@ -8,5 +8,5 @@ public interface MemberDAO {
 	public MemberDTO readMemberByTel(String tel) throws SQLException; // 전화번호로 회원 정보 읽기
 	public int updateMember(String name, String tel, int memberNum) throws SQLException; // 회원 정보 수정
 	public List<MemberDTO> listMember(); // 회원 목록 확인
-	public int deleteMember(String name, String tel) throws SQLException; // 회원 탈퇴
+	public int deleteMember(String tel) throws SQLException; // 회원 탈퇴
 }
