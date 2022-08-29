@@ -187,11 +187,11 @@ public class MemberUI {
 			System.out.println();
 			
 			if(choice==1) {
-				System.out.print("수정할 이름를 입력해 주세요.");
+				System.out.print("수정할 이름 => ");
 				new_name = br.readLine();
 				
 				do {
-					System.out.print("수정할 전화번호를 입력해 주세요.");
+					System.out.print("수정할 전화번호 => ");
 					new_tel = br.readLine();
 
 					if (!new_tel.matches(p)) {
