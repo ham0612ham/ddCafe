@@ -13,6 +13,9 @@ public class MenuDTO {
 	private boolean best; // 불린으로 해도 되고, int로 해도 될 것 같음
 	private String panmai_date;
 	private int menuNum;
+	private String soldMenu;
+	
+	
 	public String getMenuName() {
 		return menuName;
 	}
@@ -84,6 +87,12 @@ public class MenuDTO {
 	}
 	public void setMenuNum(int menuNum) {
 		this.menuNum = menuNum;
+	}
+	public String getSoldMenu() {
+		return soldMenu;
+	}
+	public void setSoldMenu(String soldMenu) {
+		this.soldMenu = soldMenu;
 	}
 
 	

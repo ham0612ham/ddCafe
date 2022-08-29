@@ -2,6 +2,7 @@ package ddCafe_Manage;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -208,7 +209,7 @@ public class MenuDAOmpl implements MenuDAO{
 			
 			rs = (ResultSet)cstmt.getObject(1);
 	
-			if(rs.next()) {
+			while(rs.next()) {
 				MenuDTO dto = new MenuDTO();
 				
 				dto.setMenuNum(Integer.parseInt(rs.getString("menu_code")));
@@ -254,21 +255,94 @@ public class MenuDAOmpl implements MenuDAO{
 	}
 
 	@Override
-	public int updateSoldOut() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+	public int updateSoldOut(int code) throws SQLException {
+		int result = 0;
+		CallableStatement cstmt = null;
+		String sql;
+		
+		try {
+			sql = "{CALL updateSoldout(?)}";
+			cstmt = conn.prepareCall(sql);
+			cstmt.setInt(1, code);
+			
+
+			cstmt.executeUpdate();
+			result = 1;
+
+
+			
+		} catch (SQLIntegrityConstraintViolationException e) {
+			if(e.getErrorCode() == 1400) {
+				System.out.println("필수 입력 사항을 입력하지 않았습니다.");
+			}else {
+				System.out.println(e.toString());
+			}
+			
+			throw e;
+			
+		} catch (SQLException e) {
+			if(e.getErrorCode() == 20100) {
+				System.out.println("등록된 상품이 아닙니다.");
+			}
+			e.printStackTrace();
+			throw e;
+			
+		} finally {
+			if(cstmt != null) {
+				try {
+					cstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return result;
 	}
 
-	@Override
-	public int seachSoldOut() throws SQLException {
-		// 
-		return 0;
-	}
 
 	@Override
-	public int seachSoldOut(String menu) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+	public List<MenuDTO> listSoldout() {
+		List<MenuDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "select unique menu_name"
+					+ " from menu m1"
+					+ " Join menu_detail m2 on m2.menu_code = m1.menu_code"
+					+ " Join menu_ingredient m3 on m3.menu_detail_code = m2.menu_detail_code"
+					+ " Join ingredient i1 on i1.ingredient_code = m3.ingredient_code"
+					+ " WHERE ingredient_qty = 0";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				MenuDTO dto = new MenuDTO();
+				dto.setSoldMenu(rs.getString("menu_name"));
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			
+		}
+		
+		return list;
 	}
 
 
