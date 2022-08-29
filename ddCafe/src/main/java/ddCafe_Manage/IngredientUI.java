@@ -9,7 +9,9 @@ import db.util.DBConn;
 public class IngredientUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private IngredientDAO dao = new IngredientImpl();
+	int ingredient_code, qty, menu;
 
+	
 	public void menu() {
 		System.out.println("\n✦ 재료 메뉴 ✦");
 
@@ -20,7 +22,7 @@ public class IngredientUI {
 				do {
 					System.out.print("\n1.재고확인 2.재료추가주문 3.입고내역 4.새로운재료추가 5.재고삭제 6.납품업체확인 7.종료 => ");
 					ch = Integer.parseInt(br.readLine());
-				} while (ch < 1 || ch > 7);
+				} while (ch < 1||ch > 7);
 
 				if (ch == 7) {
 					System.out.println();
@@ -41,15 +43,15 @@ public class IngredientUI {
 		}
 	}
 
-	public void check_ingredient() { // 완료, 재료를 5개씩 보이게 출력싶다
+	public void check_ingredient() {
 		System.out.println("\n✦ 재료 확인 ︎✦");
 
 		List<IngredientDTO> list = dao.leftingredient();
 
 		for (IngredientDTO dto : list) {
 
-			System.out.print(dto.getIngredient_code()+ ". ");
-			System.out.print(dto.getIngredient_name() + "\t");
+			System.out.print(dto.getIngredient_code()+ ".");
+			System.out.print(dto.getIngredient_name() + " / ");
 			System.out.println(dto.getIngredient_qty());
 
 		}
@@ -59,38 +61,56 @@ public class IngredientUI {
 	}
 
 	public void add_ingredietn() {
+		
 		System.out.println("\n✦ 재료 추가 주문 ︎✦");
-
+		List<IngredientDTO> list = dao.show_orderlist();
+		
+		for (IngredientDTO dto : list) {
+			
+			System.out.print(dto.getIngredient_code()+ ".");
+			System.out.print(dto.getIngredient_name()+ " / ");
+			System.out.print(dto.getReceiving_price()+ " / ");
+			System.out.print(dto.getVendor_code()+ ".");
+			System.out.print(dto.getVendor_name()+ " / ");
+			System.out.print(dto.getManager_name()+ " / ");
+			System.out.println(dto.getManager_tel());
+			
+			
+		}
+		
 		try {
+			int ch;
+			do {
+				System.out.print("\n 추가할 재료 코드를 골라주세요. [뒤로가기 : 0]  ");
+				ch = Integer.parseInt(br.readLine());
+				if(ch==0) {menu();}
+			} while(ch<1||ch>list.size());
+			System.out.print("\n 개수를 입력해주세요. [뒤로가기 : 0]  ");
+			qty = Integer.parseInt(br.readLine());
+			if(qty==0) {menu();}
+			
 			IngredientDTO dto = new IngredientDTO();
-			
-			System.out.print("주문 날짜 ( 오늘 날짜? ) ? ");
-			dto.setReceiving_date(br.readLine());
-			
-			System.out.print("주문 수량 ? ");
-			dto.setReceiving_qty(Integer.parseInt(br.readLine()));
 
-			System.out.print("주문 단가 ? ");
-			dto.setReceiving_price(Integer.parseInt(br.readLine()));
-
-			System.out.print("재료 이름 ? ");
-			dto.setIngredient_name(br.readLine());
-
-			System.out.print("납품업체코드 ? ");
-			dto.setVendor_code(Integer.parseInt(br.readLine()));
+			dto = list.get(ch);  //납품업체코드, 재료코드랑 주문단가는 정해짐,,,
 			
-			System.out.print("재료코드");
-			dto.setIngredient_code(Integer.parseInt(br.readLine()));
+			dto.setIngredient_code(ch); 
+			dto.setReceiving_qty(qty);
 			
-			//dao.add_ingredient(dto);
+			// 이 제품을 ㅇ여기에서 이마만큼 주문하시겠습니까? y예 주문하도록 하면 102번 실행 주문ㅇ안하면 빠져나오게,,,
+		
+			int result = dao.add_ingredient(dto);
 			
-			System.out.println("재료가 주문 돼었습니다.");
+			System.out.println("\n 재료가 주문 되었습니다.");
+			
+			menu();
 			
 		} catch (NumberFormatException e) {
 			System.out.println("숫자만 입력 가능합니다.");
 		} catch (Exception e) {
 			System.out.println("데이터 등록이 실패했습니다.");
 		}
+		
+		
 		System.out.println();
 		
 	}
@@ -99,34 +119,48 @@ public class IngredientUI {
 		System.out.println("\n✦ 입고 내역 ︎✦");
 		
 		System.out.println();
-		System.out.println("입고날짜\t\t재료이름\t재료수량");
+		System.out.println("\n입고날짜\t / 재료이름 / 재료수량");
 		System.out.println("-----------------------------------------------");
 
 		List<IngredientDTO> list = dao.receiving_history();
 		
 		for(IngredientDTO dto : list) {
-			System.out.print(dto.getReceiving_date()+"\t");
-			System.out.print(dto.getIngredient_name()+"\t");
-			System.out.println(dto.getReceiving_qty()+"\t");
+			System.out.print(dto.getReceiving_date()+" / ");
+			System.out.print(dto.getIngredient_name()+" / ");
+			System.out.println(dto.getReceiving_qty());
 		}
 		System.out.println();
 	}
 
 	public void new_ingredient() { // 완료
 		System.out.println("\n✦ 새로운 재료 추가 ︎✦");
-		String ingredient;
-		int result;
+		String newingredient;
+		int ans;
+		
 		try {
-			System.out.println("재료 이름 => ");
-			ingredient = br.readLine();
-			result = dao.new_ingredient(ingredient, 0);
+			
+			do {
+			System.out.println("추가 할 재료 이름 => ");
+			newingredient = br.readLine();
+			System.out.print(newingredient + "(을)를 추가하시겠습니까? [1.예/2.아니오] => ");
+			ans = dao.new_ingredient(newingredient, 0);
+			ans = Integer.parseInt(br.readLine());
+			} while(ans<1||ans>2);
+			if(ans==2) {
+				return;
+			} 
+			
+		
+			//
+			int result = dao.new_ingredient(newingredient, qty);
 			if(result==0) {
-				System.out.println("재료 등록이 실패됐습니다.");
-				System.out.println("메뉴로 돌아갑니다.");
+				System.out.println("재료 등록이 실패. 메뉴로 돌아갑니다.");
 				menu();
 			}
-			System.out.println(ingredient+"가 등록 되었습니다.");
+			System.out.println(newingredient+"가 등록 되었습니다.");
 			menu();
+
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -134,6 +168,15 @@ public class IngredientUI {
 
 	public void delete_ingredient() {
 		System.out.println("\n✦ 재고 삭제 ︎✦");
+		List<IngredientDTO> list = dao.trash_ingredientcode();
+		
+		for (IngredientDTO dto : list) {
+			
+			System.out.print(dto.getIngredient_code()+ ".");
+			System.out.println(dto.getIngredient_name());
+			
+			
+		}
 		
 		try {
 			IngredientDTO dto = new IngredientDTO();
@@ -141,10 +184,7 @@ public class IngredientUI {
 			System.out.print("재료코드 ? ");
 			dto.setIngredient_code(Integer.parseInt(br.readLine()));
 			
-			System.out.print("폐기날짜 ? ");
-			dto.setTrash_date(br.readLine());
-			
-			System.out.print("재료수량 ? ");
+			System.out.print("버릴수량 ? ");
 			dto.setTrash_qty(Integer.parseInt(br.readLine()));
 			
 			System.out.print("비고 " );
@@ -169,8 +209,8 @@ public class IngredientUI {
 		List<IngredientDTO> list = dao.vendorList();
 
 		for (IngredientDTO dto : list) {
-			System.out.print(dto.getVendor_name() + "\t");
-			System.out.print(dto.getManager_name() + "\t");
+			System.out.print(dto.getVendor_name() + " / ");
+			System.out.print(dto.getManager_name() + " / ");
 			System.out.println(dto.getManager_tel());
 		}
 
