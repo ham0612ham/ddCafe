@@ -279,8 +279,8 @@ public class SalesDAOImpl<ScoreDTO> implements SalesDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
-		
-		try  {
+
+		try {
 			sql = "INSERT INTO listWeek(saledate, name,menu,qty) VALUES (?, ?, ?, ?)";
 
 			pstmt = conn.prepareStatement(sql);
@@ -316,17 +316,15 @@ public class SalesDAOImpl<ScoreDTO> implements SalesDAO {
 		return list;
 
 	}
-			
-		
-		
+
 	@Override
 	public List<SalesDTO> listMonth() {
 		List<SalesDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
-		
-		try  {
+
+		try {
 			sql = "INSERT INTO listMonth(saledate,name,menu,qty) VALUES (?, ?, ?, ?)";
 
 			pstmt = conn.prepareStatement(sql);
@@ -362,15 +360,15 @@ public class SalesDAOImpl<ScoreDTO> implements SalesDAO {
 		return list;
 
 	}
-	
+
 	@Override
 	public List<SalesDTO> listYear() {
 		List<SalesDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
-		
-		try  {
+
+		try {
 			sql = "INSERT INTO listYear(saledate,name,menu,qty) VALUES (?, ?, ?, ?)";
 
 			pstmt = conn.prepareStatement(sql);
