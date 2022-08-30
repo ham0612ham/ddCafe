@@ -24,7 +24,7 @@ public class MemberDAOImpl implements MemberDAO{
 		
 		try {
 			sql = " SELECT member_code, member_name, member_tel, member_date FROM member "
-					+" WHERE INSTR(member_name, ?) >= 1 ";
+					+" WHERE INSTR(member_name, ?) > 0";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -210,18 +210,17 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 
 	@Override
-	public int deleteMember(String name, String tel) throws SQLException {
+	public int deleteMember(String tel) throws SQLException {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql;
 		
 		try {
-			sql = " DELETE FROM member WHERE member_name = ? AND member_tel = ? ";
+			sql = " DELETE FROM member WHERE member_tel = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, name);
-			pstmt.setString(2, tel);
+			pstmt.setString(1, tel);
 			
 			result = pstmt.executeUpdate();
 			
