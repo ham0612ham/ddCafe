@@ -16,4 +16,5 @@ public interface KioskDAO {
 	public int usableStamp(int member_code) throws SQLException;// 사용 가능한 스탬프 개수 확인
 	public List<String> showPaymentMethod(); // 결제 방법 선택
 	public int totalPrice(List<MenuDTO> list); // 총가격 구함
+	public List<Integer> selectPlastic(List<MenuDTO> list);// 플라스틱 합계, 판별
 }

@@ -4,11 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import db.util.DBConn;
 
 public class KioskUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -351,7 +347,12 @@ public class KioskUI {
 			System.out.println("\n🜚 결제 🜚");
 			List<String> list = new ArrayList<>();
 			int ch;
-
+			
+			/*
+			List<Integer> list2 = dao.selectPlastic(shoppingList);
+			System.out.println("사용될 플라스틱 컵R : " + list2.get(0));
+			System.out.println("사용될 플라스틱 컵L : " + list2.get(1));
+			*/
 			try {
 				list = dao.showPaymentMethod();
 				int n = 1;

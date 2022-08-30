@@ -129,6 +129,7 @@ public class KioskDAOImpl implements KioskDAO{
 		PreparedStatement pstmt = null;
 		String sql;
 		int result=0, final_price;
+		List<Integer> plasticList = selectPlastic(list);
 		
 		try {
 			conn.setAutoCommit(false);
@@ -147,6 +148,7 @@ public class KioskDAOImpl implements KioskDAO{
 			pstmt.close();
 			pstmt = null;
 			
+			// 메뉴에 있는 모든 리스들의 재료를 주문 개수만큼 뺌
 			for(MenuDTO dto : list) {
 				sql = "INSERT INTO order_detail (order_detail_num, order_qty, order_num, menu_detail_code) "
 						+ "VALUES (order_detail_seq.NEXTVAL, ?, order_seq.CURRVAL, ?) ";
@@ -158,6 +160,29 @@ public class KioskDAOImpl implements KioskDAO{
 				pstmt.close();
 				pstmt = null;
 			}
+			
+			// 플라스틱 컵을 사이즈별로 개수만큼 뺌
+			if(takeout_togo.equals("포장")) {
+				
+				// R사이즈 플라스틱 컵 수량 줄어들게
+				sql = " UPDATE ingredient SET ingredient_qty = ? WHERE ingredient_code = 29 ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, plasticList.get(0));
+				result = pstmt.executeUpdate();
+				
+				pstmt.close();
+				pstmt = null;
+				
+				// L사이즈 플라스틱 컵 수량 줄어들게
+				sql = " UPDATE ingredient SET ingredient_qty = ? WHERE ingredient_code = 30 ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, plasticList.get(1));
+				result = pstmt.executeUpdate();
+				
+				pstmt.close();
+				pstmt = null;
+			}
+			
 			if(stampUse_price > 0) {
 				final_price = totalPrice(list)-stampUse_price < 0 ? 0 : totalPrice(list)-3000;
 			} else final_price = totalPrice(list);
@@ -169,7 +194,7 @@ public class KioskDAOImpl implements KioskDAO{
 			pstmt.setString(1, payment_method);
 			pstmt.setInt(2, final_price);
 			pstmt.setInt(3, stampUse_price);
-			result += pstmt.executeUpdate();
+			result = pstmt.executeUpdate();
 			
 			pstmt.close();
 			pstmt = null;
@@ -178,7 +203,7 @@ public class KioskDAOImpl implements KioskDAO{
 				sql = "INSERT INTO stamp (stamp_num, order_num, stampUse_date) "
 						+ " VALUES (stamp_seq.NEXTVAL, order_seq.CURRVAL, SYSDATE) ";
 				pstmt = conn.prepareStatement(sql);
-				result += pstmt.executeUpdate();
+				result = pstmt.executeUpdate();
 			}
 			
 			conn.commit();
@@ -412,6 +437,49 @@ public class KioskDAOImpl implements KioskDAO{
 		
 		return price;
 	}
-	
 
+	@Override
+	public List<Integer> selectPlastic(List<MenuDTO> list) {
+		List<Integer> plasticList = new ArrayList<>();
+		int countR=0, countL=0;
+		String sql;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			sql = "SELECT ingredient_qty FROM ingredient WHERE ingredient_code = 29";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				countR = rs.getInt("ingredient_qty");
+			}
+			pstmt.close();
+			pstmt = null;
+			
+			sql = "SELECT ingredient_qty FROM ingredient WHERE ingredient_code = 30";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				countL = rs.getInt("ingredient_qty");
+			}
+			pstmt.close();
+			pstmt = null;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		for(MenuDTO dto :list) {
+			if(dto.getSize().equals("R")) {
+				countR -= dto.getQty();
+			} else if(dto.getSize().equals("L")){
+				countL -= dto.getQty();
+			}
+		}
+		plasticList.add(countR);
+		plasticList.add(countL);
+		
+		return plasticList;
+	}
+	
 }
