@@ -3,10 +3,10 @@ package ddCafe_Manage;
 public class SalesDTO {
 	private String saledate;
 	private int seq;
-	private String itemcode;
-	private int qty;
+	private String qty;
 	private int amount;
 	private String regdate;
+	public char[] getmenu;
 		
 	public String getSaledate() {
 		return saledate;
@@ -20,17 +20,12 @@ public class SalesDTO {
 	public void setSeq(int seq) {
 		this.seq = seq;
 	}
-	public String getItemcode() {
-		return itemcode;
-	}
-	public void setItemcode(String itemcode) {
-		this.itemcode = itemcode;
-	}
-	public int getQty() {
+	
+	public String getQty() {
 		return qty;
 	}
-	public void setQty(int qty) {
-		this.qty = qty;
+	public void setQty(String string) {
+		this.qty = string;
 	}
 	public int getAmount() {
 		return amount;
@@ -46,10 +41,24 @@ public class SalesDTO {
 	}
 	@Override
 	public String toString() {
-		return "SalesDTO [saledate=" + saledate + ", seq=" + seq + ", itemcode=" + itemcode + ", qty=" + qty
+		return "SalesDTO [saledate=" + saledate + ", seq=" + seq + ", , qty=" + qty
 				+ ", amount=" + amount + ", regdate=" + regdate + "]";
 	}
-	
-	
-	
-}
+	public String setBest() {
+		return null;
+	}
+	public String getmenu() {
+		return null;
+	}
+	public void setName(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void setmenu(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	}
+
+		
