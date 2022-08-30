@@ -100,14 +100,15 @@ public class KioskUI {
 			try {
 				int ch2;
 				do {
-					MenuDTO dto = new MenuDTO();
 					System.out.print("\n메뉴를 골라주세요 [이전 : 0] => ");
 					ch2 = Integer.parseInt(br.readLine());
-					if(dto.getStatus().equals("품절")) {
-						
-					}
-					
 					if(ch2==0) { return 567; }
+					MenuDTO dto = new MenuDTO();
+					dto = list.get(ch2-1);
+					if(dto.getStatus().equals("품절")) {
+						System.out.println("해당 메뉴는 품절입니다.");
+						ch2 = 0;
+					}
 				} while(ch2<1||ch2>list.size());
 				System.out.print("개수를 입력해주세요 [이전 : 0] => ");
 				qty = Integer.parseInt(br.readLine()); // 재료의개수가 충분한지 여부를 확인할 수 있게 해야함

@@ -1,5 +1,6 @@
 package ddCafe_Customer;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,12 +54,23 @@ public class KioskDAOImpl implements KioskDAO{
 
 	@Override
 	public List<MenuDTO> showMenues(int category_num) {
+		CallableStatement cstmt = null;
 		PreparedStatement pstmt = null;
 		String sql;
 		ResultSet rs = null;
 		List<MenuDTO> list = new ArrayList<>();
 		
 		try {
+			sql = "{ CALL menuSoldout }";
+			cstmt = conn.prepareCall(sql);
+			cstmt.executeUpdate();
+			cstmt.close();
+			
+			sql = "{ CALL menuEnable }";
+			cstmt = conn.prepareCall(sql);
+			cstmt.executeUpdate();
+			cstmt.close();
+			
 			sql = "SELECT menu_detail_code, m.menu_name, md.menu_size, md.menu_price, status "
 					+ "FROM menu m "
 					+ "FULL OUTER JOIN menu_detail md ON md.menu_code = m.menu_code "
@@ -400,6 +412,6 @@ public class KioskDAOImpl implements KioskDAO{
 		
 		return price;
 	}
-
+	
 
 }
