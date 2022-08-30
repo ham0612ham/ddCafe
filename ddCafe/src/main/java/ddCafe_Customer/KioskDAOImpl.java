@@ -10,6 +10,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.rowset.CachedRowSet;
 
 import db.util.DBConn;
 
@@ -480,6 +481,90 @@ public class KioskDAOImpl implements KioskDAO{
 		plasticList.add(countL);
 		
 		return plasticList;
+	}
+
+	@Override
+	public boolean calculateMenu(List<MenuDTO> list) {
+		String sql;
+		List<CalculateDTO> clist = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		boolean b = true;
+		int ingredient_code, ingredient_qty;
+		int calculate, plus = 0;
+		
+		try {
+			for(MenuDTO dto : list) {
+				sql = "SELECT i.ingredient_code "
+						+ "FROM menu_detail md "
+						+ "JOIN menu_ingredient mi ON mi.menu_detail_code = md.menu_detail_code "
+						+ "JOIN ingredient i ON mi.ingredient_code = i.ingredient_code "
+						+ "WHERE md.menu_detail_code = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, dto.getMenu_detail_code());
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					CalculateDTO cdto = new CalculateDTO();
+					cdto.setIngredient_code(rs.getInt("ingredient_code"));
+					cdto.setIngredient_qty(dto.getQty());
+					
+					clist.add(cdto);
+				}
+				pstmt.close();
+				pstmt = null;
+			}
+			for(int i = 0; i<clist.size(); i++) {
+				for(int j = 0; j<i; j++) {
+					CalculateDTO cdto2 = clist.get(i);
+					CalculateDTO cdto3 = clist.get(j);
+					if(cdto2.getIngredient_code()==cdto3.getIngredient_code()) {
+						cdto3.setIngredient_qty(cdto3.getIngredient_qty() + cdto2.getIngredient_qty());
+					}
+				}
+			}
+			
+			for(CalculateDTO cdto : clist) {
+				sql = "SELECT i.ingredient_code, ingredient_qty "
+						+ "FROM menu_detail md "
+						+ "JOIN menu_ingredient mi ON mi.menu_detail_code = md.menu_detail_code "
+						+ "JOIN ingredient i ON mi.ingredient_code = i.ingredient_code "
+						+ "WHERE md.menu_detail_code = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, cdto.getIngredient_code());
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					ingredient_code = rs.getInt("ingredient_code");
+					ingredient_qty = rs.getInt("ingredient_qty");
+					
+					for(CalculateDTO cdto2 : clist) {
+						if(cdto2.getIngredient_code()==ingredient_code) {
+							calculate = cdto2.getIngredient_qty()>ingredient_qty? 1 : 0 ;
+							plus += calculate;
+						}
+					}
+				}
+			}
+			b = plus > 0 ? true : false ;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return b;
 	}
 	
 }

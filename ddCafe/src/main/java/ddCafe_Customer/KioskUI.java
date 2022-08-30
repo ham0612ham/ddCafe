@@ -249,6 +249,11 @@ public class KioskUI {
 		while(true) {
 			int ch, result;
 			try {
+				boolean b = dao.calculateMenu(shoppingList);
+				if(b == true) {
+					System.out.println("죄송합니다. 주문이 재료수량보다 많아 주문이 불가합니다.");
+					return 567;
+				}
 				do {
 					System.out.print("포인트 적립 하시겠습니까? [1.예/2.아니오/3.신규가입/4.이전] => ");
 					ch = Integer.parseInt(br.readLine());
