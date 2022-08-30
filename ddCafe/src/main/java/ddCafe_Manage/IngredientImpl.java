@@ -125,12 +125,23 @@ public class IngredientImpl implements IngredientDAO{
 		String sql;
 		
 		try {
+			/*
 			sql = "SELECT DISTINCT i.ingredient_code, ri.ingredient_name, ri.receiving_price, "
 					+ " v.vendor_code, vendor_name, manager_name, manager_tel "
 					+ "FROM vendor v "
 					+ "JOIN receiving_ingredient ri ON ri.vendor_code = v.vendor_code "
 					+ "JOIN ingredient i ON ri.ingredient_code = i.ingredient_code "
 					+ "ORDER BY ingredient_code ";
+			*/
+			
+			sql = "SELECT DISTINCT(i.ingredient_code), i.ingredient_name, ri.receiving_price, " 
+					+ " v.vendor_code, vendor_name, manager_name, manager_tel " 
+					+ " FROM vendor v  "
+					+ " JOIN receiving_ingredient ri ON ri.vendor_code = v.vendor_code "
+					+ " JOIN ingredient i ON ri.ingredient_code = i.ingredient_code "
+					+ " ORDER BY ingredient_code ";
+			
+
 			pstmt = conn.prepareStatement(sql);
 			
 			rs = pstmt.executeQuery();

@@ -91,9 +91,9 @@ public class IngredientUI {
 			
 			IngredientDTO dto = new IngredientDTO();
 
-			dto = list.get(ch);  //납품업체코드, 재료코드랑 주문단가는 정해짐,,,
+			dto = list.get(ch - 1);  //납품업체코드, 재료코드랑 주문단가는 정해짐,,,
 			
-			dto.setIngredient_code(ch); 
+			dto.setIngredient_code(ch -1); 
 			dto.setReceiving_qty(qty);
 			
 			// 이 제품을 ㅇ여기에서 이마만큼 주문하시겠습니까? y예 주문하도록 하면 102번 실행 주문ㅇ안하면 빠져나오게,,,
@@ -143,21 +143,21 @@ public class IngredientUI {
 			System.out.println("추가 할 재료 이름 => ");
 			newingredient = br.readLine();
 			System.out.print(newingredient + "(을)를 추가하시겠습니까? [1.예/2.아니오] => ");
-			ans = dao.new_ingredient(newingredient, 0);
 			ans = Integer.parseInt(br.readLine());
 			} while(ans<1||ans>2);
+
 			if(ans==2) {
+				System.out.println("재료 등록 취소. 메뉴로 돌아갑니다.");
 				return;
 			} 
 			
+			int result = dao.new_ingredient(newingredient, 0);
 		
-			//
-			int result = dao.new_ingredient(newingredient, qty);
 			if(result==0) {
-				System.out.println("재료 등록이 실패. 메뉴로 돌아갑니다.");
+				System.out.println("재료 등록 실패. 메뉴로 돌아갑니다.");
 				menu();
 			}
-			System.out.println(newingredient+"가 등록 되었습니다.");
+			System.out.println(newingredient+"(이)가 등록 되었습니다.");
 			menu();
 
 			
