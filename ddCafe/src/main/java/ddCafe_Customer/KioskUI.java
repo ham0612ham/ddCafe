@@ -87,10 +87,10 @@ public class KioskUI {
 					System.out.print(n+"."+dto.getMenu()+" / ");
 					System.out.print(dto.getSize()+" / ");
 					System.out.print(nf.format(dto.getPrice())+" / ");
-					if(dto.getStatus()==null) {
-						System.out.println("주문가능");
-					} else {
+					if(dto.getStatus().equals("품절")) {
 						System.out.println("품절");
+					} else {
+						System.out.println("주문가능");
 					}
 					n++;
 				}
