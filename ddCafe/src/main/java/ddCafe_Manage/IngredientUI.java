@@ -20,7 +20,7 @@ public class IngredientUI {
 		while (true) {
 			try {
 				do {
-					System.out.print("\n1.재고확인 2.재료추가주문 3.입고내역 4.새로운재료추가 5.재고삭제 6.납품업체확인 7.종료 => ");
+					System.out.print("\n1.재고확인 2.재료추가주문 3.입고내역 4.새로운재료추가 5.재고삭제 6.납품업체확인 7.뒤로가기 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while (ch < 1||ch > 7);
 
@@ -79,15 +79,17 @@ public class IngredientUI {
 		}
 		
 		try {
-			int ch;
+			int ch, chc ;
+			//////////////////////////////////String name = null;
+			
 			do {
-				System.out.print("\n 추가할 재료 코드를 골라주세요. [뒤로가기 : 0]  ");
+				System.out.print("\n 추가할 재료를 입력하세요. [뒤로가기 : 0]  ");
 				ch = Integer.parseInt(br.readLine());
-				if(ch==0) {menu();}
+				if(ch==0) {return;}
 			} while(ch<1||ch>list.size());
-			System.out.print("\n 개수를 입력해주세요. [뒤로가기 : 0]  ");
+			System.out.print("\n 개수를 입력하세요. [뒤로가기 : 0]  ");
 			qty = Integer.parseInt(br.readLine());
-			if(qty==0) {menu();}
+			if(qty==0) {return;}
 			
 			IngredientDTO dto = new IngredientDTO();
 
@@ -95,14 +97,25 @@ public class IngredientUI {
 			
 			dto.setIngredient_code(ch -1); 
 			dto.setReceiving_qty(qty);
+			///////////////////////////////dto.setIngredient_name(name);
 			
-			// 이 제품을 ㅇ여기에서 이마만큼 주문하시겠습니까? y예 주문하도록 하면 102번 실행 주문ㅇ안하면 빠져나오게,,,
-		
-			int result = dao.add_ingredient(dto);
+			do {
+				System.out.println();
+				System.out.print("\n "+ dto.getIngredient_name() + "(을)를 " + qty + "개 추가주문하시겠습니까? [1.예/2.아니오] =>  ");
+				chc = Integer.parseInt(br.readLine());
+			} while (chc<0 || chc>2);
+				
+			if(chc==1) {
+				int result = dao.add_ingredient(dto);
+				System.out.println("\n 재료가 추가 되었습니다.");
+				
+			} else if(chc==2) {
+				System.out.println("\n 추가 주문을 취소했습니다.");
+				return;
+			}
 			
-			System.out.println("\n 재료가 주문 되었습니다.");
 			
-			menu();
+			return; 
 			
 		} catch (NumberFormatException e) {
 			System.out.println("숫자만 입력 가능합니다.");
@@ -115,7 +128,7 @@ public class IngredientUI {
 		
 	}
 
-	public void receiving_history() { // 완료
+	public void receiving_history() { 
 		System.out.println("\n✦ 입고 내역 ︎✦");
 		
 		System.out.println();
@@ -132,7 +145,7 @@ public class IngredientUI {
 		System.out.println();
 	}
 
-	public void new_ingredient() { // 완료
+	public void new_ingredient() { 
 		System.out.println("\n✦ 새로운 재료 추가 ︎✦");
 		String newingredient;
 		int ans;
@@ -155,10 +168,10 @@ public class IngredientUI {
 		
 			if(result==0) {
 				System.out.println("재료 등록 실패. 메뉴로 돌아갑니다.");
-				menu();
+				return; //menu()
 			}
 			System.out.println(newingredient+"(이)가 등록 되었습니다.");
-			menu();
+			return; //menu();
 
 			
 		} catch (Exception e) {
@@ -168,6 +181,8 @@ public class IngredientUI {
 
 	public void delete_ingredient() {
 		System.out.println("\n✦ 재고 삭제 ︎✦");
+		int ch, chq;
+		
 		List<IngredientDTO> list = dao.trash_ingredientcode();
 		
 		for (IngredientDTO dto : list) {
@@ -181,18 +196,33 @@ public class IngredientUI {
 		try {
 			IngredientDTO dto = new IngredientDTO();
 			
-			System.out.print("재료코드 ? ");
+			System.out.print("\n 폐기할 자료를 입력하세요. => ");
 			dto.setIngredient_code(Integer.parseInt(br.readLine()));
 			
-			System.out.print("버릴수량 ? ");
-			dto.setTrash_qty(Integer.parseInt(br.readLine()));
+			System.out.print("\n " + dto.getIngredient_name() + "의 개수를 입력하세요. => ");
+			chq = Integer.parseInt(br.readLine());
+			if(chq > dto.getIngredient_qty()) {
+				System.out.print("\n 재료 개수보다 많습니다. 다시 입력하세요. => ");
+				} 
+			dto.setTrash_qty(Integer.parseInt(br.readLine())); 
 			
-			System.out.print("비고 " );
+			System.out.print("\n 폐기 이유 (선택) => " );
 			dto.setRemark(br.readLine());
 			
-			dao.sub_ingredient(dto);
-			
-			System.out.println("재료가 폐기돼었습니다.");
+			do {
+				System.out.println();
+				System.out.print("\n "+ dto.getIngredient_name() + "(을)를 " + dto.getTrash_qty()+ "개 폐기하겠습니까? [1.예/2.아니오] =>  ");
+				ch = Integer.parseInt(br.readLine());
+			} while (ch<0 || ch>2);
+				
+			if(ch==1) {
+				dao.sub_ingredient(dto);
+				System.out.println("\n 재료가 폐기되었습니다.");
+				
+			} else if(ch==2) {
+				System.out.println("\n 폐기를 취소했습니다.");
+				return;
+			}
 			
 		} catch (NumberFormatException e) {
 			System.out.println("숫자만 입력 가능합니다.");
@@ -203,12 +233,13 @@ public class IngredientUI {
 		
 	}
 		
-	public void check_vendor() { // 완료
+	public void check_vendor() { 
 		System.out.println("\n✦ 납품업체 확인 ︎✦");
 
 		List<IngredientDTO> list = dao.vendorList();
 
 		for (IngredientDTO dto : list) {
+			System.out.print(dto.getVendor_code() + ".");
 			System.out.print(dto.getVendor_name() + " / ");
 			System.out.print(dto.getManager_name() + " / ");
 			System.out.println(dto.getManager_tel());

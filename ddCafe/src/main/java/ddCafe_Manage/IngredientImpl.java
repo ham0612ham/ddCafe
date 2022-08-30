@@ -9,6 +9,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import db.util.DBConn;
+import ddCafe_Customer.MenuDTO;
 
 public class IngredientImpl implements IngredientDAO{
 	private Connection conn = DBConn.getConnection();
@@ -25,7 +26,7 @@ public class IngredientImpl implements IngredientDAO{
 		
 		try {
 			sql  = "SELECT ingredient_code, ingredient_name, ingredient_qty "
-					+ " FROM ingredient";
+					+ " FROM ingredient ORDER BY ingredient_code";
 			
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery(sql);
@@ -61,17 +62,25 @@ public class IngredientImpl implements IngredientDAO{
 		return list;
 	}
 	
-	
-	@Override // 2.재료추가주문    
-	//public ingredientDTO add_ingredient(int ch, qty) throws SQLEception{	
+	/*
+	@Override // 2. 재료추가주문
 	public int add_ingredient(IngredientDTO dto) throws SQLException { // 2.재료추가주문
-	PreparedStatement pstmt = null;
+		PreparedStatement pstmt = null;
 		String sql;
 		//ResultSet rs = null;
 		int result = 0;
 		//List<IngredientDTO> list = new ArrayList<>();
-		
+		*/
 	
+	
+	
+	@Override // 2.재료추가주문    
+	public int add_ingredient(IngredientDTO dto) throws SQLException { // 2.재료추가주문
+	PreparedStatement pstmt = null;
+		String sql, sql1;
+		//ResultSet rs = null;
+		int result = 0;
+		//List<IngredientDTO> list = new ArrayList<>();
 		
 		try {
 			sql = "INSERT INTO receiving_ingredient("
@@ -89,6 +98,24 @@ public class IngredientImpl implements IngredientDAO{
 			
 			result = pstmt.executeUpdate();
 			
+			pstmt.close();
+			pstmt = null;
+			/*
+			sql1 = "UPDATE ingredient SET i.ingredient_qty = i.ingredient_qty + r.receiving_qty  "
+					+ " WHERE i.ingredient_code= r.ingredient_code" ;
+			*/
+			
+			sql1 = "UPDATE ingredient SET ingredient_qty = ingredient_qty + ? WHERE ingredient_code = ? ";
+			
+			pstmt = conn.prepareStatement(sql1);
+			
+			pstmt.setInt(1, dto.getReceiving_qty());
+			pstmt.setInt(2, dto.getIngredient_code());
+			
+			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			pstmt = null;
 			
 			
 		} catch (SQLIntegrityConstraintViolationException e) {
@@ -117,6 +144,7 @@ public class IngredientImpl implements IngredientDAO{
 		return result;
 	}
 	
+	
 	@Override 
 	public List<IngredientDTO> show_orderlist(){
 		List<IngredientDTO> list = new ArrayList<>();
@@ -125,21 +153,14 @@ public class IngredientImpl implements IngredientDAO{
 		String sql;
 		
 		try {
-			/*
+			
 			sql = "SELECT DISTINCT i.ingredient_code, ri.ingredient_name, ri.receiving_price, "
 					+ " v.vendor_code, vendor_name, manager_name, manager_tel "
 					+ "FROM vendor v "
 					+ "JOIN receiving_ingredient ri ON ri.vendor_code = v.vendor_code "
 					+ "JOIN ingredient i ON ri.ingredient_code = i.ingredient_code "
 					+ "ORDER BY ingredient_code ";
-			*/
 			
-			sql = "SELECT DISTINCT(i.ingredient_code), i.ingredient_name, ri.receiving_price, " 
-					+ " v.vendor_code, vendor_name, manager_name, manager_tel " 
-					+ " FROM vendor v  "
-					+ " JOIN receiving_ingredient ri ON ri.vendor_code = v.vendor_code "
-					+ " JOIN ingredient i ON ri.ingredient_code = i.ingredient_code "
-					+ " ORDER BY ingredient_code ";
 			
 
 			pstmt = conn.prepareStatement(sql);
@@ -193,7 +214,7 @@ public class IngredientImpl implements IngredientDAO{
 		try {
 			sql = "SELECT TO_CHAR(receiving_date,'YYYY-MM-DD') receiving_date, ingredient_name, receiving_qty "
 					+ "FROM receiving_ingredient "
-					+ "ORDER BY receiving_date DESC";
+					+ "ORDER BY receiving_date DESC, receiving_num DESC";
 			
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -228,6 +249,7 @@ public class IngredientImpl implements IngredientDAO{
 		return list;
 	}
 
+	
 	
 	public int new_ingredient(String newingredient, int qty) throws SQLException { // 완료 4.새로운재료추가
 		PreparedStatement pstmt = null;
@@ -289,7 +311,7 @@ public class IngredientImpl implements IngredientDAO{
 		String sql;
 
 		try {
-			sql = "INSERT INTO ingredient(trash_code, ingredient_code, trash_date, trash_qty, remark) "
+			sql = "INSERT INTO trash(trash_code, ingredient_code, trash_date, trash_qty, remark) "
 					+ " VALUES (TRASH_SEQ.NEXTVAL, ?, SYSDATE, ?, ?)";
 
 			pstmt = conn.prepareStatement(sql);
@@ -344,7 +366,7 @@ public class IngredientImpl implements IngredientDAO{
 	String sql;
 	
 	try {
-		sql = "SELECT ingredient_code, ingredient_name FROM ingredient";
+		sql = "SELECT ingredient_code, ingredient_name FROM ingredient ORDER BY ingredient_code";
 		pstmt = conn.prepareStatement(sql);
 		
 		rs = pstmt.executeQuery();
@@ -387,7 +409,7 @@ public class IngredientImpl implements IngredientDAO{
 		String sql;
 		
 		try {
-			sql  = "SELECT vendor_name, manager_name, manager_tel "
+			sql  = "SELECT vendor_code, vendor_name, manager_name, manager_tel "
 					+ " FROM vendor";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -396,6 +418,7 @@ public class IngredientImpl implements IngredientDAO{
 			while(rs.next()) {
 				IngredientDTO dto = new IngredientDTO();
 				
+				dto.setVendor_code(rs.getInt("vendor_code"));
 				dto.setVendor_name(rs.getString("vendor_name"));
 				dto.setManager_name(rs.getString("manager_name"));
 				dto.setManager_tel(rs.getString("manager_tel"));
