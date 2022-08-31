@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import db.util.DBConn;
+import ddCafe_Customer.MenuDTO;
 
 public class IngredientUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -80,7 +81,6 @@ public class IngredientUI {
 		
 		try {
 			int ch, chc ;
-			//////////////////////////////////String name = null;
 			
 			do {
 				System.out.print("\n 추가할 재료를 입력하세요. [뒤로가기 : 0]  ");
@@ -95,11 +95,10 @@ public class IngredientUI {
 			
 			IngredientDTO dto = new IngredientDTO();
 
-			dto = list.get(ch - 1);  //납품업체코드, 재료코드랑 주문단가는 정해짐,,,
+			dto = list.get(ch - 1);  
 			
-			dto.setIngredient_code(ch -1); 
+			// dto.setIngredient_code(ch -1);  오류의 범인
 			dto.setReceiving_qty(qty);
-			///////////////////////////////dto.setIngredient_name(name);
 			
 			do {
 				System.out.println();
@@ -146,54 +145,48 @@ public class IngredientUI {
 		}
 		System.out.println();
 	}
+	
+	
+	public void new_ingredient() { // 완료
+	      System.out.println("\n✦ 새로운 재료 추가 ︎✦");
+	      String new_ingredient;
+	      int ans;
+	      
+	      try {
+	         
+	         do {
+	            System.out.print("추가 할 재료 이름 => ");
+	            new_ingredient = br.readLine();
+	            System.out.print(new_ingredient + "(을)를 추가하시겠습니까? [1.예/2.아니오] => ");
+	            ans = Integer.parseInt(br.readLine());
+	         } while (ans < 1 || ans > 2);
 
-	public void new_ingredient() { 
-		System.out.println("\n✦ 새로운 재료 추가 ︎✦");
-		String newingredient;
-		int ans;
-		
-		try {
-			
-			// IngredientDTO dto = dao.leftingredient();
-			
-		
-			
-			do {
-			System.out.println("추가 할 재료 이름 => ");
-			newingredient = br.readLine();
-			if (newingredient == dto.getIngredient_name() ) {
-				System.out.println(" 이미 있는 재료입니다. 메뉴로 돌아갑니다.");
-				return;
-			}
-			
-			
-			System.out.println(dto.getIngredient_name());
-			System.out.print(newingredient + "(을)를 추가하시겠습니까? [1.예/2.아니오] => ");
-			ans = Integer.parseInt(br.readLine());
-			
-			
-			} while(ans<1||ans>2);
+	         if (ans == 1) {
+	            List<IngredientDTO> list = dao.leftingredient();
 
-			if(ans==2) {
-				System.out.println("재료 등록 취소. 메뉴로 돌아갑니다.");
-				return;
-			} 
-			
-			int result = dao.new_ingredient(newingredient, 0);
-		
-			if(result==0) {
-				System.out.println("재료 등록 실패. 메뉴로 돌아갑니다.");
-				return; //menu()
-			}
-			System.out.println(newingredient+"(이)가 등록 되었습니다.");
-			return; //menu();
+	            for (IngredientDTO dto : list) {
+	               if (dto.getIngredient_name().equals(new_ingredient)) {
+	                  System.out.println("이미 있는 재료입니다. 메뉴로 돌아갑니다");
+	                  return;
+	               }
+	            }
 
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	            int result = dao.new_ingredient(new_ingredient);
 
+	            System.out.println(new_ingredient + "(이)가 등록 되었습니다.");
+
+	         } else if (ans == 2) {
+	            System.out.println("재료 등록 취소. 메뉴로 돌아갑니다.");
+	            return;
+	         }
+	         
+	         
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	   }
+	
+	
 	public void delete_ingredient() {
 		System.out.println("\n✦ 재고 삭제 ︎✦");
 		List<IngredientDTO> list = dao.trash_ingredientcode();

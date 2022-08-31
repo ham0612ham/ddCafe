@@ -260,17 +260,17 @@ public class IngredientImpl implements IngredientDAO{
 
 	
 	
-	public int new_ingredient(String newingredient, int qty) throws SQLException { // 완료 4.새로운재료추가
+	public int new_ingredient(String new_ingredient) throws SQLException { // 완료 4.새로운재료추가
 		PreparedStatement pstmt = null;
 		String sql;
 		int result = 0;
 		
 		try {
 			sql = "INSERT INTO ingredient(ingredient_code, ingredient_name, ingredient_qty )"
-					+ " VALUES (ingredient_seq.NEXTVAL,?,0)"; // 0 ?
+					+ " VALUES (ingredient_seq.NEXTVAL,?,0)";
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, newingredient);
+			pstmt.setString(1, new_ingredient);
 			//pstmt.setInt(2, 0);
 			
 			result = pstmt.executeUpdate();

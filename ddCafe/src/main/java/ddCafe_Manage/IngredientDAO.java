@@ -15,8 +15,9 @@ public interface IngredientDAO {
 	
 	public List<IngredientDTO> receiving_history(); // 3. 입고된 재료 수량 확인
 	
-	
-	public int new_ingredient(String newingredient, int qty) throws SQLException; // 4.새로운재료추가
+
+	public int new_ingredient(String newingredient) throws SQLException; // 4.새로운재료추가
+	//public int new_ingredient(String newingredient, int qty) throws SQLException; // 4.새로운재료추가
 	
 	
   //public int sub_ingredient(Number ingredient, int qty, String vendor)throws SQLException; // 5.재고 삭제
