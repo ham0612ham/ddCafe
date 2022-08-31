@@ -132,7 +132,7 @@ public class IngredientUI {
 		System.out.println("\n✦ 입고 내역 ︎✦");
 		
 		System.out.println();
-		System.out.println("\n입고날짜\t / 재료이름 / 재료수량");
+		System.out.println("\n  입고날짜    / 재료이름 / 재료수량");
 		System.out.println("-----------------------------------------------");
 
 		List<IngredientDTO> list = dao.receiving_history();
@@ -181,33 +181,46 @@ public class IngredientUI {
 
 	public void delete_ingredient() {
 		System.out.println("\n✦ 재고 삭제 ︎✦");
-		int ch, chq;
-		
 		List<IngredientDTO> list = dao.trash_ingredientcode();
+		
 		
 		for (IngredientDTO dto : list) {
 			
 			System.out.print(dto.getIngredient_code()+ ".");
-			System.out.println(dto.getIngredient_name());
+			System.out.print(dto.getIngredient_name()+ "/");
+			System.out.println(dto.getIngredient_qty());
 			
 			
 		}
 		
 		try {
+			int ic, icq, ch;
 			IngredientDTO dto = new IngredientDTO();
 			
 			System.out.print("\n 폐기할 자료를 입력하세요. => ");
-			dto.setIngredient_code(Integer.parseInt(br.readLine()));
+			ic =Integer.parseInt(br.readLine());
 			
-			System.out.print("\n " + dto.getIngredient_name() + "의 개수를 입력하세요. => ");
-			chq = Integer.parseInt(br.readLine());
-			if(chq > dto.getIngredient_qty()) {
-				System.out.print("\n 재료 개수보다 많습니다. 다시 입력하세요. => ");
-				} 
-			dto.setTrash_qty(Integer.parseInt(br.readLine())); 
+			dto = list.get(ic -1);
+			
+		//	dto.setIngredient_code(ic -1);     -오류의 주범
+			
+			do {
+				System.out.print("\n " + dto.getIngredient_name() + " 개수를 입력하세요. => ");
+				icq = Integer.parseInt(br.readLine());
+				if (icq >= 1 && icq <= dto.getIngredient_qty()) {
+					dto.setTrash_qty(icq);
+				} else { 
+					System.out.println("\n 재료 수량보다 많습니다. 다시 입력하세요. => ");
+				}
+				
+			} while (icq > dto.getIngredient_qty());
+			
+				
+
 			
 			System.out.print("\n 폐기 이유 (선택) => " );
 			dto.setRemark(br.readLine());
+
 			
 			do {
 				System.out.println();

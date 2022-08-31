@@ -83,6 +83,9 @@ public class IngredientImpl implements IngredientDAO{
 		//List<IngredientDTO> list = new ArrayList<>();
 		
 		try {
+			
+			conn.setAutoCommit(false);
+			
 			sql = "INSERT INTO receiving_ingredient("
 					+ "receiving_num, receiving_date, receiving_qty, receiving_price, ingredient_name, vendor_code, ingredient_code) "
 					+ " VALUES (RECEIVING_SEQ.NEXTVAL, SYSDATE, ?, ?, ?, ?, ?)";
@@ -117,9 +120,15 @@ public class IngredientImpl implements IngredientDAO{
 			pstmt.close();
 			pstmt = null;
 			
+			conn.commit();
+			
 			
 		} catch (SQLIntegrityConstraintViolationException e) {
-		
+			try {
+				conn.rollback();                    
+			} catch (Exception e2) {
+			}
+			
 			if(e.getErrorCode() == 1400) { // NOT NULL
 				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
 			} else {
@@ -265,6 +274,7 @@ public class IngredientImpl implements IngredientDAO{
 			pstmt.setInt(2, 0);
 			
 			result = pstmt.executeUpdate();
+		
 		} catch (SQLIntegrityConstraintViolationException e) {
 			try {
 			} catch (Exception e2) {
@@ -307,10 +317,12 @@ public class IngredientImpl implements IngredientDAO{
 	
 	public int sub_ingredient(IngredientDTO dto) throws SQLException{ // 5.재고삭제
 		PreparedStatement pstmt = null; 
+		String sql, sql1;
 		int result = 0;
-		String sql;
 
 		try {
+			conn.setAutoCommit(false);
+			
 			sql = "INSERT INTO trash(trash_code, ingredient_code, trash_date, trash_qty, remark) "
 					+ " VALUES (TRASH_SEQ.NEXTVAL, ?, SYSDATE, ?, ?)";
 
@@ -321,7 +333,28 @@ public class IngredientImpl implements IngredientDAO{
 			
 			result = pstmt.executeUpdate();
 			
+			pstmt.close();
+			pstmt = null;
+			
+			sql1 = "UPDATE ingredient SET ingredient_qty = ingredient_qty - ?  WHERE ingredient_code = ?";
+			
+			pstmt = conn.prepareStatement(sql1);
+			
+			pstmt.setInt(1, dto.getTrash_qty());
+			pstmt.setInt(2, dto.getIngredient_code());
+			
+			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			pstmt = null;
+			
+			conn.commit();
+			
 		} catch (SQLIntegrityConstraintViolationException e) {
+			try {
+				conn.rollback();                 
+			} catch (Exception e2) {
+			}
 		
 			if(e.getErrorCode() == 1400) { // NOT NULL
 				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
@@ -366,7 +399,7 @@ public class IngredientImpl implements IngredientDAO{
 	String sql;
 	
 	try {
-		sql = "SELECT ingredient_code, ingredient_name FROM ingredient ORDER BY ingredient_code";
+		sql = "SELECT ingredient_code, ingredient_name, ingredient_qty FROM ingredient ORDER BY ingredient_code";
 		pstmt = conn.prepareStatement(sql);
 		
 		rs = pstmt.executeQuery();
@@ -376,6 +409,7 @@ public class IngredientImpl implements IngredientDAO{
 			
 			dto.setIngredient_code(rs.getInt("ingredient_code"));
 			dto.setIngredient_name(rs.getString("ingredient_name"));
+			dto.setIngredient_qty(rs.getInt("ingredient_qty"));
 			
 			list.add(dto);
 		}
