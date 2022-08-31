@@ -34,7 +34,7 @@ public class IngredientUI {
 				case 1:	check_ingredient();	break;
 				case 2:	add_ingredietn();	break;
 				case 3:	receiving_history();break;
-				case 4:	new_ingredient();	break;
+				case 4:	newIngredient();	break;
 				case 5:	delete_ingredient();break;
 				case 6:	check_vendor();		break;
 				}
@@ -104,8 +104,10 @@ public class IngredientUI {
 			} while (chc<0 || chc>2);
 				
 			if(chc==1) {
+				
 				int result = dao.add_ingredient(dto);
 				System.out.println("\n 재료가 추가 되었습니다.");
+				
 				
 			} else if(chc==2) {
 				System.out.println("\n 추가 주문을 취소했습니다.");
@@ -144,7 +146,7 @@ public class IngredientUI {
 	}
 	
 	
-	public void new_ingredient() { 
+	public void newIngredient() { 
 	      System.out.println("\n✦ 새로운 재료 추가 ︎✦");
 	      String new_ingredient;
 	      int ans;
@@ -168,7 +170,7 @@ public class IngredientUI {
 	               }
 	            }
 
-	            int result = dao.new_ingredient(new_ingredient);
+	            int result = dao.newIngredient(new_ingredient);
 
 	            System.out.println("\n " + new_ingredient + "(이)가 등록 되었습니다.");
 
@@ -182,6 +184,51 @@ public class IngredientUI {
 	         e.printStackTrace();
 	      }
 	   }
+	
+	// 사업자등록번호를 7개 입력받게 하고싶음
+	public void new_vendor() {
+		while(true) {
+			System.out.println("\n 업체추가");
+			String vendorName, managerName, managerTel; 
+			String compRegisNumS;
+			int compRegisNum;
+			int result;
+			String p = "010-\\d{4}-\\d{4}";
+			String r = "^[0-9]{7}$";
+			
+			try {
+				System.out.print("업체 이름 => ");
+				vendorName = br.readLine();
+				System.out.print("매니저 이름 => ");
+				managerName = br.readLine();
+				System.out.print("매니저 전화번호 => ");
+				managerTel = br.readLine();
+				if(!managerTel.matches(p)) {
+					System.out.println("입력 형식이 일치하지 않습니다[010-0000-0000]");
+				}
+				System.out.print("사업자등록번호 => ");
+				compRegisNumS = br.readLine();
+				compRegisNum = Integer.parseInt(compRegisNumS);
+				compRegisNum = Integer.parseInt(br.readLine()); 
+				if(!compRegisNumS.matches(r)) {
+					System.out.println("7자리 수를 입력하세요.");
+				}
+				result = dao.newVendor(vendorName, managerName, managerTel, compRegisNum);
+				if(result == 0) {
+					System.out.println("업체 등록이 실패됐습니다.");
+					System.out.println("메뉴로 돌아갑니다.");
+					return;
+				}
+				System.out.println(vendorName + "업체가 등록 되었습니다.");
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	
 	
 	
 	public void delete_ingredient() {

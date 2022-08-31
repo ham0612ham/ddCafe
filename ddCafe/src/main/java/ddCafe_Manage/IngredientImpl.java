@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+
 import db.util.DBConn;
 
 public class IngredientImpl implements IngredientDAO{
@@ -241,8 +242,8 @@ public class IngredientImpl implements IngredientDAO{
 	}
 
 	
-	
-	public int new_ingredient(String new_ingredient) throws SQLException { // 완료 4.새로운재료추가
+	@Override
+	public int newIngredient(String new_ingredient) throws SQLException { // 완료 4.새로운재료추가
 		PreparedStatement pstmt = null;
 		String sql;
 		int result = 0;
@@ -290,10 +291,59 @@ public class IngredientImpl implements IngredientDAO{
 	
 	}
 	
+	@Override
+	public int newVendor(String vendorName, String managerName, String managerTel, int compRegisNum) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+		int result = 0;
+		
+		try {
+			sql = "INSERT INTO vendor(vendor_code, vendor_name, manager_name, manager_tel, companyRegistration_num) "
+					+ " VALUES (vendor_seq.NEXTVAL, ? , ? , ? , ?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, vendorName);
+			pstmt.setString(2, managerName);
+			pstmt.setString(3, managerTel);
+			pstmt.setInt(4, compRegisNum);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLIntegrityConstraintViolationException e) {
+			try {
+			} catch (Exception e2) {
+			}
+			
+			if(e.getErrorCode()==1) {
+				System.out.println("이미 등록된 전화번호 입니다.");
+			} else {
+				System.out.println(e.toString());
+			}
+			
+			throw e;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			throw e;
+			
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			
+			try {
+			} catch (Exception e2) {
+			}
+			
+		} 
+		return result;
+	}
 	
 	@Override // 재고 삭제     
-	// public int sub_ingredient(String ingredient, int qty, String vendor) throws SQLException {
-	
 	public int sub_ingredient(IngredientDTO dto) throws SQLException{ // 5.재고삭제
 		PreparedStatement pstmt = null; 
 		String sql, sql1;
