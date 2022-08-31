@@ -87,8 +87,10 @@ public class IngredientUI {
 				ch = Integer.parseInt(br.readLine());
 				if(ch==0) {return;}
 			} while(ch<1||ch>list.size());
+			
 			System.out.print("\n 개수를 입력하세요. [뒤로가기 : 0]  ");
 			qty = Integer.parseInt(br.readLine());
+			
 			if(qty==0) {return;}
 			
 			IngredientDTO dto = new IngredientDTO();
@@ -152,11 +154,24 @@ public class IngredientUI {
 		
 		try {
 			
+			// IngredientDTO dto = dao.leftingredient();
+			
+		
+			
 			do {
 			System.out.println("추가 할 재료 이름 => ");
 			newingredient = br.readLine();
+			if (newingredient == dto.getIngredient_name() ) {
+				System.out.println(" 이미 있는 재료입니다. 메뉴로 돌아갑니다.");
+				return;
+			}
+			
+			
+			System.out.println(dto.getIngredient_name());
 			System.out.print(newingredient + "(을)를 추가하시겠습니까? [1.예/2.아니오] => ");
 			ans = Integer.parseInt(br.readLine());
+			
+			
 			} while(ans<1||ans>2);
 
 			if(ans==2) {

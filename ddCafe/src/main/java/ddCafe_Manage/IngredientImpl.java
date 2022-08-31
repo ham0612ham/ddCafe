@@ -267,18 +267,15 @@ public class IngredientImpl implements IngredientDAO{
 		
 		try {
 			sql = "INSERT INTO ingredient(ingredient_code, ingredient_name, ingredient_qty )"
-					+ " VALUES (ingredient_seq.NEXTVAL,?,?)";
+					+ " VALUES (ingredient_seq.NEXTVAL,?,0)"; // 0 ?
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, newingredient);
-			pstmt.setInt(2, 0);
+			//pstmt.setInt(2, 0);
 			
 			result = pstmt.executeUpdate();
 		
 		} catch (SQLIntegrityConstraintViolationException e) {
-			try {
-			} catch (Exception e2) {
-			}
 			
 			if(e.getErrorCode() == 1400) {
 				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
