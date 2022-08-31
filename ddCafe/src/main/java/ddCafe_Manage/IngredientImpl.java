@@ -3,13 +3,11 @@ package ddCafe_Manage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import db.util.DBConn;
-import ddCafe_Customer.MenuDTO;
 
 public class IngredientImpl implements IngredientDAO{
 	private Connection conn = DBConn.getConnection();
@@ -18,7 +16,7 @@ public class IngredientImpl implements IngredientDAO{
 	
 	
 	@Override // 현재 재고 확인
-	public List<IngredientDTO> leftingredient() { // 완료 1.재고확인
+	public List<IngredientDTO> left_ingredient() { // 완료 1.재고확인
 		List<IngredientDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -62,25 +60,13 @@ public class IngredientImpl implements IngredientDAO{
 		return list;
 	}
 	
-	/*
-	@Override // 2. 재료추가주문
-	public int add_ingredient(IngredientDTO dto) throws SQLException { // 2.재료추가주문
-		PreparedStatement pstmt = null;
-		String sql;
-		//ResultSet rs = null;
-		int result = 0;
-		//List<IngredientDTO> list = new ArrayList<>();
-		*/
-	
-	
+
 	
 	@Override // 2.재료추가주문    
 	public int add_ingredient(IngredientDTO dto) throws SQLException { // 2.재료추가주문
 	PreparedStatement pstmt = null;
 		String sql, sql1;
-		//ResultSet rs = null;
 		int result = 0;
-		//List<IngredientDTO> list = new ArrayList<>();
 		
 		try {
 			
@@ -103,10 +89,6 @@ public class IngredientImpl implements IngredientDAO{
 			
 			pstmt.close();
 			pstmt = null;
-			/*
-			sql1 = "UPDATE ingredient SET i.ingredient_qty = i.ingredient_qty + r.receiving_qty  "
-					+ " WHERE i.ingredient_code= r.ingredient_code" ;
-			*/
 			
 			sql1 = "UPDATE ingredient SET ingredient_qty = ingredient_qty + ? WHERE ingredient_code = ? ";
 			
@@ -361,15 +343,7 @@ public class IngredientImpl implements IngredientDAO{
 			
 			throw e;
 			
-		} catch (SQLDataException e) {
-
-			if(e.getErrorCode() == 1840 || e.getErrorCode() == 1861) {
-				System.out.println("날짜 입력 형식 오류 입니다.");
-			} else {
-				System.out.println(e.toString());
-			}
-			
-			throw e;
+	
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import db.util.DBConn;
-import ddCafe_Customer.MenuDTO;
 
 public class IngredientUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -47,7 +46,7 @@ public class IngredientUI {
 	public void check_ingredient() {
 		System.out.println("\n✦ 재료 확인 ︎✦");
 
-		List<IngredientDTO> list = dao.leftingredient();
+		List<IngredientDTO> list = dao.left_ingredient();
 
 		for (IngredientDTO dto : list) {
 
@@ -75,12 +74,10 @@ public class IngredientUI {
 			System.out.print(dto.getVendor_name()+ " / ");
 			System.out.print(dto.getManager_name()+ " / ");
 			System.out.println(dto.getManager_tel());
-			
-			
 		}
 		
 		try {
-			int ch, chc ;
+			int ch, chc;
 			
 			do {
 				System.out.print("\n 추가할 재료를 입력하세요. [뒤로가기 : 0]  ");
@@ -147,7 +144,7 @@ public class IngredientUI {
 	}
 	
 	
-	public void new_ingredient() { // 완료
+	public void new_ingredient() { 
 	      System.out.println("\n✦ 새로운 재료 추가 ︎✦");
 	      String new_ingredient;
 	      int ans;
@@ -155,28 +152,28 @@ public class IngredientUI {
 	      try {
 	         
 	         do {
-	            System.out.print("추가 할 재료 이름 => ");
+	            System.out.print("\n 추가 할 재료 이름 => ");
 	            new_ingredient = br.readLine();
-	            System.out.print(new_ingredient + "(을)를 추가하시겠습니까? [1.예/2.아니오] => ");
+	            System.out.print("\n "+ new_ingredient + "(을)를 추가하시겠습니까? [1.예/2.아니오] => ");
 	            ans = Integer.parseInt(br.readLine());
 	         } while (ans < 1 || ans > 2);
 
 	         if (ans == 1) {
-	            List<IngredientDTO> list = dao.leftingredient();
+	            List<IngredientDTO> list = dao.left_ingredient();
 
 	            for (IngredientDTO dto : list) {
 	               if (dto.getIngredient_name().equals(new_ingredient)) {
-	                  System.out.println("이미 있는 재료입니다. 메뉴로 돌아갑니다");
+	                  System.out.println("\n 이미 있는 재료입니다. 메뉴로 돌아갑니다");
 	                  return;
 	               }
 	            }
 
 	            int result = dao.new_ingredient(new_ingredient);
 
-	            System.out.println(new_ingredient + "(이)가 등록 되었습니다.");
+	            System.out.println("\n " + new_ingredient + "(이)가 등록 되었습니다.");
 
 	         } else if (ans == 2) {
-	            System.out.println("재료 등록 취소. 메뉴로 돌아갑니다.");
+	            System.out.println("\n 재료 등록 취소. 메뉴로 돌아갑니다.");
 	            return;
 	         }
 	         
@@ -244,18 +241,16 @@ public class IngredientUI {
 				System.out.println("\n 폐기를 취소했습니다.");
 				return;
 			}
-			
-		} catch (NumberFormatException e) {
-			System.out.println("숫자만 입력 가능합니다.");
+		
 		} catch (Exception e) {
-			System.out.println("데이터 등록이 실패했습니다.");
+			e.printStackTrace();
 		}
 		System.out.println();
 		
 	}
 		
 	public void check_vendor() { 
-		System.out.println("\n✦ 납품업체 확인 ︎✦");
+		System.out.println("\n\t✦ 납품업체 확인 ︎✦\n");
 
 		List<IngredientDTO> list = dao.vendorList();
 
