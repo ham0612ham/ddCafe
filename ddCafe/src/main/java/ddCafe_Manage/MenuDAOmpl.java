@@ -20,25 +20,80 @@ public class MenuDAOmpl implements MenuDAO{
 	public int addMenu(MenuDTO dto) throws SQLException {
 		int result = 0;
 		CallableStatement cstmt = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		String sql;
 		
+		
 		try {
-			sql = "{CALL insertMenu(menu_seq.nextval,?,?,?,?,?)}";
+/*			
+			sql = "{CALL insertMenu(menu_seq.nextval,menu_detail_seq.nextval,?,?,?,?,?,?)}";
 			cstmt = conn.prepareCall(sql);
 			
 			cstmt.setString(1, dto.getMenuName());
 			cstmt.setInt(2, dto.getCategoryNum());
 			cstmt.setString(3, dto.getStatus());
-			cstmt.setInt(4, dto.getPrice());
+			cstmt.setInt(4, dto.getMenuPrice());
 			cstmt.setString(5, dto.getMenuSize());
+			cstmt.setInt(6, dto.getIngredientNum());
+			
 			
 			cstmt.executeUpdate();
 			result = 1;
+			cstmt.close();
+			*/
+			conn.setAutoCommit(false);
+			sql = "Insert into menu(menu_code,menu_name,category_num,status) values(menu_seq.nextval,?,?,?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getMenuName());
+			pstmt.setInt(2, dto.getCategoryNum());
+			pstmt.setString(3, dto.getStatus());
+			result = pstmt.executeUpdate();
 			
+			pstmt.close();
+			pstmt = null;
+			
+			sql = "select menu_detail_seq.nextval from dual";
+			int no=0;
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				no = rs.getInt(1);
+			}
+			rs.close();
+			pstmt.close();
+			pstmt = null;
+			
+			sql = "Insert into menu_detail(menu_detail_code,menu_price,menu_code,menu_size) values(?,?,menu_seq.currval,?)";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			pstmt.setInt(2,dto.getMenuPrice());
+			pstmt.setString(3,dto.getMenuSize());
+			pstmt.executeUpdate();
+			pstmt.close();
+			pstmt = null;
+			
+			
+			for(Integer n : dto.getIngredients()) {
+				sql = "Insert into menu_ingredient(ingredient_code,menu_detail_code) values(?,?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, n);
+				pstmt.setInt(2, no);
+				pstmt.executeUpdate();
+				pstmt.close();
+				pstmt = null;
+			}
+			conn.commit();
 		} catch (SQLIntegrityConstraintViolationException e) {
+			
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
 			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
 			if(e.getErrorCode() == 1) { // 기본키 중복
-				System.out.println("아이디 중복으로 등록이 불가능합니다.");
+				System.out.println("상품코드 중복으로 등록이 불가능합니다.");
 			} else if(e.getErrorCode() == 1400) { // NOT NULL
 				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
 			} else {
@@ -47,6 +102,11 @@ public class MenuDAOmpl implements MenuDAO{
 			
 			throw e;
 		} catch (SQLException e) {
+			
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
 			e.printStackTrace();
 			
 			throw e;
@@ -123,9 +183,8 @@ public class MenuDAOmpl implements MenuDAO{
 			
 		} catch (SQLException e) {
 			if(e.getErrorCode() == 20100) {
-				System.out.println("등록된 자료가 아닙니다.");
+				System.out.println("등록된 상품이 아닙니다.");
 			}
-			e.printStackTrace();
 			throw e;
 			
 		} finally {
@@ -243,15 +302,44 @@ public class MenuDAOmpl implements MenuDAO{
 	}
 
 	@Override
-	public int addCategory() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int selectIngredient() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+	public List<MenuDTO> selectCategory() throws SQLException {
+		List<MenuDTO> list  = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "select * from category";
+			
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				MenuDTO dto = new MenuDTO();
+				
+				dto.setCategoryNum(Integer.parseInt(rs.getString("category_num")));
+				dto.setCategoryName(rs.getString("category_name"));
+				
+				list.add(dto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return list;
 	}
 
 	@Override
@@ -312,7 +400,7 @@ public class MenuDAOmpl implements MenuDAO{
 					+ " Join menu_detail m2 on m2.menu_code = m1.menu_code"
 					+ " Join menu_ingredient m3 on m3.menu_detail_code = m2.menu_detail_code"
 					+ " Join ingredient i1 on i1.ingredient_code = m3.ingredient_code"
-					+ " WHERE ingredient_qty = 0";
+					+ " WHERE ingredient_qty = 0 or status = '품절'";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -343,6 +431,93 @@ public class MenuDAOmpl implements MenuDAO{
 		}
 		
 		return list;
+	}
+
+	@Override
+	public List<MenuDTO> showTwoMenu() {
+		List<MenuDTO> list  = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "select menu_code,menu_name from menu order by menu_code";
+			
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				MenuDTO dto = new MenuDTO();
+				
+				dto.setMenuNum(Integer.parseInt(rs.getString("menu_code")));
+				dto.setMenuName(rs.getString("menu_name"));
+				
+				list.add(dto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public int insertIngredient(IngredientDTO dto) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		String sql;
+		
+		try {
+			sql = "insert into ingredient(ingredient_code,ingredient_name,ingredient_qty)values(ingredient_seq.nextval,?,?) ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getIngredient_name());
+			pstmt.setInt(2, dto.getIngredient_qty());
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLIntegrityConstraintViolationException e) {
+			// 기본키 제약 위반, NOT NULL 등의 제약 위반 - 무결성 제약 위반시 발생
+			if(e.getErrorCode() == 1) { // 기본키 중복
+				System.out.println("재료코드 중복으로 등록이 불가능합니다.");
+			} else if(e.getErrorCode() == 1400) { // NOT NULL
+				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
+			} else {
+				System.out.println(e.toString());
+			}
+			
+			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			throw e;
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return result;
 	}
 
 

@@ -1,5 +1,7 @@
 package ddCafe_Manage;
 
+import java.util.List;
+
 public class MenuDTO {
 	private String menuName;
 	private int categoryNum;
@@ -8,13 +10,14 @@ public class MenuDTO {
 	private String menuSize;
 	private String category;
 	private String menu;
-	private int qty;
-	private int price;
-	private boolean best; // 불린으로 해도 되고, int로 해도 될 것 같음
-	private String panmai_date;
 	private int menuNum;
 	private String soldMenu;
+	private int ingredientNum;
+	private String categoryName;
+	private int price;
+	private int qty;
 	
+	private List<Integer> ingredients;
 	
 	public String getMenuName() {
 		return menuName;
@@ -58,30 +61,6 @@ public class MenuDTO {
 	public void setMenu(String menu) {
 		this.menu = menu;
 	}
-	public int getQty() {
-		return qty;
-	}
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
-	public int getPrice() {
-		return price;
-	}
-	public void setPrice(int price) {
-		this.price = price;
-	}
-	public boolean isBest() {
-		return best;
-	}
-	public void setBest(boolean best) {
-		this.best = best;
-	}
-	public String getPanmai_date() {
-		return panmai_date;
-	}
-	public void setPanmai_date(String panmai_date) {
-		this.panmai_date = panmai_date;
-	}
 	public int getMenuNum() {
 		return menuNum;
 	}
@@ -94,7 +73,38 @@ public class MenuDTO {
 	public void setSoldMenu(String soldMenu) {
 		this.soldMenu = soldMenu;
 	}
-
+	public int getIngredientNum() {
+		return ingredientNum;
+	}
+	public void setIngredientNum(int ingredientNum) {
+		this.ingredientNum = ingredientNum;
+	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public int getQty() {
+		return qty;
+	}
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+	public List<Integer> getIngredients() {
+		return ingredients;
+	}
+	public void setIngredients(List<Integer> ingredients) {
+		this.ingredients = ingredients;
+	}
+	
+	
 	
 	
 	
