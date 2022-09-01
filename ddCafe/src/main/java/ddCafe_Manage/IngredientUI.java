@@ -20,7 +20,7 @@ public class IngredientUI {
 		while (true) {
 			try {
 				do {
-					System.out.print("\n1.재고확인 2.재료추가주문 3.입고내역 4.새로운재료추가 5.재고삭제 6.납품업체확인 7.뒤로가기 => ");
+					System.out.print("\n1.재고확인 2.재료추가주문 3.입고내역 4.재고삭제 5.납품업체추가 6.납품업체확인 7.뒤로가기 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while (ch < 1||ch > 7);
 
@@ -34,8 +34,8 @@ public class IngredientUI {
 				case 1:	check_ingredient();	break;
 				case 2:	add_ingredietn();	break;
 				case 3:	receiving_history();break;
-				case 4:	newIngredient();	break;
-				case 5:	delete_ingredient();break;
+				case 4:	delete_ingredient();break;
+				case 5:	new_vendor();		break;
 				case 6:	check_vendor();		break;
 				}
 			} catch (Exception e) {
@@ -80,15 +80,20 @@ public class IngredientUI {
 			int ch, chc;
 			
 			do {
-				System.out.print("\n 추가할 재료를 입력하세요. [뒤로가기 : 0]  ");
+				System.out.print("\n 추가할 재료를 입력하세요. [새로운 재료 추가 : 0]  ");
 				ch = Integer.parseInt(br.readLine());
-				if(ch==0) {return;}
+				if(ch==0) {
+					newIngredient();
+					return;
+					}
 			} while(ch<1||ch>list.size());
 			
 			System.out.print("\n 개수를 입력하세요. [뒤로가기 : 0]  ");
 			qty = Integer.parseInt(br.readLine());
 			
-			if(qty==0) {return;}
+			if(qty==0) {
+				return;
+				}
 			
 			IngredientDTO dto = new IngredientDTO();
 
@@ -127,6 +132,76 @@ public class IngredientUI {
 		System.out.println();
 		
 	}
+	
+	
+
+	public void newIngredient() { 
+	      System.out.println("\n✦ 새로운 재료 추가 ︎✦");
+	      List<IngredientDTO> list1 = dao.vendorList();
+	      
+	      for (IngredientDTO dto1 : list1) {
+	    	  System.out.print(dto1.getVendor_code() + ".");
+	    	  System.out.print(dto1.getVendor_name() + " / ");
+	    	  System.out.print(dto1.getManager_name() + " / ");
+	    	  System.out.println(dto1.getManager_tel());
+	      }
+
+	      
+			
+	      try {
+	    	  int ch, ans, pri;
+	    	  String new_ingredient;
+	    	  IngredientDTO dto1 = new IngredientDTO();
+	    	  
+	    	  do {
+	    		  System.out.print("\n 새로운 재료를 공급받을 업체를 입력하세요.");
+	    		  ch = Integer.parseInt(br.readLine());
+	    		  
+	    	  } while(ch<1||ch>list1.size());
+	    		  
+	    	  dto1 = list1.get(ch-1);
+    	  
+	         do {
+	            System.out.print("\n " + dto1.getVendor_name() +"에서 추가 할 재료 이름 => ");
+	            new_ingredient = br.readLine();
+	            System.out.print("\n 재료 단가 => ");
+	            pri = Integer.parseInt(br.readLine());
+	            System.out.print("\n "+ new_ingredient + "(을)를 추가하시겠습니까? [1.예/2.아니오] => ");
+	            ans = Integer.parseInt(br.readLine());
+	         } while (ans < 1 || ans > 2);
+
+	         if (ans == 1) {
+	            List<IngredientDTO> list2 = dao.left_ingredient();
+	            for (IngredientDTO dto2 : list2) {
+	               if (dto2.getIngredient_name().equals(new_ingredient)) {
+	                  System.out.println("\n 이미 있는 재료입니다. 메뉴로 돌아갑니다");
+	                  return;
+	               }
+	            }
+	            dto1.setIngredient_name(new_ingredient);
+	            dto1.setReceiving_price(pri);
+
+	            dao.newIngredient(dto1);
+	            
+	            System.out.println("\n " + new_ingredient + "(이)가 등록 되었습니다.");
+	            return;
+
+	         } else if (ans == 2) {
+	            System.out.println("\n 재료 등록 취소. 메뉴로 돌아갑니다.");
+	            return;
+	         }
+	         
+	         
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+		return;
+	   }
+	
+
+	
+	
+	
 
 	public void receiving_history() { 
 		System.out.println("\n✦ 입고 내역 ︎✦");
@@ -144,90 +219,6 @@ public class IngredientUI {
 		}
 		System.out.println();
 	}
-	
-	
-	public void newIngredient() { 
-	      System.out.println("\n✦ 새로운 재료 추가 ︎✦");
-	      String new_ingredient;
-	      int ans;
-	      
-	      try {
-	         
-	         do {
-	            System.out.print("\n 추가 할 재료 이름 => ");
-	            new_ingredient = br.readLine();
-	            System.out.print("\n "+ new_ingredient + "(을)를 추가하시겠습니까? [1.예/2.아니오] => ");
-	            ans = Integer.parseInt(br.readLine());
-	         } while (ans < 1 || ans > 2);
-
-	         if (ans == 1) {
-	            List<IngredientDTO> list = dao.left_ingredient();
-
-	            for (IngredientDTO dto : list) {
-	               if (dto.getIngredient_name().equals(new_ingredient)) {
-	                  System.out.println("\n 이미 있는 재료입니다. 메뉴로 돌아갑니다");
-	                  return;
-	               }
-	            }
-
-	            int result = dao.newIngredient(new_ingredient);
-
-	            System.out.println("\n " + new_ingredient + "(이)가 등록 되었습니다.");
-
-	         } else if (ans == 2) {
-	            System.out.println("\n 재료 등록 취소. 메뉴로 돌아갑니다.");
-	            return;
-	         }
-	         
-	         
-	      } catch (Exception e) {
-	         e.printStackTrace();
-	      }
-	   }
-	
-	// 사업자등록번호를 7개 입력받게 하고싶음
-	public void new_vendor() {
-		while(true) {
-			System.out.println("\n 업체추가");
-			String vendorName, managerName, managerTel; 
-			String compRegisNumS;
-			int compRegisNum;
-			int result;
-			String p = "010-\\d{4}-\\d{4}";
-			String r = "^[0-9]{7}$";
-			
-			try {
-				System.out.print("업체 이름 => ");
-				vendorName = br.readLine();
-				System.out.print("매니저 이름 => ");
-				managerName = br.readLine();
-				System.out.print("매니저 전화번호 => ");
-				managerTel = br.readLine();
-				if(!managerTel.matches(p)) {
-					System.out.println("입력 형식이 일치하지 않습니다[010-0000-0000]");
-				}
-				System.out.print("사업자등록번호 => ");
-				compRegisNumS = br.readLine();
-				compRegisNum = Integer.parseInt(compRegisNumS);
-				compRegisNum = Integer.parseInt(br.readLine()); 
-				if(!compRegisNumS.matches(r)) {
-					System.out.println("7자리 수를 입력하세요.");
-				}
-				result = dao.newVendor(vendorName, managerName, managerTel, compRegisNum);
-				if(result == 0) {
-					System.out.println("업체 등록이 실패됐습니다.");
-					System.out.println("메뉴로 돌아갑니다.");
-					return;
-				}
-				System.out.println(vendorName + "업체가 등록 되었습니다.");
-				return;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	
 	
 	
 	
@@ -296,6 +287,62 @@ public class IngredientUI {
 		
 	}
 		
+	
+
+
+	public void new_vendor() {
+		while(true) {
+			System.out.println("\n✦ 새로운 업체 추가 ︎✦");
+			String vendorName, managerName, managerTel; 
+			String compRegisNum;
+			int result;
+			String p = "010-\\d{4}-\\d{4}";
+			String r = "^[0-9]{10}$";
+			
+			try {
+				System.out.print("\n 업체 이름 => ");
+				vendorName = br.readLine();
+				System.out.print("\n 매니저 이름 => ");
+				managerName = br.readLine();
+				
+				do {
+					System.out.print("\n 매니저 전화번호 => ");
+					managerTel = br.readLine();
+					if(managerTel.matches(p)) {
+					} else if(!managerTel.matches(p)) {
+						System.out.println("\n 입력 형식이 일치하지 않습니다[010-0000-0000]");
+					}
+				} while (!managerTel.matches(p));
+				
+				do {
+				System.out.print("\n 사업자등록번호 => ");
+				compRegisNum = br.readLine();
+				if(compRegisNum.matches(r)) {
+				} else if(!compRegisNum.matches(r)) {
+					System.out.println("\n 10자리 수를 입력하세요.");
+					}
+				} while (!compRegisNum.matches(r));
+				
+				result = dao.newVendor(vendorName, managerName, managerTel, compRegisNum);
+				if(result == 0) {
+					System.out.println("\n 업체 등록이 실패됐습니다.");
+					System.out.println("\n 메뉴로 돌아갑니다.");
+					return;
+				}
+				System.out.println("\n " + vendorName + "업체가 등록 되었습니다. 메뉴로 돌아갑니다.");
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
 	public void check_vendor() { 
 		System.out.println("\n\t✦ 납품업체 확인 ︎✦\n");
 

@@ -243,37 +243,56 @@ public class IngredientImpl implements IngredientDAO{
 
 	
 	@Override
-	public int newIngredient(String new_ingredient) throws SQLException { // 완료 4.새로운재료추가
+	public int newIngredient(IngredientDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;
 		int result = 0;
 		
+		
 		try {
+			conn.setAutoCommit(false);
+		
 			sql = "INSERT INTO ingredient(ingredient_code, ingredient_name, ingredient_qty )"
 					+ " VALUES (ingredient_seq.NEXTVAL,?,0)";
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, new_ingredient);
-			//pstmt.setInt(2, 0);
+			pstmt.setString(1, dto.getIngredient_name());
+			
 			
 			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			pstmt = null;
+			
+			sql = "INSERT INTO receiving_ingredient(receiving_num, receiving_date, receiving_qty, "
+					+ " receiving_price, ingredient_name, vendor_code, ingredient_code )"
+					+ " VALUES (receiving_seq.NEXTVAL, sysdate, 0, ?, ?, ?, ingredient_seq.CURRVAL )";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getReceiving_price()); // 입고금액 3 이거 입력
+			pstmt.setString(2, dto.getIngredient_name()); // 재료명 2 이거 입력하고
+			pstmt.setInt(3, dto.getVendor_code()); // 납품업체코드    1 이거먼저 받고
+			//pstmt.setInt(4, dto.getIngredient_code());
 		
-		} catch (SQLIntegrityConstraintViolationException e) {
+			result = pstmt.executeUpdate();
 			
-			if(e.getErrorCode() == 1400) {
-				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
-			} else {
-				System.out.println(e.toString());
-			}
-			
-			throw e;
+			pstmt.close();
+			pstmt = null;
+	
 			
 			
+			conn.commit();
+			
+			
+		
 		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
 			e.printStackTrace();
-			
 			throw e;
-			
+		
 		} finally {
 			if(pstmt != null) {
 				try {
@@ -283,16 +302,17 @@ public class IngredientImpl implements IngredientDAO{
 			}
 			
 			try {
+				conn.setAutoCommit(true);
 			} catch (Exception e2) {
 			}
 			
 		}
 		return result;
-	
 	}
 	
+	
 	@Override
-	public int newVendor(String vendorName, String managerName, String managerTel, int compRegisNum) throws SQLException {
+	public int newVendor(String vendorName, String managerName, String managerTel, String compRegisNum) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;
 		int result = 0;
@@ -305,7 +325,7 @@ public class IngredientImpl implements IngredientDAO{
 			pstmt.setString(1, vendorName);
 			pstmt.setString(2, managerName);
 			pstmt.setString(3, managerTel);
-			pstmt.setInt(4, compRegisNum);
+			pstmt.setString(4, compRegisNum);
 			
 			result = pstmt.executeUpdate();
 			
@@ -465,7 +485,7 @@ public class IngredientImpl implements IngredientDAO{
 		
 		try {
 			sql  = "SELECT vendor_code, vendor_name, manager_name, manager_tel "
-					+ " FROM vendor";
+					+ " FROM vendor ORDER BY vendor_code";
 			
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery(sql);
