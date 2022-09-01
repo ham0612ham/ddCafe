@@ -68,7 +68,7 @@ public class IngredientImpl implements IngredientDAO{
 	PreparedStatement pstmt = null;
 		String sql, sql1;
 		int result = 0;
-		
+		 
 		try {
 			
 			conn.setAutoCommit(false);

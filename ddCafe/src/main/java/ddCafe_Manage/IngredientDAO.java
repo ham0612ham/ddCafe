@@ -7,7 +7,7 @@ public interface IngredientDAO {
 	
 	public List<IngredientDTO> left_ingredient(); // 1.현재 재고 확인
 	
-
+ 
 	public int add_ingredient(IngredientDTO dto) throws SQLException; // 2.재고 추가 주문
 	public List<IngredientDTO> show_orderlist(); // 2.현재 재고와 vendor list
 	

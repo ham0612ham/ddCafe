@@ -79,7 +79,7 @@ public class IngredientUI {
 		try {
 			int ch, chc;
 			
-			do {
+			do { 
 				System.out.print("\n 추가할 재료를 입력하세요. [새로운 재료 추가 : 0]  ");
 				ch = Integer.parseInt(br.readLine());
 				if(ch==0) {
