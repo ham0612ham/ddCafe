@@ -84,31 +84,39 @@ public class SalesUI {
 
 	public void sales_by_menu() {
 		System.out.println("\n✦ 메뉴 판매량 ︎✦");
-		Map<String, Integer> map = dao.countTakeOut();
-
-		int store = map.get("store");
-		int takeout = map.get("takeout");
-
-		System.out.println("매장 : " + store);
-		System.out.println("포장 : " + takeout);
-
-		System.out.println();
+		
+		List<SalesDTO> list = dao.listPanmai();
+		
+		int index = 1;
+		for(SalesDTO dto : list) {
+			System.out.print(index+".");
+			System.out.print(dto.getMenu_name()+" / ");
+			System.out.print(dto.getMenu_size()+" / ");
+			System.out.println(dto.getQty());
+			
+			index++;
+		}
+		List<SalesDTO> total = dao.totalPanmai();
+		for(SalesDTO dto : total) {
+			System.out.println("합계 : "+dto.getQty());
+		}
 
 	}
 
-	public Map<String, Integer> best_menu() {
+	public void best_menu() {
 		System.out.println("\n✦ 베스트 메뉴 확인 ︎✦");
-		@SuppressWarnings("unused")
-		List<MenuDTO> map = dao.bestMenues();
-
-		System.out.println(((SalesDTO) dao).setBest() + "\t");
-		System.out.println(((MenuDTO) dao).getQty() + "\t");
-		System.out.println(((SalesDTO) dao).getSeq() + "\t");
-		System.out.println(((SalesDTO) dao).getmenu() + "\t");
-
-		System.out.println();
-		return null;
-
+		
+		List<SalesDTO> list = dao.bestMenues();
+		
+		int index = 1;
+		for(SalesDTO dto : list) {
+			System.out.print(index+".");
+			
+			System.out.println(dto.getMenu_name());
+			
+			index++;
+			
+		}
 	}
 
 	public void today_sales() {
