@@ -109,7 +109,7 @@ public class SalesUI {
 		
 		int index = 1;
 		for(SalesDTO dto : list) {
-			System.out.print(index+".");
+			System.out.print(index+"위 : ");
 			
 			System.out.println(dto.getMenu_name());
 			
