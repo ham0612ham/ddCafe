@@ -18,7 +18,7 @@ public class MemberUI {
 			System.out.println("\n✦ 회원 메뉴 ✦");
 			try {
 				do {
-					System.out.print("\n1.회원정보확인[이름] 2.회원정보확인[전화번호] 3.회원리스트 4.회원정보수정 5.회원탈퇴 6.종료 => ");
+					System.out.print("\n1.회원정보확인[이름] 2.회원정보확인[전화번호] 3.회원리스트 4.회원정보수정 5.회원탈퇴 6.뒤로가기 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while(ch<1||ch>6);
 				
@@ -210,7 +210,7 @@ public class MemberUI {
 					System.out.println("회원 정보가 수정 되었습니다.");
 					
 				} else if(choice==2) {
-					updateMember();
+					return;
 				}
 				
 			} else if(choice==2) {

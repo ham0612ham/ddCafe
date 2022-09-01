@@ -1,18 +1,39 @@
 package ddCafe_Manage;
 
 public class SalesDTO {
-	private String saledate;
+	private String saledate; // 사용
+	private String price; // 사용
+	private String week1; // 사용
+	private String week2; // 사용
 	private int seq;
 	private String qty;
 	private int amount;
 	private String regdate;
 	public char[] getmenu;
-		
+	
 	public String getSaledate() {
 		return saledate;
 	}
 	public void setSaledate(String saledate) {
 		this.saledate = saledate;
+	}
+	public String getPrice() {
+		return price;
+	}
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	public String getWeek1() {
+		return week1;
+	}
+	public void setWeek1(String week1) {
+		this.week1 = week1;
+	}
+	public String getWeek2() {
+		return week2;
+	}
+	public void setWeek2(String week2) {
+		this.week2 = week2;
 	}
 	public int getSeq() {
 		return seq;
@@ -20,12 +41,11 @@ public class SalesDTO {
 	public void setSeq(int seq) {
 		this.seq = seq;
 	}
-	
 	public String getQty() {
 		return qty;
 	}
-	public void setQty(String string) {
-		this.qty = string;
+	public void setQty(String qty) {
+		this.qty = qty;
 	}
 	public int getAmount() {
 		return amount;
@@ -39,26 +59,13 @@ public class SalesDTO {
 	public void setRegdate(String regdate) {
 		this.regdate = regdate;
 	}
-	@Override
-	public String toString() {
-		return "SalesDTO [saledate=" + saledate + ", seq=" + seq + ", , qty=" + qty
-				+ ", amount=" + amount + ", regdate=" + regdate + "]";
+	public char[] getGetmenu() {
+		return getmenu;
 	}
-	public String setBest() {
-		return null;
+	public void setGetmenu(char[] getmenu) {
+		this.getmenu = getmenu;
 	}
-	public String getmenu() {
-		return null;
-	}
-	public void setName(String string) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void setmenu(String string) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	}
-
-		
+	
+	
+}
+	
