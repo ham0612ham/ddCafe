@@ -1,15 +1,13 @@
 package ddCafe_Manage;
 
 public class SalesDTO {
-	private String saledate; // 사용
-	private String price; // 사용
-	private String week1; // 사용
-	private String week2; // 사용
-	private int seq;
-	private String qty;
-	private int amount;
-	private String regdate;
-	public char[] getmenu;
+	private String saledate; 
+	private String price; 
+	private String week1; 
+	private String week2; 
+	private int qty;
+	private String menu_name;
+	private String menu_size;
 	
 	public String getSaledate() {
 		return saledate;
@@ -35,36 +33,29 @@ public class SalesDTO {
 	public void setWeek2(String week2) {
 		this.week2 = week2;
 	}
-	public int getSeq() {
-		return seq;
-	}
-	public void setSeq(int seq) {
-		this.seq = seq;
-	}
-	public String getQty() {
+	public int getQty() {
 		return qty;
 	}
-	public void setQty(String qty) {
+	public void setQty(int qty) {
 		this.qty = qty;
 	}
-	public int getAmount() {
-		return amount;
+	public String getMenu_name() {
+		return menu_name;
 	}
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public void setMenu_name(String menu_name) {
+		this.menu_name = menu_name;
 	}
-	public String getRegdate() {
-		return regdate;
+	public String getMenu_size() {
+		return menu_size;
 	}
-	public void setRegdate(String regdate) {
-		this.regdate = regdate;
+	public void setMenu_size(String menu_size) {
+		this.menu_size = menu_size;
 	}
-	public char[] getGetmenu() {
-		return getmenu;
-	}
-	public void setGetmenu(char[] getmenu) {
-		this.getmenu = getmenu;
-	}
+	
+	
+	
+	
+	
 	
 	
 }
