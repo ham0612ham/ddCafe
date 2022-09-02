@@ -26,7 +26,6 @@ public class IngredientUI {
 
 				if (ch == 7) {
 					System.out.println();
-					DBConn.close();
 					return;
 				}
 
@@ -63,11 +62,7 @@ public class IngredientUI {
 	public void add_ingredietn() {
 		System.out.println("\n✦ 재료 추가 주문 ︎✦");
 		List<IngredientDTO> list = dao.show_orderlist();
-		
-		//for (int i = 0; i < list.size(); ++i) {
-			//String var = list.get(i);
-		//}
-		
+	
 		int n=0;
 		
 		for (IngredientDTO dto : list) {
@@ -81,18 +76,6 @@ public class IngredientUI {
 			System.out.println(dto.getManager_tel());
 		}
 		
-		/*
-		 
-		 List<ContentListDTO> dtos = new ArrayList<ContentListDTO>();
-    for (int i = 0; i < result.getContentCount(); i++) {      
-       ContentListDTO dto = new ContentListDTO();
-       String content = result.getContent()[i].toString();
-       String category = result.getCategory()[i].toString();
-       dto.setContent(content);
-       dto.setCategory(category);
-       dtos.add(dto);
-    }
-		 */
 		
 		
 		

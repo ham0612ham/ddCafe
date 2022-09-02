@@ -5,8 +5,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import db.util.DBConn;
-
 
 public class MenuUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -20,13 +18,12 @@ public class MenuUI {
 			System.out.println("\n✦ 메뉴 관리 ✦");
 			try {
 				do {
-					System.out.print("\n1.메뉴추가 2.전체메뉴보기 3.메뉴검색  4.품절메뉴보기 5.메뉴삭제 6.품절처리 7.종료 => ");
+					System.out.print("\n1.메뉴추가 2.전체메뉴보기 3.메뉴검색 4.품절메뉴보기 5.메뉴삭제 6.품절처리 7.종료 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while(ch<1||ch>7);
 				
 				if(ch==7) {
 					System.out.println();
-					DBConn.close();
 					return;
 				}
 				
@@ -46,7 +43,7 @@ public class MenuUI {
 
 	public void add_menu() {
 		System.out.println("\n✦ 메뉴 추가 ︎✦");
-		System.out.println("카테고리번호 / 카테고리");
+		System.out.println("카테고리번호/카테고리");
 		try {
 			List<MenuDTO> list = dao.selectCategory();
 			for(MenuDTO dto : list) {
@@ -61,10 +58,10 @@ public class MenuUI {
 			int a,b;
 			MenuDTO dto = new MenuDTO();
 			
-			System.out.print("추가하고싶은 메뉴?");
+			System.out.print("추가하고싶은 메뉴를 입력해주세요 ");
 			dto.setMenuName(br.readLine());
 		
-			System.out.print("카테고리 번호");
+			System.out.print("카테고리 번호를 입력해주세요 ");
 			b = Integer.parseInt(br.readLine());
 			if(b >7) {
 				System.out.println("카테고리 번호 오류");
@@ -75,7 +72,7 @@ public class MenuUI {
 			
 			int ch;
 			do {
-				System.out.print("현재 상태 ? [1.주문가능/2.품절]");
+				System.out.print("현재 상태를 입력해주세요 [1.주문가능/2.품절] => ");
 				ch = Integer.parseInt(br.readLine());
 			} while(ch<1||ch>2);
 			String status = null;
@@ -86,11 +83,11 @@ public class MenuUI {
 			}
 			dto.setStatus(status);
 				
-			System.out.print("메뉴 가격 ? ");
+			System.out.print("메뉴 가격을 입력해주세요 ");
 			dto.setMenuPrice(Integer.parseInt(br.readLine()));
 			int c;
 			do {
-				System.out.print("사이즈 ? [1.R/2.L]");
+				System.out.print("사이즈를 입력해주세요 [1.R/2.L] => ");
 				c = Integer.parseInt(br.readLine());
 			} while(c<1||c>2);
 			String size = null;
@@ -103,7 +100,7 @@ public class MenuUI {
 
 			try {
 				List<IngredientDTO> list = dio.left_ingredient();
-				System.out.println("✦ 재료 확인 ︎✦");
+				System.out.println("\n✦ 재료 확인 ︎✦");
 
 				for (IngredientDTO dto1 : list) {
 
@@ -113,14 +110,14 @@ public class MenuUI {
 					
 				System.out.println();
 			} catch (NumberFormatException e) {
-				System.out.println("수량은 숫자만 가능합니다");
+				System.out.println("숫자를 입력해주세요");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			int d;
 			List<Integer> list = new ArrayList<>();
 			do {
-				System.out.print("메뉴에 맞는 재료번호 ? 0.모든재료 선택완료");
+				System.out.print("메뉴에 맞는 재료번호를 입력해주세요 [0.모든재료 선택완료] => ");
 				d=Integer.parseInt(br.readLine());
 				list.add(d);
 			}while(d!=0);
@@ -129,7 +126,7 @@ public class MenuUI {
             dto.setIngredients(list);
 			
 			
-			System.out.print("정말 추가 하시겠습니까? 1.예 2.아니요");
+			System.out.print("정말 추가 하시겠습니까? [1.예/2.아니요] => ");
 			a = Integer.parseInt(br.readLine());
 			if(a==1) {
 				dao.addMenu(dto);
@@ -175,13 +172,13 @@ public class MenuUI {
 		String name;
 		
 		try {
-			System.out.print("검색할 메뉴?");
+			System.out.print("검색할 메뉴를 입력해주세요 ");
 			name = br.readLine();
 			
 			List<MenuDTO> list=dao.listMenu(name);
 			
 			if(list.size() ==0) {
-				System.out.println("등록된 자료가 없습니다.");
+				System.out.println("등록된 메뉴가 없습니다.");
 				return;
 			}
 			for(MenuDTO dto : list) {
@@ -193,7 +190,7 @@ public class MenuUI {
 				System.out.println(dto.getMenuSize());
 			}
 		} catch (Exception e) {
-			System.out.println("이름 검색 실패");
+			System.out.println("메뉴 검색 실패");
 		}
 		System.out.println();
 	}
@@ -228,10 +225,10 @@ public class MenuUI {
 		System.out.println();
 		
 		try {
-			System.out.print("삭제할 메뉴코드?");
+			System.out.print("삭제할 메뉴코드를 입력해주세요 ");
 			code = Integer.parseInt(br.readLine());
 
-			System.out.print("정말 삭제 하시겠습니까? 1.예 2.아니요");
+			System.out.print("정말 삭제 하시겠습니까 [1.예 2.아니요] => ");
 			c = Integer.parseInt(br.readLine());
 			if(c == 1) {
 				dao.deleteMenu(code);
@@ -241,7 +238,7 @@ public class MenuUI {
 			System.out.println("메뉴를 삭제 했습니다.");
 			
 		} catch (Exception e) {
-			System.out.println("데이터 삭제 실패 !!");
+			System.out.println("메뉴 삭제 실패 !!");
 		}
 		
 		System.out.println();
@@ -260,9 +257,9 @@ public class MenuUI {
 		}
 		System.out.println();
 		try {
-			System.out.println("품절 처리할 메뉴코드?");
+			System.out.print("품절 처리할 메뉴코드를 입력해주세요 ");
 			code = Integer.parseInt(br.readLine());
-			System.out.print("정말 품절처리 하시겠습니까? 1.예 2.아니요");
+			System.out.print("정말 품절처리 하시겠습니까 [1.예 2.아니요] => ");
 			c = Integer.parseInt(br.readLine());
 			if(c == 1) {
 				dao.updateSoldOut(code);
