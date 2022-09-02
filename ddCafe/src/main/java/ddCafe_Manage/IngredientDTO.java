@@ -7,7 +7,6 @@ public class IngredientDTO {
 	private String vendor_name;
 	private String manager_name;
 	private String manager_tel;
-	// 내가 추가
 	private int trash_code;
 	private String trash_date;
 	private int trash_qty;
@@ -17,7 +16,6 @@ public class IngredientDTO {
 	private int receiving_qty;
 	private int receiving_price;
 	private int vendor_code;
-	//
 	
 	
 	public int getIngredient_code() {
@@ -67,7 +65,6 @@ public class IngredientDTO {
 	public void setManager_tel(String manager_tel) {
 		this.manager_tel = manager_tel;
 	}
-// 내가 추가
 	public int getTrash_code() {
 		return trash_code;
 	}
@@ -132,8 +129,6 @@ public class IngredientDTO {
 	public void setVendor_code(int vendor_code) {
 		this.vendor_code = vendor_code;
 	}
-
-//
 
 }
 
