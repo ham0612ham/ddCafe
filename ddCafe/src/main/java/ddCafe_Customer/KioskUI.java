@@ -53,7 +53,7 @@ public class KioskUI {
 					n++;
 				}
 				do {
-					System.out.print("[종료 : 0] => ");
+					System.out.print("[이전 : 0] => ");
 					ch = Integer.parseInt(br.readLine());
 				} while(ch<0||ch>list5.size());
 				if(ch==0) {
@@ -64,6 +64,8 @@ public class KioskUI {
 					category_num = ch;
 					category = list5.get(ch-1);
 				}
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -90,6 +92,8 @@ public class KioskUI {
 					}
 					n++;
 				}
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요");
 			} catch (Exception e) {
 			}
 			
@@ -135,6 +139,8 @@ public class KioskUI {
 					if(result == 987) {return 987;}
 					
 				} else { return 567; }
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요");
 			} catch (Exception e) {
 			}
 		}
@@ -168,6 +174,8 @@ public class KioskUI {
 						
 				} while(ch < 1||ch > 6);
 				
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -196,7 +204,7 @@ public class KioskUI {
 			System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 			try {
 				do {
-					System.out.print("삭제할 메뉴 [이전 : 0] => ");
+					System.out.print("삭제할 메뉴를 입력해주세요 [이전 : 0] => ");
 					ch = Integer.parseInt(br.readLine());
 					if(ch==0) { return 567; }
 				} while (ch<0||ch>shoppingList.size());
@@ -204,6 +212,9 @@ public class KioskUI {
 				System.out.println("삭제가 완료되었습니다");
 				int result = afterchoice();
 				if(result == 987) {return 987;}
+				
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -222,11 +233,11 @@ public class KioskUI {
 			System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 			try {
 				do {
-					System.out.print("수정할 메뉴 [이전 : 0] => ");
+					System.out.print("수정할 메뉴를 입력해주세요 [이전 : 0] => ");
 					ch = Integer.parseInt(br.readLine());
 					if(ch==0) { return 567; }
 				} while (ch<0||ch>shoppingList.size());
-				System.out.print("개 수 [이전 : 0] => ");
+				System.out.print("개 수를 입력해주세요 [이전 : 0] => ");
 				qty = Integer.parseInt(br.readLine()); // ## 바꾼 개수로 재료 확보 가능한지 여부 <- 추가해야함
 				if(qty==0) { return 567; }
 				MenuDTO dto = shoppingList.get(ch-1);
@@ -239,6 +250,8 @@ public class KioskUI {
 				}
 				int result = afterchoice();
 				if(result == 987) {return 987;}
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -271,6 +284,8 @@ public class KioskUI {
 					return 567;
 				}
 				
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -285,7 +300,7 @@ public class KioskUI {
 			int ch2;
 			try {
 				do {
-					System.out.print("전화번호[이전 : 0] => ");
+					System.out.print("휴대전화 번호를 입력해주세요 [이전 : 0] => ");
 					tel = br.readLine();
 					if(tel.equals("0")) {
 						return 567;
@@ -298,7 +313,7 @@ public class KioskUI {
 				if(dto2.getMember_name()!=null) {
 					System.out.println("\n환영합니다 " + dto2.getMember_name() + " 님!");
 					System.out.println("적립된 스탬프 : " + dao.usableStamp(dto2.getMember_code())+ " 개");
-					System.out.println("스탬프 20개를 사용하면 3000원이 할인됩니다.");
+					System.out.println("스탬프 20개 사용 시 3000원이 할인");
 					if(dao.usableStamp(dto2.getMember_code())>=20) {
 						do {
 							System.out.println("포인트를 사용하시겠습니까?[1.예/2.아니오] => ");
@@ -313,6 +328,8 @@ public class KioskUI {
 					System.out.println("존재하지 않는 회원입니다.");
 					return 567;
 				}
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -326,9 +343,9 @@ public class KioskUI {
 			int result;
 			String p = "010-\\d{4}-\\d{4}";
 			try {
-				System.out.println("이름 or 별명 => ");
+				System.out.println("이름 or 별명을 입력해주세요 => ");
 				name = br.readLine();
-				System.out.println("휴대폰번호[010-0000-0000] => ");
+				System.out.println("휴대폰번호를 입력해주세요 [010-0000-0000] => ");
 				tel = br.readLine();
 				if(!tel.matches(p)) {
 					System.out.println("입력 형식이 일치하지 않습니다[010-0000-0000]");
@@ -353,11 +370,6 @@ public class KioskUI {
 			List<String> list = new ArrayList<>();
 			int ch;
 			
-			/*
-			List<Integer> list2 = dao.selectPlastic(shoppingList);
-			System.out.println("사용될 플라스틱 컵R : " + list2.get(0));
-			System.out.println("사용될 플라스틱 컵L : " + list2.get(1));
-			*/
 			try {
 				list = dao.showPaymentMethod();
 				int n = 1;
@@ -367,7 +379,7 @@ public class KioskUI {
 				}
 				System.out.println();
 				do {
-					System.out.print("결제 수단 => ");
+					System.out.print("결제 수단을 입력해주세요 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while (ch < 1 || ch > list.size());
 				payment_method = list.get(ch - 1);
@@ -394,6 +406,9 @@ public class KioskUI {
 				}
 				System.out.println("결제가 완료되었습니다.");
 				return 987;
+				
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요");
 			} catch (Exception e) {
 			}
 		}

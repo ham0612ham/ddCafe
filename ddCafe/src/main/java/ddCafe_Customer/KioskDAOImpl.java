@@ -10,8 +10,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.rowset.CachedRowSet;
-
 import db.util.DBConn;
 
 public class KioskDAOImpl implements KioskDAO{
@@ -234,11 +232,14 @@ public class KioskDAOImpl implements KioskDAO{
 
 	@Override
 	public void bestMenues() {
-		
+		// 2022.09.02 하기
 	}
 
 	@Override
-	public int addMember(String name, String tel) throws SQLException {
+	public int addMember(String name, String tel)  throws MyDuplicationException, SQLException  {
+		if(findMember(tel) != null) {
+			throw new MyDuplicationException("이미 등록된 번호입니다.");
+		};
 		PreparedStatement pstmt = null;
 		String sql;
 		int result = 0;
