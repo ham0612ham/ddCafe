@@ -26,7 +26,6 @@ public class IngredientUI {
 
 				if (ch == 7) {
 					System.out.println();
-					DBConn.close();
 					return;
 				}
 
