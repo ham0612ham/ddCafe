@@ -142,18 +142,18 @@ public class SalesUI {
 		try {
 
 			do {
-				System.out.println("1.매출리스트 2.오늘매출총합[종료 : 0] => ");
+				System.out.print("1.매출리스트 2.오늘매출총합 [종료 : 0] => ");
 				ch = Integer.parseInt(br.readLine());
 			} while (ch < 0 || ch > 2);
 
 			if (ch == 0) {
 				return;
 			} else if (ch == 1) {
-				System.out.print("검색할 날짜 =>");
+				System.out.print("검색할 날짜를 입력해주세요[YYYYMMDD] => ");
 				saledate = br.readLine();
 
 				if (!saledate.matches(p)) {
-					System.out.println("입력 형식이 일치하지 않습니다[YYYYMMDD]");
+					System.out.println("입력 형식이 일치하지 않습니다 [YYYYMMDD]");
 					return;
 				} else {
 					List<SalesDTO> list = dao.selectToday(saledate);
@@ -193,18 +193,18 @@ public class SalesUI {
 		try {
 
 			do {
-				System.out.println("1.매출리스트 2.주매출총합[종료 : 0] => ");
+				System.out.print("1.매출리스트 2.주매출총합 [종료 : 0] => ");
 				ch = Integer.parseInt(br.readLine());
 			} while (ch < 0 || ch > 2);
 
 			if (ch == 0) {
 				return;
 			} else if (ch == 1) {
-				System.out.print("검색할 날짜 =>");
+				System.out.print("검색할 날짜를 입력해주세요[YYYYMMDD] => ");
 				saledate = br.readLine();
 
 				if (!saledate.matches(p)) {
-					System.out.println("입력 형식이 일치하지 않습니다[YYYYMMDD]");
+					System.out.println("입력 형식이 일치하지 않습니다 [YYYYMMDD]");
 					return;
 				} else {
 					List<SalesDTO> list = dao.selectWeek(saledate);
@@ -243,18 +243,18 @@ public class SalesUI {
 		try {
 
 			do {
-				System.out.println("1.매출리스트 2.월매출총합[종료 : 0] => ");
+				System.out.println("1.매출리스트 2.월매출총합 [종료 : 0] => ");
 				ch = Integer.parseInt(br.readLine());
 			} while (ch < 0 || ch > 2);
 
 			if (ch == 0) {
 				return;
 			} else if (ch == 1) {
-				System.out.print("검색할 날짜 =>");
+				System.out.print("검색할 날짜를 입력해주세요[YYYYMM] => ");
 				saledate = br.readLine();
 
 				if (!saledate.matches(p)) {
-					System.out.println("입력 형식이 일치하지 않습니다[YYYYMM]");
+					System.out.println("입력 형식이 일치하지 않습니다 [YYYYMM]");
 					return;
 				} else {
 					List<SalesDTO> list = dao.selectMonth(saledate);
@@ -293,18 +293,18 @@ public class SalesUI {
 		try {
 
 			do {
-				System.out.println("1.매출리스트 2.년매출총합[종료 : 0] => ");
+				System.out.println("1.매출리스트 2.년매출총합 [종료 : 0] => ");
 				ch = Integer.parseInt(br.readLine());
 			} while (ch < 0 || ch > 2);
 
 			if (ch == 0) {
 				return;
 			} else if (ch == 1) {
-				System.out.print("검색할 날짜 =>");
+				System.out.print("검색할 날짜를 입력해주세요[YYYY] => ");
 				saledate = br.readLine();
 
 				if (!saledate.matches(p)) {
-					System.out.println("입력 형식이 일치하지 않습니다[YYYY]");
+					System.out.println("입력 형식이 일치하지 않습니다 [YYYY]");
 					return;
 				} else {
 					List<SalesDTO> list = dao.selectYear(saledate);

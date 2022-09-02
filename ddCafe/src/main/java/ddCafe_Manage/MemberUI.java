@@ -24,7 +24,6 @@ public class MemberUI {
 
 				if (ch == 6) {
 					System.out.println();
-					DBConn.close();
 					return;
 				}
 

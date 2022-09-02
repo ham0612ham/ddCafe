@@ -204,7 +204,7 @@ public class KioskUI {
 			System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 			try {
 				do {
-					System.out.print("삭제할 메뉴 [이전 : 0] => ");
+					System.out.print("삭제할 메뉴를 입력해주세요 [이전 : 0] => ");
 					ch = Integer.parseInt(br.readLine());
 					if(ch==0) { return 567; }
 				} while (ch<0||ch>shoppingList.size());
@@ -233,11 +233,11 @@ public class KioskUI {
 			System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 			try {
 				do {
-					System.out.print("수정할 메뉴 [이전 : 0] => ");
+					System.out.print("수정할 메뉴를 입력해주세요 [이전 : 0] => ");
 					ch = Integer.parseInt(br.readLine());
 					if(ch==0) { return 567; }
 				} while (ch<0||ch>shoppingList.size());
-				System.out.print("개 수 [이전 : 0] => ");
+				System.out.print("개 수를 입력해주세요 [이전 : 0] => ");
 				qty = Integer.parseInt(br.readLine()); // ## 바꾼 개수로 재료 확보 가능한지 여부 <- 추가해야함
 				if(qty==0) { return 567; }
 				MenuDTO dto = shoppingList.get(ch-1);
@@ -300,7 +300,7 @@ public class KioskUI {
 			int ch2;
 			try {
 				do {
-					System.out.print("전화번호[이전 : 0] => ");
+					System.out.print("휴대전화 번호를 입력해주세요 [이전 : 0] => ");
 					tel = br.readLine();
 					if(tel.equals("0")) {
 						return 567;
@@ -343,9 +343,9 @@ public class KioskUI {
 			int result;
 			String p = "010-\\d{4}-\\d{4}";
 			try {
-				System.out.println("이름 or 별명 => ");
+				System.out.println("이름 or 별명을 입력해주세요 => ");
 				name = br.readLine();
-				System.out.println("휴대폰번호[010-0000-0000] => ");
+				System.out.println("휴대폰번호를 입력해주세요 [010-0000-0000] => ");
 				tel = br.readLine();
 				if(!tel.matches(p)) {
 					System.out.println("입력 형식이 일치하지 않습니다[010-0000-0000]");
@@ -379,7 +379,7 @@ public class KioskUI {
 				}
 				System.out.println();
 				do {
-					System.out.print("결제 수단 => ");
+					System.out.print("결제 수단을 입력해주세요 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while (ch < 1 || ch > list.size());
 				payment_method = list.get(ch - 1);

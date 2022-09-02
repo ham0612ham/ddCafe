@@ -232,7 +232,7 @@ public class KioskDAOImpl implements KioskDAO{
 
 	@Override
 	public void bestMenues() {
-		
+		// 2022.09.02 하기
 	}
 
 	@Override
