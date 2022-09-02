@@ -25,7 +25,6 @@ public class SalesUI {
 
 				if (ch == 4) {
 					System.out.println();
-					DBConn.close();
 					return;
 				}
 				switch (ch) {
