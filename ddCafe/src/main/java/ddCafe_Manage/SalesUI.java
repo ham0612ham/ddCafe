@@ -59,6 +59,7 @@ public class SalesUI {
 
 		System.out.println();
 	}
+	
 	public void sales_menu() {
 
 		int ch;

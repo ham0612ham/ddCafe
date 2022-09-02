@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import db.util.DBConn;
-
 public class MemberUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private MemberDAO dao = new MemberDAOImpl();
@@ -18,13 +16,12 @@ public class MemberUI {
 			System.out.println("\n✦ 회원 메뉴 ✦");
 			try {
 				do {
-					System.out.print("\n1.회원정보확인[이름] 2.회원정보확인[전화번호] 3.회원리스트 4.회원정보수정 5.회원탈퇴 6.뒤로가기 => ");
+					System.out.print("\n1.회원정보확인[이름] 2.회원정보확인[전화번호] 3.회원리스트 4.회원정보수정 5.회원탈퇴 6.이전 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while (ch < 1 || ch > 6);
 
 				if (ch == 6) {
 					System.out.println();
-					DBConn.close();
 					return;
 				}
 
@@ -58,7 +55,7 @@ public class MemberUI {
 
 			List<MemberDTO> list = null;
 
-			System.out.println("이름[종료 : 0] => ");
+			System.out.print("이름을 입력해주세요 [종료 : 0] => ");
 			name = br.readLine();
 
 			if (name.equals("0")) {
@@ -73,14 +70,13 @@ public class MemberUI {
 			}
 
 			System.out.println();
-			System.out.println("회원번호\t회원이름\t전화번호\t\t회원등록일");
-			System.out.println("-----------------------------------------------------");
+			System.out.println("회원번호 / 회원이름 / 전화번호 / 회원등록일");
 
 			for (MemberDTO dto : list) {
-				System.out.print(dto.getMemberNum() + "\t");
-				System.out.print(dto.getName() + "\t");
-				System.out.print(dto.getTel() + "\t");
-				System.out.println(dto.getDate() + "\t");
+				System.out.print(dto.getMemberNum() + " / ");
+				System.out.print(dto.getName() + " / ");
+				System.out.print(dto.getTel() + " / ");
+				System.out.println(dto.getDate());
 			}
 			System.out.println();
 
@@ -99,7 +95,7 @@ public class MemberUI {
 			MemberDTO dto = new MemberDTO();
 
 			do {
-				System.out.println("전화번호[종료 : 0] => ");
+				System.out.print("전화번호를 입력해주세요 [종료 : 0] => ");
 				tel = br.readLine();
 
 				if (tel.equals("0")) {
@@ -115,18 +111,17 @@ public class MemberUI {
 			} while (!tel.matches(p));
 
 			if (dto.getName() == null) {
-				System.out.println("등록된 회원 정보가 없습니다.\n");
+				System.out.println("등록된 회원 정보가 없습니다.");
 				return;
 			}
 
 			System.out.println();
-			System.out.println("회원번호\t회원이름\t전화번호\t\t회원등록일");
-			System.out.println("-----------------------------------------------------");
+			System.out.println("회원번호 / 회원이름 / 전화번호 / 회원등록일");
 
-			System.out.print(dto.getMemberNum() + "\t");
-			System.out.print(dto.getName() + "\t");
-			System.out.print(dto.getTel() + "\t");
-			System.out.println(dto.getDate() + "\t");
+			System.out.print(dto.getMemberNum() + " / ");
+			System.out.print(dto.getName() + " / ");
+			System.out.print(dto.getTel() + " / ");
+			System.out.println(dto.getDate());
 
 			System.out.println();
 
@@ -140,16 +135,15 @@ public class MemberUI {
 		System.out.println("\n✦ 회원 리스트 ︎✦");
 
 		System.out.println();
-		System.out.println("회원번호\t회원이름\t전화번호\t\t회원등록일");
-		System.out.println("-----------------------------------------------------");
+		System.out.println("회원번호 / 회원이름 / 전화번호 / 회원등록일");
 
 		List<MemberDTO> list = dao.listMember();
 
 		for (MemberDTO dto : list) {
-			System.out.print(dto.getMemberNum() + "\t");
-			System.out.print(dto.getName() + "\t");
-			System.out.print(dto.getTel() + "\t");
-			System.out.println(dto.getDate() + "\t");
+			System.out.print(dto.getMemberNum() + " / ");
+			System.out.print(dto.getName() + " / ");
+			System.out.print(dto.getTel() + " / ");
+			System.out.println(dto.getDate());
 		}
 		System.out.println();
 	}
@@ -166,7 +160,7 @@ public class MemberUI {
 			MemberDTO dto = new MemberDTO();
 
 			do {
-				System.out.print("기존 전화번호[종료 : 0] => ");
+				System.out.print("기존 전화번호를 입력해주세요 [종료 : 0] => ");
 				old_tel = br.readLine();
 
 				if (old_tel.equals("0")) {
@@ -182,23 +176,23 @@ public class MemberUI {
 			} while (!old_tel.matches(p));
 
 			if (dto.getName() == null) {
-				System.out.println("등록된 회원 정보가 없습니다.\n");
+				System.out.println("등록된 회원 정보가 없습니다.");
 				return;
 			}
 
 			do {
-				System.out.print(dto.getName() + "님(이/가) 맞습니까?[1.예/2.아니오] => ");
+				System.out.print(dto.getName() + "님(이/가) 맞습니까? [1.예/2.아니오] => ");
 				choice = Integer.parseInt(br.readLine());
 			} while (choice < 0 || choice > 2);
 
 			System.out.println();
 
 			if (choice == 1) {
-				System.out.print("수정할 이름 => ");
+				System.out.print("수정할 이름을 입력해주세요 => ");
 				new_name = br.readLine();
 
 				do {
-					System.out.print("수정할 전화번호 => ");
+					System.out.print("수정할 전화번호를 입력해주세요 => ");
 					new_tel = br.readLine();
 
 					if (!new_tel.matches(p)) {
@@ -207,7 +201,7 @@ public class MemberUI {
 				} while (!new_tel.matches(p));
 
 				do {
-					System.out.print("정말로 수정하시겠습니까?[1.예/2.아니오] => ");
+					System.out.print("정말로 수정하시겠습니까? [1.예/2.아니오] => ");
 					choice = Integer.parseInt(br.readLine());
 				} while (choice < 0 || choice > 2);
 
@@ -244,7 +238,7 @@ public class MemberUI {
 		try {
 
 			do {
-				System.out.println("삭제할 전화번호[종료 : 0] => ");
+				System.out.println("삭제할 전화번를 입력해주세요 [종료 : 0] => ");
 				tel = br.readLine();
 
 				if (tel.equals("0")) {
@@ -260,18 +254,18 @@ public class MemberUI {
 			MemberDTO dto = dao.readMemberByTel(tel);
 
 			if (dto == null) {
-				System.out.println("등록된 회원정보가 없습니다.\n");
+				System.out.println("등록된 회원정보가 없습니다.");
 				return;
 			}
 
 			do {
-				System.out.print(dto.getName() + "님(이/가) 맞습니까?[1.예/2.아니오] => ");
+				System.out.print(dto.getName() + "님(이/가) 맞습니까? [1.예/2.아니오] => ");
 				choice = Integer.parseInt(br.readLine());
 			} while (choice < 0 || choice > 2);
 
 			do {
 				System.out.println();
-				System.out.print("정말로 삭제하시겠습니까?[1.예/2.아니오] =>  ");
+				System.out.print("정말로 삭제하시겠습니까? [1.예/2.아니오] =>  ");
 				choice = Integer.parseInt(br.readLine());
 			} while (choice < 0 || choice > 2);
 
