@@ -133,10 +133,11 @@ public class MenuUI {
 			a = Integer.parseInt(br.readLine());
 			if(a==1) {
 				dao.addMenu(dto);
+				System.out.println("메뉴 추가 완료");
 			}else {
 				return;
 			}
-
+			
 		} catch (NumberFormatException e) {
 			System.out.println("숫자만 가능합니다");
 		} catch (Exception e) {
