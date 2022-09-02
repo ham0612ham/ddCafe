@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import db.util.DBConn;
-
 public class IngredientUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private IngredientDAO dao = new IngredientImpl();
@@ -42,6 +40,7 @@ public class IngredientUI {
 		}
 	}
 
+	
 	public void check_ingredient() {
 		System.out.println("\n✦ 재료 확인 ︎✦");
 
@@ -55,6 +54,7 @@ public class IngredientUI {
 		System.out.println();
 	}
 
+	
 	public void add_ingredietn() {
 		System.out.println("\n✦ 재료 추가 주문 ︎✦");
 		List<IngredientDTO> list = dao.show_orderlist();
@@ -70,16 +70,11 @@ public class IngredientUI {
 			System.out.println(dto.getManager_tel());
 		}
 		
-		
-		
-		
-		
-		
 		try {
 			int ch, chc;
 			
 			do {
-				System.out.print("\n추가할 재료를 입력하세요. [새로운 재료 추가 : 0] => ");
+				System.out.print("\n추가할 재료를 입력해주세요. [새로운 재료 추가 : 0] => ");
 				ch = Integer.parseInt(br.readLine());
 				if(ch==0) {
 					newIngredient();
@@ -87,7 +82,7 @@ public class IngredientUI {
 					}
 			} while(ch<1||ch>list.size());
 			
-			System.out.print("\n개수를 입력하세요. => ");
+			System.out.print("\n개수를 입력해주세요. => ");
 			qty = Integer.parseInt(br.readLine());
 			
 			IngredientDTO dto = new IngredientDTO();
@@ -98,7 +93,7 @@ public class IngredientUI {
 			
 			do {
 				System.out.println();
-				System.out.print("\n"+ dto.getIngredient_name() + "(을)를 " + qty + "개 추가주문하시겠습니까? [1.예/2.아니오] => ");
+				System.out.print("\n"+ dto.getIngredient_name() + "(을)를 " + qty + "개 추가주문 하시겠습니까? [1.예/2.아니오] => ");
 				chc = Integer.parseInt(br.readLine());
 			} while (chc<0 || chc>2);
 				
@@ -117,7 +112,6 @@ public class IngredientUI {
 	}
 	
 	
-
 	public void newIngredient() { 
 	      System.out.println("\n✦ 새로운 재료 추가 ︎✦");
 	      List<IngredientDTO> list1 = dao.vendorList();
@@ -136,7 +130,7 @@ public class IngredientUI {
 	    	  IngredientDTO dto1 = new IngredientDTO();
 	    	  
 	    	  do {
-	    		  System.out.print("\n새로운 재료를 공급받을 업체를 입력하세요. => ");
+	    		  System.out.print("\n새로운 재료를 공급받을 업체를 입력해주세요. => ");
 	    		  ch = Integer.parseInt(br.readLine());
 	    	  } while(ch<1||ch>list1.size());
 	    		  
@@ -177,11 +171,7 @@ public class IngredientUI {
 		return;
 	   }
 	
-
 	
-	
-	
-
 	public void receiving_history() { 
 		System.out.println("\n✦ 입고 내역 ︎✦");
 		
@@ -200,14 +190,13 @@ public class IngredientUI {
 	}
 	
 	
-	
 	public void delete_ingredient() {
 		System.out.println("\n✦ 재고 삭제 ︎✦");
 		List<IngredientDTO> list = dao.trash_ingredientcode();
 		
-		
+			
+		int n = 0;
 		for (IngredientDTO dto : list) {
-			int n = 0;
 			System.out.print( (++n) + ".");
 			System.out.print(dto.getIngredient_name()+ "/");
 			System.out.println(dto.getIngredient_qty());
@@ -217,18 +206,18 @@ public class IngredientUI {
 			int ic, icq, ch;
 			IngredientDTO dto = new IngredientDTO();
 			
-			System.out.print("\n폐기할 자료를 입력하세요. => ");
+			System.out.print("\n폐기할 자료를 입력해주세요. => ");
 			ic =Integer.parseInt(br.readLine());
 			
 			dto = list.get(ic -1);
 			
 			do {
-				System.out.print("\n" + dto.getIngredient_name() + "의 개수를 입력하세요. => ");
+				System.out.print("\n" + dto.getIngredient_name() + "의 개수를 입력해주세요. => ");
 				icq = Integer.parseInt(br.readLine());
 				if (icq >= 1 && icq <= dto.getIngredient_qty()) {
 					dto.setTrash_qty(icq);
 				} else { 
-					System.out.println("\n재료 수량보다 많습니다. 다시 입력하세요. => ");
+					System.out.println("\n재료 수량보다 많습니다. 다시 입력해주세요. => ");
 				}
 			} while (icq > dto.getIngredient_qty());
 			
@@ -257,10 +246,8 @@ public class IngredientUI {
 		}
 		System.out.println();
 	}
-		
+
 	
-
-
 	public void new_vendor() {
 		while(true) {
 			System.out.println("\n✦ 새로운 업체 추가 ︎✦");
@@ -306,11 +293,6 @@ public class IngredientUI {
 			}
 		}
 	}
-	
-	
-	
-	
-	
 	
 	
 	public void check_vendor() { 

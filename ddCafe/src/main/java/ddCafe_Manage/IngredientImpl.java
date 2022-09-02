@@ -14,8 +14,6 @@ public class IngredientImpl implements IngredientDAO{
 	private Connection conn = DBConn.getConnection();
 	
 	
-	
-	
 	@Override 
 	public List<IngredientDTO> left_ingredient() { 
 		List<IngredientDTO> list = new ArrayList<>();
@@ -58,7 +56,6 @@ public class IngredientImpl implements IngredientDAO{
 		}
 		return list;
 	}
-	
 
 	
 	@Override    
@@ -106,7 +103,7 @@ public class IngredientImpl implements IngredientDAO{
 			}
 			
 			if(e.getErrorCode() == 1400) { 
-				System.out.println("\n필수 입력 사항을 입력 하지 않았습니다.");
+				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
 			} else {
 				System.out.println(e.toString());
 			}
@@ -179,8 +176,6 @@ public class IngredientImpl implements IngredientDAO{
 		}
 		return list;
 	}
-	
-
 	
 	
 	@Override 
@@ -306,7 +301,7 @@ public class IngredientImpl implements IngredientDAO{
 			} catch (Exception e2) {
 			}
 			if(e.getErrorCode()==1) {
-				System.out.println("\n이미 등록된 전화번호 입니다.");
+				System.out.println("이미 등록된 전화번호 입니다.");
 			} else {
 				System.out.println(e.toString());
 			}
@@ -329,6 +324,7 @@ public class IngredientImpl implements IngredientDAO{
 		} 
 		return result;
 	}
+	
 	
 	@Override 
 	public int sub_ingredient(IngredientDTO dto) throws SQLException{
@@ -370,7 +366,7 @@ public class IngredientImpl implements IngredientDAO{
 			}
 		
 			if(e.getErrorCode() == 1400) { 
-				System.out.println("\n필수 입력 사항을 입력 하지 않았습니다.");
+				System.out.println("필수 입력 사항을 입력 하지 않았습니다.");
 			} else {
 				System.out.println(e.toString());
 			}
