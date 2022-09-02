@@ -61,13 +61,18 @@ public class IngredientUI {
 	}
 
 	public void add_ingredietn() {
-		
 		System.out.println("\n✦ 재료 추가 주문 ︎✦");
 		List<IngredientDTO> list = dao.show_orderlist();
 		
+		//for (int i = 0; i < list.size(); ++i) {
+			//String var = list.get(i);
+		//}
+		
+		int n=0;
+		
 		for (IngredientDTO dto : list) {
-			
-			System.out.print(dto.getIngredient_code()+ ".");
+			// System.out.print(dto.getIngredient_code()+ ".");
+			System.out.print( (++n) + ".");
 			System.out.print(dto.getIngredient_name()+ " / ");
 			System.out.print(dto.getReceiving_price()+ " / ");
 			System.out.print(dto.getVendor_code()+ ".");
@@ -76,10 +81,27 @@ public class IngredientUI {
 			System.out.println(dto.getManager_tel());
 		}
 		
+		/*
+		 
+		 List<ContentListDTO> dtos = new ArrayList<ContentListDTO>();
+    for (int i = 0; i < result.getContentCount(); i++) {      
+       ContentListDTO dto = new ContentListDTO();
+       String content = result.getContent()[i].toString();
+       String category = result.getCategory()[i].toString();
+       dto.setContent(content);
+       dto.setCategory(category);
+       dtos.add(dto);
+    }
+		 */
+		
+		
+		
+		
+		
 		try {
 			int ch, chc;
 			
-			do { 
+			do {
 				System.out.print("\n 추가할 재료를 입력하세요. [새로운 재료 추가 : 0]  ");
 				ch = Integer.parseInt(br.readLine());
 				if(ch==0) {
@@ -99,7 +121,6 @@ public class IngredientUI {
 
 			dto = list.get(ch - 1);  
 			
-			// dto.setIngredient_code(ch -1);  오류의 범인
 			dto.setReceiving_qty(qty);
 			
 			do {
@@ -139,8 +160,9 @@ public class IngredientUI {
 	      System.out.println("\n✦ 새로운 재료 추가 ︎✦");
 	      List<IngredientDTO> list1 = dao.vendorList();
 	      
+	      int n=0;
 	      for (IngredientDTO dto1 : list1) {
-	    	  System.out.print(dto1.getVendor_code() + ".");
+	    	  System.out.print( (++n) + ".");
 	    	  System.out.print(dto1.getVendor_name() + " / ");
 	    	  System.out.print(dto1.getManager_name() + " / ");
 	    	  System.out.println(dto1.getManager_tel());
@@ -229,7 +251,8 @@ public class IngredientUI {
 		
 		for (IngredientDTO dto : list) {
 			
-			System.out.print(dto.getIngredient_code()+ ".");
+			int n = 0;
+			System.out.print( (++n) + ".");
 			System.out.print(dto.getIngredient_name()+ "/");
 			System.out.println(dto.getIngredient_qty());
 			
