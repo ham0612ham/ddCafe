@@ -3,6 +3,7 @@ package ddCafe_Manage;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 
 import db.util.DBConn;
 
@@ -19,23 +20,26 @@ public class SalesUI {
 
 			try {
 				do {
-					System.out.print("\n1.메뉴판매량 2.베스트메뉴확인 3.매출확인 4.종료 => ");
+					System.out.print("\n1.포장/매장여부확인 2.메뉴판매량확인 3.베스트메뉴확인 4.매출확인 5.종료 => ");
 					ch = Integer.parseInt(br.readLine());
-				} while (ch < 1 || ch > 4);
+				} while (ch < 1 || ch > 5);
 
-				if (ch == 4) {
+				if (ch == 5) {
 					System.out.println();
 					DBConn.close();
 					return;
 				}
 				switch (ch) {
 				case 1:
-					sales_by_menu();
+					takeout_menu();
 					break;
 				case 2:
-					best_menu();
+					sales_by_menu();
 					break;
 				case 3:
+					best_menu();
+					break;
+				case 4:
 					sales_menu();
 					break;
 				}
@@ -43,7 +47,18 @@ public class SalesUI {
 			}
 		}
 	}
+	
+	public void takeout_menu() {
+		Map<String, Integer> map = dao.countTakeOut();
 
+		int store = map.get("store");
+		int takeout = map.get("takeout");
+
+		System.out.println("매장 : " + store);
+		System.out.println("포장 : " + takeout);
+
+		System.out.println();
+	}
 	public void sales_menu() {
 
 		int ch;
@@ -97,7 +112,7 @@ public class SalesUI {
 		}
 		List<SalesDTO> total = dao.totalPanmai();
 		for(SalesDTO dto : total) {
-			System.out.println("합계 : "+dto.getQty());
+			System.out.println("판매량 합계 : "+dto.getQty());
 		}
 
 	}

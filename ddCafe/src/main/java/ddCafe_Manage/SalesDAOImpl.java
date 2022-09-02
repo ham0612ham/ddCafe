@@ -23,7 +23,8 @@ public class SalesDAOImpl implements SalesDAO {
 
 		try {
 			sql = " SELECT SUM(DECODE(takeout_togo, '매장', order_qty, 0)) store, "
-					+ "       SUM(DECODE(takeout_togo, '포장', order_qty, 0)) takeout " + " FROM menu_order mo "
+					+ " SUM(DECODE(takeout_togo, '포장', order_qty, 0)) takeout " 
+					+ " FROM menu_order mo "
 					+ " JOIN order_detail od ON mo.order_num = od.order_num ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -56,10 +57,12 @@ public class SalesDAOImpl implements SalesDAO {
 		String sql;
 
 		try {
-			sql = " SELECT m2.menu_name, m1.menu_size, SUM(order_qty) qty " + " FROM order_detail o1 "
+			sql = " SELECT m2.menu_name, m1.menu_size, SUM(order_qty) qty " 
+					+ " FROM order_detail o1 "
 					+ " JOIN menu_detail m1 ON o1.menu_detail_code = m1.menu_detail_code "
 					+ " JOIN menu m2 ON m1.menu_code = m2.menu_code "
-					+ " GROUP BY m1.menu_detail_code, m2.menu_name, m1.menu_size " + " ORDER BY qty DESC ";
+					+ " GROUP BY m1.menu_detail_code, m2.menu_name, m1.menu_size " 
+					+ " ORDER BY qty DESC ";
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -105,10 +108,12 @@ public class SalesDAOImpl implements SalesDAO {
 		String sql;
 
 		try {
-			sql = " SELECT SUM(qty) total_qty FROM( " + " SELECT SUM(order_qty) qty " + " FROM order_detail o1 "
+			sql = " SELECT SUM(qty) total_qty FROM( " 
+					+ " SELECT SUM(order_qty) qty " + " FROM order_detail o1 "
 					+ " JOIN menu_detail m1 ON o1.menu_detail_code = m1.menu_detail_code "
 					+ " JOIN menu m2 ON m1.menu_code = m2.menu_code "
-					+ " GROUP BY m1.menu_detail_code, m2.menu_name, m1.menu_size " + " ORDER BY qty DESC) ";
+					+ " GROUP BY m1.menu_detail_code, m2.menu_name, m1.menu_size " 
+					+ " ORDER BY qty DESC) ";
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -155,7 +160,8 @@ public class SalesDAOImpl implements SalesDAO {
 			sql = " SELECT menu_name FROM( "
 					+ " SELECT menu_name,SUM(order_qty) qty ,RANK() OVER(ORDER BY SUM(order_qty) DESC) rank, m2.menu_code "
 					+ " FROM order_detail o1 " + " JOIN menu_detail m1 ON o1.menu_detail_code = m1.menu_detail_code "
-					+ " JOIN menu m2 ON m1.menu_code = m2.menu_code " + " GROUP BY menu_name, m2.menu_code "
+					+ " JOIN menu m2 ON m1.menu_code = m2.menu_code " 
+					+ " GROUP BY menu_name, m2.menu_code "
 					+ " )WHERE rank <=3 ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -201,7 +207,8 @@ public class SalesDAOImpl implements SalesDAO {
 
 		try {
 			sql = " SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD') today, TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') today_price "
-					+ " FROM payment p " + " JOIN menu_order mo ON p.order_num = mo.order_num "
+					+ " FROM payment p " 
+					+ " JOIN menu_order mo ON p.order_num = mo.order_num "
 					+ " WHERE TO_CHAR(order_date, 'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD') ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -248,7 +255,8 @@ public class SalesDAOImpl implements SalesDAO {
 		try {
 			sql = " SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD') week, TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') week_price, "
 					+ " TO_CHAR(NEXT_DAY(SYSDATE , 1) -7, 'YYYY-MM-DD') day1, "
-					+ " TO_CHAR(NEXT_DAY(SYSDATE-1, 7), 'YYYY-MM-DD') day2 " + " FROM payment p "
+					+ " TO_CHAR(NEXT_DAY(SYSDATE-1, 7), 'YYYY-MM-DD') day2 " 
+					+ " FROM payment p "
 					+ " JOIN menu_order mo ON p.order_num = mo.order_num "
 					+ " WHERE (order_date >= NEXT_DAY(SYSDATE, 1) -7) "
 					+ " AND (order_date <= NEXT_DAY(SYSDATE-1, 7)) ";
@@ -298,7 +306,8 @@ public class SalesDAOImpl implements SalesDAO {
 
 		try {
 			sql = " SELECT TO_CHAR(SYSDATE, 'MM') month , TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') month_price "
-					+ "	FROM payment p " + "	JOIN menu_order mo ON p.order_num = mo.order_num "
+					+ "	FROM payment p " 
+					+ "	JOIN menu_order mo ON p.order_num = mo.order_num "
 					+ "	WHERE TO_CHAR(order_date, 'MM') = TO_CHAR(SYSDATE, 'MM') ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -344,7 +353,8 @@ public class SalesDAOImpl implements SalesDAO {
 
 		try {
 			sql = " SELECT TO_CHAR(SYSDATE, 'YYYY') year , TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') year_price "
-					+ " FROM payment p " + " JOIN menu_order mo ON p.order_num = mo.order_num "
+					+ " FROM payment p " 
+					+ " JOIN menu_order mo ON p.order_num = mo.order_num "
 					+ " WHERE TO_CHAR(order_date, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY')";
 
 			pstmt = conn.prepareStatement(sql);
@@ -390,7 +400,8 @@ public class SalesDAOImpl implements SalesDAO {
 
 		try {
 			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS') day, "
-					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') day_price " + " FROM payment p "
+					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') day_price " 
+					+ " FROM payment p "
 					+ " JOIN menu_order mo ON p.order_num = mo.order_num  "
 					+ " WHERE TO_CHAR(order_date,'YYYYMMDD') = ? "
 					+ " GROUP BY ROLLUP(TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS')) ";
@@ -440,7 +451,8 @@ public class SalesDAOImpl implements SalesDAO {
 
 		try {
 			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS') week, "
-					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') week_price" + " FROM payment p "
+					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') week_price" 
+					+ " FROM payment p "
 					+ " JOIN menu_order mo ON p.order_num = mo.order_num "
 					+ " WHERE (order_date >= NEXT_DAY(TO_DATE(?,'YYYYMMDD'), 1) -7) "
 					+ " AND (order_date <= NEXT_DAY(TO_DATE(?,'YYYYMMDD')-1, 7)) "
@@ -492,8 +504,10 @@ public class SalesDAOImpl implements SalesDAO {
 
 		try {
 			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS') month, "
-					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') month_price " + " FROM payment p "
-					+ " JOIN menu_order mo ON p.order_num = mo.order_num " + " WHERE TO_CHAR(order_date,'YYYYMM') = ? "
+					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') month_price " 
+					+ " FROM payment p "
+					+ " JOIN menu_order mo ON p.order_num = mo.order_num " 
+					+ " WHERE TO_CHAR(order_date,'YYYYMM') = ? "
 					+ " GROUP BY ROLLUP(TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS')) ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -541,8 +555,10 @@ public class SalesDAOImpl implements SalesDAO {
 
 		try {
 			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS') year, "
-					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') year_price " + " FROM payment p "
-					+ " JOIN menu_order mo ON p.order_num = mo.order_num " + " WHERE TO_CHAR(order_date,'YYYY') = ? "
+					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') year_price " 
+					+ " FROM payment p "
+					+ " JOIN menu_order mo ON p.order_num = mo.order_num " 
+					+ " WHERE TO_CHAR(order_date,'YYYY') = ? "
 					+ " GROUP BY ROLLUP(TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS')) ";
 
 			pstmt = conn.prepareStatement(sql);
