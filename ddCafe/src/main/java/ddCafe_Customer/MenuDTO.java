@@ -12,6 +12,7 @@ public class MenuDTO {
 	private String size;
 	private int menu_detail_code;
 	private String status;
+	private int rank;
 	
 	public String getCategory() {
 		return category;
@@ -85,4 +86,11 @@ public class MenuDTO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+	
 }
