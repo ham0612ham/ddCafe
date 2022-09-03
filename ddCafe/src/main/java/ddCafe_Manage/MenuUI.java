@@ -18,7 +18,7 @@ public class MenuUI {
 			System.out.println("\n✦ 메뉴 관리 ✦");
 			try {
 				do {
-					System.out.print("\n1.메뉴추가 2.전체메뉴보기 3.메뉴검색 4.품절메뉴보기 5.메뉴삭제 6.품절처리 7.종료 => ");
+					System.out.print("\n1.메뉴추가 2.전체메뉴보기 3.메뉴검색 4.품절메뉴보기 5.메뉴삭제 6.품절처리 7.이전 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while(ch<1||ch>7);
 				
@@ -214,7 +214,7 @@ public class MenuUI {
 	public void delete_menu() {
 		System.out.println("\n✦ 메뉴 삭제 ︎✦");
 		
-		int code,c;
+		int code=0,c = 0;
 		
 		try {
 			List<MenuDTO> list=dao.showTwoMenu();
@@ -240,7 +240,10 @@ public class MenuUI {
 			System.out.println("메뉴를 삭제 했습니다.");
 			
 		} catch (Exception e) {
+			System.out.println(code);
+			System.out.println(c);
 			System.out.println("메뉴 삭제 실패 !!");
+			e.printStackTrace();
 		}
 		
 		System.out.println();

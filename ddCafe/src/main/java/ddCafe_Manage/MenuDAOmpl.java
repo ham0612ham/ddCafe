@@ -43,17 +43,8 @@ public class MenuDAOmpl implements MenuDAO{
 			cstmt.close();
 			*/
 			conn.setAutoCommit(false);
-			sql = "Insert into menu(menu_code,menu_name,category_num,status) values(menu_seq.nextval,?,?,?)";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, dto.getMenuName());
-			pstmt.setInt(2, dto.getCategoryNum());
-			pstmt.setString(3, dto.getStatus());
-			result = pstmt.executeUpdate();
 			
-			pstmt.close();
-			pstmt = null;
-			
-			sql = "select menu_detail_seq.nextval from dual";
+			sql = "select menu_seq.nextval from dual";
 			int no=0;
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -64,10 +55,63 @@ public class MenuDAOmpl implements MenuDAO{
 			pstmt.close();
 			pstmt = null;
 			
+			sql = "select menu_code from menu where menu_name = ?";
+			int no3=0;
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getMenuName());
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				no3 = rs.getInt("menu_code");
+			}
+			rs.close();
+			pstmt.close();
+			pstmt = null;
+			
+			sql = "select menu_name from menu";
+			String ss = null;
+			List<String> sss = new ArrayList<>();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				ss = rs.getString("menu_name");
+				sss.add(ss);
+			}
+			rs.close();
+			pstmt.close();
+			pstmt = null;
+			
+			
+			sql = "Insert into menu(menu_code,menu_name,category_num,status) values(?,?,?,?)";
+			pstmt = conn.prepareStatement(sql);
+			if(sss.contains(dto.getMenuName())) {
+				pstmt.setInt(1,no3);
+			}
+			pstmt.setInt(1, no);
+			
+			pstmt.setString(2, dto.getMenuName());
+			pstmt.setInt(3, dto.getCategoryNum());
+			pstmt.setString(4, dto.getStatus());
+			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			pstmt = null;
+			
+			sql = "select menu_detail_seq.nextval from dual";
+			int no2=0;
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				no2 = rs.getInt(1);
+			}
+			rs.close();
+			pstmt.close();
+			pstmt = null;
+			
 			sql = "Insert into menu_detail(menu_detail_code,menu_price,menu_code,menu_size) values(?,?,menu_seq.currval,?)";
 
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, no);
+			pstmt.setInt(1, no2);
 			pstmt.setInt(2,dto.getMenuPrice());
 			pstmt.setString(3,dto.getMenuSize());
 			pstmt.executeUpdate();
@@ -79,7 +123,7 @@ public class MenuDAOmpl implements MenuDAO{
 				sql = "Insert into menu_ingredient(ingredient_code,menu_detail_code) values(?,?)";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, n);
-				pstmt.setInt(2, no);
+				pstmt.setInt(2, no2);
 				pstmt.executeUpdate();
 				pstmt.close();
 				pstmt = null;
@@ -168,20 +212,57 @@ public class MenuDAOmpl implements MenuDAO{
 	@Override
 	public int deleteMenu(int code) throws SQLException {
 		int result = 0;
+		MenuDTO dto = new MenuDTO();
 		CallableStatement cstmt = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		String sql;
 		
 		try {
-			sql = "{CALL deleteMenu(?)}";
-			cstmt = conn.prepareCall(sql);
-			cstmt.setInt(1, code);
-			cstmt.executeUpdate();
-			result = 1;
-
+//			sql = "{CALL deleteMenu(?)}";
+//			cstmt = conn.prepareCall(sql);
+//			cstmt.setInt(1, code);
+//			cstmt.executeUpdate();
+//			result = 1;
 			
+			conn.setAutoCommit(false);
+			sql = "select menu_detail_code from menu_detail where menu_code=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, code);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				dto.setMenuDetailNum(rs.getInt("menu_detail_code"));
+			}
+			pstmt.close();
+			pstmt = null;
 			
+			sql = "delete from menu_ingredient where menu_detail_code = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getMenuDetailNum());
+			pstmt.executeUpdate();
+			pstmt.close();
+			pstmt = null;
+			
+			sql = "delete from menu_detail where menu_code = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, code);
+			pstmt.executeUpdate();
+			pstmt.close();
+			pstmt = null;
+			
+			sql = "delete from menu where menu_code = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, code);
+			pstmt.executeUpdate();
+			pstmt.close();
+			pstmt = null;
+			conn.commit();
 			
 		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
 			if(e.getErrorCode() == 20100) {
 				System.out.println("등록된 상품이 아닙니다.");
 			}
