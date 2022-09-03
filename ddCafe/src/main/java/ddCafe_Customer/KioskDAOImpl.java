@@ -120,10 +120,6 @@ public class KioskDAOImpl implements KioskDAO{
 		return list;
 	}
 	
-	/**
-	 * 포인트 개수 쌓이게 만들어야 함.
-	 * 포인트 사용하면, 포인트를 차감, 차감하는 것 * 3000만큼 금액이 빠지도록 설정해야 함
-	 */
 	@Override
 	public int orderMenues(List<MenuDTO> list, String takeout_togo,int member_code, String payment_method, int stampUse_price) throws SQLException{
 		PreparedStatement pstmt = null;
@@ -282,7 +278,7 @@ public class KioskDAOImpl implements KioskDAO{
 
 	@Override
 	public int addMember(String name, String tel)  throws MyDuplicationException, SQLException  {
-		if(findMember(tel) != null) {
+		if(findMember(tel).getMember_tel() != null) {
 			throw new MyDuplicationException("이미 등록된 번호입니다.");
 		};
 		PreparedStatement pstmt = null;
