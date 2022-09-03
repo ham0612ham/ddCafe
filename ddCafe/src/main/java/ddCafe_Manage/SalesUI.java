@@ -20,7 +20,7 @@ public class SalesUI {
 
 			try {
 				do {
-					System.out.print("\n1.포장/매장여부확인 2.메뉴판매량확인 3.베스트메뉴확인 4.매출확인 5.종료 => ");
+					System.out.print("\n1.포장/매장여부확인 2.메뉴판매량확인 3.베스트메뉴확인 4.매출확인 5.이전 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while (ch < 1 || ch > 5);
 
