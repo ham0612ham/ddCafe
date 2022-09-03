@@ -6,6 +6,8 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import ddCafe_Manage.SalesDTO;
+
 public class KioskUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	List<MenuDTO> shoppingList = null;
@@ -83,6 +85,7 @@ public class KioskUI {
 			
 			List<MenuDTO> list = dao.showMenues(category_num);
 			List<String> list2 = dao.showMenues2(category_num);
+			List<MenuDTO> bestList = dao.bestMenues();
 			MenuDTO dto3 = new MenuDTO();
 			MenuDTO dto2 = new MenuDTO();
 
@@ -97,10 +100,18 @@ public class KioskUI {
 					System.out.print(dto.getSize()+" / ");
 					System.out.print(nf.format(dto.getPrice())+" / ");
 					if(dto.getStatus().equals("품절")) {
-						System.out.println("품절");
+						System.out.print("품절");
 					} else {
-						System.out.println("주문가능");
+						System.out.print("주문가능");
 					}
+					for(MenuDTO dto4 :bestList) {
+						if(dto.getMenu_detail_code()==dto4.getMenu_detail_code()) {
+							System.out.print(" / 베스트 ");
+							System.out.print(dto4.getRank()+"위");
+						} else {
+						}
+					}
+					System.out.println();
 					n++;
 				}
 			} catch (NumberFormatException e) {

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import db.util.DBConn;
+import ddCafe_Manage.SalesDTO;
 
 public class KioskDAOImpl implements KioskDAO{
 	private Connection conn = DBConn.getConnection();
@@ -119,10 +120,6 @@ public class KioskDAOImpl implements KioskDAO{
 		return list;
 	}
 	
-	/**
-	 * 포인트 개수 쌓이게 만들어야 함.
-	 * 포인트 사용하면, 포인트를 차감, 차감하는 것 * 3000만큼 금액이 빠지도록 설정해야 함
-	 */
 	@Override
 	public int orderMenues(List<MenuDTO> list, String takeout_togo,int member_code, String payment_method, int stampUse_price) throws SQLException{
 		PreparedStatement pstmt = null;
@@ -231,13 +228,57 @@ public class KioskDAOImpl implements KioskDAO{
 	}
 
 	@Override
-	public void bestMenues() {
-		// 2022.09.02 하기
+	public List<MenuDTO> bestMenues() {
+		List<MenuDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+
+		try {
+			sql = " SELECT menu_code, rank FROM( "
+					+ " SELECT menu_name,SUM(order_qty) qty ,RANK() OVER(ORDER BY SUM(order_qty) DESC) rank, m2.menu_code "
+					+ " FROM order_detail o1 " + " JOIN menu_detail m1 ON o1.menu_detail_code = m1.menu_detail_code "
+					+ " JOIN menu m2 ON m1.menu_code = m2.menu_code " 
+					+ " GROUP BY menu_name, m2.menu_code "
+					+ " )WHERE rank <=3 ";
+
+			pstmt = conn.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				MenuDTO dto = new MenuDTO();
+
+				dto.setMenu_detail_code(rs.getInt("menu_code"));
+				dto.setRank(rs.getInt("rank"));
+
+				list.add(dto);
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return list;
 	}
 
 	@Override
 	public int addMember(String name, String tel)  throws MyDuplicationException, SQLException  {
-		if(findMember(tel) != null) {
+		if(findMember(tel).getMember_tel() != null) {
 			throw new MyDuplicationException("이미 등록된 번호입니다.");
 		};
 		PreparedStatement pstmt = null;
