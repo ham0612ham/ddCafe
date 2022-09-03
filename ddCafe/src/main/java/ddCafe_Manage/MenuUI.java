@@ -87,14 +87,16 @@ public class MenuUI {
 			dto.setMenuPrice(Integer.parseInt(br.readLine()));
 			int c;
 			do {
-				System.out.print("사이즈를 입력해주세요 [1.R/2.L] => ");
+				System.out.print("사이즈를 입력해주세요 [1.R/2.L/3.사이즈 없음] => ");
 				c = Integer.parseInt(br.readLine());
-			} while(c<1||c>2);
+			} while(c<1||c>3);
 			String size = null;
 			if(c==1) {
 				size = "R";
 			} else if(c ==2) {
 				size = "L";
+			} else if(c ==3) {
+				size = "null";
 			}
 			dto.setMenuSize(size);
 
