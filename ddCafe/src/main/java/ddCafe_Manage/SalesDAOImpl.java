@@ -259,7 +259,7 @@ public class SalesDAOImpl implements SalesDAO {
 					+ " FROM payment p "
 					+ " JOIN menu_order mo ON p.order_num = mo.order_num "
 					+ " WHERE (order_date >= NEXT_DAY(SYSDATE, 1) -7) "
-					+ " AND (order_date <= NEXT_DAY(SYSDATE-1, 7)) ";
+					+ " AND (order_date <= NEXT_DAY(SYSDATE-1, 7)+1) ";
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -399,12 +399,12 @@ public class SalesDAOImpl implements SalesDAO {
 		String sql;
 
 		try {
-			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS') day, "
+			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MI:SS') day, "
 					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') day_price " 
 					+ " FROM payment p "
 					+ " JOIN menu_order mo ON p.order_num = mo.order_num  "
 					+ " WHERE TO_CHAR(order_date,'YYYYMMDD') = ? "
-					+ " GROUP BY ROLLUP(TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS')) ";
+					+ " GROUP BY ROLLUP(TO_CHAR(order_date, 'YYYY-MM-DD HH24:MI:SS')) ";
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -450,13 +450,13 @@ public class SalesDAOImpl implements SalesDAO {
 		String sql;
 
 		try {
-			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS') week, "
+			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MI:SS') week, "
 					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') week_price" 
 					+ " FROM payment p "
 					+ " JOIN menu_order mo ON p.order_num = mo.order_num "
 					+ " WHERE (order_date >= NEXT_DAY(TO_DATE(?,'YYYYMMDD'), 1) -7) "
-					+ " AND (order_date <= NEXT_DAY(TO_DATE(?,'YYYYMMDD')-1, 7)) "
-					+ " GROUP BY ROLLUP(TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS')) ";
+					+ " AND (order_date <= NEXT_DAY(TO_DATE(?,'YYYYMMDD')-1, 7)+1) "
+					+ " GROUP BY ROLLUP(TO_CHAR(order_date, 'YYYY-MM-DD HH24:MI:SS')) ";
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -503,12 +503,12 @@ public class SalesDAOImpl implements SalesDAO {
 		String sql;
 
 		try {
-			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS') month, "
+			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MI:SS') month, "
 					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') month_price " 
 					+ " FROM payment p "
 					+ " JOIN menu_order mo ON p.order_num = mo.order_num " 
 					+ " WHERE TO_CHAR(order_date,'YYYYMM') = ? "
-					+ " GROUP BY ROLLUP(TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS')) ";
+					+ " GROUP BY ROLLUP(TO_CHAR(order_date, 'YYYY-MM-DD HH24:MI:SS')) ";
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -554,12 +554,12 @@ public class SalesDAOImpl implements SalesDAO {
 		String sql;
 
 		try {
-			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS') year, "
+			sql = " SELECT TO_CHAR(order_date, 'YYYY-MM-DD HH24:MI:SS') year, "
 					+ " TO_CHAR(NVL(SUM(payment_price),0),'999,999,999') year_price " 
 					+ " FROM payment p "
 					+ " JOIN menu_order mo ON p.order_num = mo.order_num " 
 					+ " WHERE TO_CHAR(order_date,'YYYY') = ? "
-					+ " GROUP BY ROLLUP(TO_CHAR(order_date, 'YYYY-MM-DD HH24:MM:SS')) ";
+					+ " GROUP BY ROLLUP(TO_CHAR(order_date, 'YYYY-MM-DD HH24:MI:SS')) ";
 
 			pstmt = conn.prepareStatement(sql);
 
