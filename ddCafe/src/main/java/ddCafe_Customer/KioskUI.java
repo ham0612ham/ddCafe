@@ -8,19 +8,20 @@ import java.util.List;
 
 public class KioskUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	List<MenuDTO> shoppingList = new ArrayList<>();
+	List<MenuDTO> shoppingList = null;
 	NumberFormat nf = NumberFormat.getCurrencyInstance();
 	private KioskDAO dao = new KioskDAOImpl();
-	MenuDTO dto = new MenuDTO();
-	MemberDTO mdto = new MemberDTO();
+	MenuDTO dto = null;
+	MemberDTO mdto = null;
 	int choice, category_num, menu_num, qty, size_num, price, stampUse_price, v;
 	String takeoutTogo, category, menu, size, payment_method;
 	
-	public void menu() {
+	public int menu() {
+		int result=0;
 		System.out.println("\n𓂃𓂃𓂃𓂃𓊝𓄹𓄺𓂃𓂃𓆞𓂃𓂃𓂃");
 		System.out.println("\n🜚 어서오세요 🜚");
-		
-		choiceTogo();
+		result = choiceTogo();
+		return result;
 	}
 	
 	public int choiceTogo() {
@@ -30,12 +31,22 @@ public class KioskUI {
 				do {
 					System.out.print("1.매장 2.포장 => ");
 					choice = Integer.parseInt(br.readLine());
+					if(choice == 9999) {
+						return choice;
+					}
+					if(choice == 0000) {
+						return choice;
+					}
 				} while(choice<0||choice>2);
 				if(choice==1) {takeoutTogo = "매장";}
 				else { takeoutTogo = "포장"; };
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			shoppingList = new ArrayList<>();
+			dto = new MenuDTO();
+			mdto = new MemberDTO();
 			int result = selectMenu();
 			if(result == 987) {return 987;}
 		}
