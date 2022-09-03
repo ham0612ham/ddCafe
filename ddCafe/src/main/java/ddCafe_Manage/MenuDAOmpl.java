@@ -16,6 +16,7 @@ import oracle.jdbc.OracleTypes;
 public class MenuDAOmpl implements MenuDAO{
 	private Connection conn = DBConn.getConnection();
 	
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public int addMenu(MenuDTO dto) throws SQLException {
 		int result = 0;
@@ -84,7 +85,7 @@ public class MenuDAOmpl implements MenuDAO{
 			
 			sql = "Insert into menu(menu_code,menu_name,category_num,status) values(?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
-			if(sss.contains(dto.getMenuName())) {
+			if(sss.equals(dto.getMenuName())) {
 				pstmt.setInt(1,no3);
 			}
 			pstmt.setInt(1, no);
