@@ -11,6 +11,7 @@ public class MemberUI {
 	public void menu() {
 
 		int ch;
+		
 
 		while (true) {
 			System.out.println("\n✦ 회원 메뉴 ✦");
