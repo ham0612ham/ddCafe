@@ -43,16 +43,16 @@ public class MenuUI {
 
 	public void add_menu() {
 		System.out.println("\n✦ 메뉴 추가 ︎✦");
-		System.out.println("카테고리번호/카테고리");
-		try {
-			List<MenuDTO> list = dao.selectCategory();
-			for(MenuDTO dto : list) {
-				System.out.println(dto.getCategoryNum()+". " + dto.getCategoryName());		
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println();
+//		System.out.println("카테고리번호/카테고리");
+//		try {
+//			List<MenuDTO> list = dao.selectCategory();
+//			for(MenuDTO dto : list) {
+//				System.out.println(dto.getCategoryNum()+". " + dto.getCategoryName());		
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println();
 			
 		try {
 			int a,b;
@@ -60,6 +60,18 @@ public class MenuUI {
 			
 			System.out.print("추가하고싶은 메뉴를 입력해주세요 => ");
 			dto.setMenuName(br.readLine());
+			
+			System.out.println("카테고리번호/카테고리");
+			try {
+				List<MenuDTO> list = dao.selectCategory();
+				for(MenuDTO dto1 : list) {
+					System.out.println(dto1.getCategoryNum()+". " + dto1.getCategoryName());		
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			System.out.println();
+			
 		
 			System.out.print("카테고리 번호를 입력해주세요 => ");
 			b = Integer.parseInt(br.readLine());
