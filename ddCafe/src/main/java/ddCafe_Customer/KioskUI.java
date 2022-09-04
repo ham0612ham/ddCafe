@@ -368,7 +368,7 @@ public class KioskUI {
 					System.out.println("스탬프 20개 사용 시 3000원이 할인");
 					if(dao.usableStamp(dto2.getMember_code())>=20) {
 						do {
-							System.out.println("포인트를 사용하시겠습니까? [1.예/2.아니오] => ");
+							System.out.print("포인트를 사용하시겠습니까? [1.예/2.아니오] => ");
 							ch2 = Integer.parseInt(br.readLine());
 						} while(ch2<1||ch2>2);
 						stampUse_price = ch2==1 ? 3000 : 0 ;
@@ -460,7 +460,11 @@ public class KioskUI {
 				System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 				if (stampUse_price > 0) {
 					System.out.println("할인금액 : " + stampUse_price);
-					System.out.println("결제 금액 : " + (dao.totalPrice(shoppingList) - stampUse_price));
+					if(dao.totalPrice(shoppingList) - stampUse_price<0) {
+						System.out.println("결제 금액 : " + 0);
+					} else {
+						System.out.println("결제 금액 : " + (dao.totalPrice(shoppingList) - stampUse_price));
+					}
 				}
 				do {
 					System.out.print("결제하시겠습니까? [1.예/2.아니오] => ");

@@ -58,9 +58,9 @@ public class App {
 				ManagerLog mlog = new ManagerLog();
 				log = mlog.log();
 				if(log==1) {
+					System.out.println("관리자메뉴로 로그인되었습니다.");
 					while(true) {
 					try {
-							System.out.println("관리자메뉴로 로그인되었습니다.");
 							int ch;
 							do {
 								System.out.print("\n1.메뉴관리 2.매출관리 3.재고관리 4.회원관리 5.돌아가기 => ");
