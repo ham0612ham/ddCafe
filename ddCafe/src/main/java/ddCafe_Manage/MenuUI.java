@@ -58,10 +58,10 @@ public class MenuUI {
 			int a,b;
 			MenuDTO dto = new MenuDTO();
 			
-			System.out.print("추가하고싶은 메뉴를 입력해주세요 ");
+			System.out.print("추가하고싶은 메뉴를 입력해주세요 => ");
 			dto.setMenuName(br.readLine());
 		
-			System.out.print("카테고리 번호를 입력해주세요 ");
+			System.out.print("카테고리 번호를 입력해주세요 => ");
 			b = Integer.parseInt(br.readLine());
 			if(b >7) {
 				System.out.println("카테고리 번호 오류");
@@ -141,7 +141,6 @@ public class MenuUI {
 			System.out.println("숫자만 가능합니다");
 		} catch (Exception e) {
 			System.out.println("메뉴 등록이 실패했습니다.");
-			e.printStackTrace();
 		}
 	}
 	
@@ -153,14 +152,14 @@ public class MenuUI {
 		List<MenuDTO> list = dao.listMenu();
 		for(MenuDTO dto : list) {
 			System.out.print(dto.getMenuNum()+". ");
-			System.out.print(dto.getMenuName()+"/");
-			System.out.print(dto.getCategoryNum()+"/");
+			System.out.print(dto.getMenuName()+" / ");
+			System.out.print(dto.getCategoryNum()+" / ");
 			if(dto.getStatus().equals("품절")) {
-				System.out.print("품절/");
+				System.out.print("품절 / ");
 			} else {
-				System.out.print("주문가능/");
+				System.out.print("주문가능 / ");
 			}
-			System.out.print(dto.getMenuPrice()+"/");
+			System.out.print(dto.getMenuPrice()+" / ");
 			if(dto.getMenuSize()==null) {
 	            System.out.println("사이즈 없음");
 	         } else {
@@ -173,11 +172,13 @@ public class MenuUI {
 	
 	public void read_menu() {
 		System.out.println("\n✦ 메뉴 검색 ✦");
+		System.out.println("메뉴번호 / 메뉴이름 / 카테고리번호 / 상태 / 가격 / 사이즈");
+		System.out.println("-----------------------------------------------------------------------");
 		
 		String name;
 		
 		try {
-			System.out.print("검색할 메뉴를 입력해주세요 ");
+			System.out.print("검색할 메뉴를 입력해주세요 => ");
 			name = br.readLine();
 			
 			List<MenuDTO> list=dao.listMenu(name);
@@ -187,12 +188,15 @@ public class MenuUI {
 				return;
 			}
 			for(MenuDTO dto : list) {
-				System.out.print(dto.getMenuNum()+"\t");
-				System.out.print(dto.getMenuName()+"\t");
-				System.out.print(dto.getCategoryNum()+"\t");
-				System.out.print(dto.getStatus()+"\t");
-				System.out.print(dto.getMenuPrice()+"\t");
-				System.out.println(dto.getMenuSize());
+				System.out.print(dto.getMenuNum()+". ");
+				System.out.print(dto.getMenuName()+" / ");
+				System.out.print(dto.getCategoryNum()+" / ");
+				if(dto.getStatus().equals("품절")) {
+					System.out.print("품절 / ");
+				} else {
+					System.out.print("주문가능 / ");
+				}
+				System.out.print(dto.getMenuPrice()+" / ");
 				if(dto.getMenuSize()==null) {
 		            System.out.println("사이즈 없음");
 		         } else {
@@ -235,7 +239,7 @@ public class MenuUI {
 		System.out.println();
 		
 		try {
-			System.out.print("삭제할 메뉴코드를 입력해주세요 ");
+			System.out.print("삭제할 메뉴코드를 입력해주세요 => ");
 			code = Integer.parseInt(br.readLine());
 
 			System.out.print("정말 삭제 하시겠습니까 [1.예 2.아니요] => ");
@@ -248,10 +252,7 @@ public class MenuUI {
 			System.out.println("메뉴를 삭제 했습니다.");
 			
 		} catch (Exception e) {
-			System.out.println(code);
-			System.out.println(c);
 			System.out.println("메뉴 삭제 실패 !!");
-			e.printStackTrace();
 		}
 		
 		System.out.println();
@@ -270,7 +271,7 @@ public class MenuUI {
 		}
 		System.out.println();
 		try {
-			System.out.print("품절 처리할 메뉴코드를 입력해주세요 ");
+			System.out.print("품절 처리할 메뉴코드를 입력해주세요 => ");
 			code = Integer.parseInt(br.readLine());
 			System.out.print("정말 품절처리 하시겠습니까 [1.예 2.아니요] => ");
 			c = Integer.parseInt(br.readLine());
