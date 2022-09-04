@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import db.util.DBConn;
 import ddCafe_Customer.MyDuplicationException;
 
 public class IngredientUI {
@@ -36,7 +37,7 @@ public class IngredientUI {
 					add_ingredietn();
 					break;
 				case 3:
-					receiving_history();
+					receiving_menu();
 					break;
 				case 4:
 					delete_ingredient();
@@ -200,9 +201,38 @@ public class IngredientUI {
 		return;
 	}
 
-	public void receiving_history() {
+	public void receiving_menu() {
+		
+		int ch;
+		
 		System.out.println("\n✦ 입고 내역 ︎✦");
 
+		try {
+			do {
+				System.out.println("\n1.전체 입고 내역 2.월 입고 내역 3.이전 => ");
+				ch = Integer.parseInt(br.readLine());
+			}while (ch < 1 || ch > 3);
+			
+			if(ch == 3) {
+				System.out.println();
+				receiving_history();
+				DBConn.close();
+				return;
+			}
+			switch (ch) {
+			case 1:
+				receiving_history();
+				return;
+			case 2:
+				selectMonth();
+				return;
+			}
+		}catch (Exception e) {
+		}
+	}
+	
+	public void receiving_history() {	
+		
 		System.out.println("\n  입고날짜    / 재료이름 / 재료수량");
 		System.out.println("--------------------------------");
 
@@ -216,6 +246,38 @@ public class IngredientUI {
 		System.out.println();
 	}
 
+	public void selectMonth() {
+		System.out.println("\n✦ 월 입고 확인 ︎✦");
+		
+		String searchdate;
+		String p = "\\d{4}\\d{2}";
+		
+		try {
+			System.out.print("검색할 날짜를 입력해주세요[YYYYMM] => ");
+			searchdate = br.readLine();
+			
+			if(!searchdate.matches(p)) {
+				System.out.println("입력 형식이 일치하지 않습니다. [YYYYMM]");
+				return;
+			} else {
+				List<IngredientDTO> list = dao.selectMonth(searchdate);
+			
+				for(IngredientDTO dto : list) {
+					System.out.print(dto.getReceiving_date() + " / ");
+					System.out.print(dto.getIngredient_name() + " / ");
+					System.out.println(dto.getReceiving_qty());
+				}
+				System.out.println();
+				
+			}
+		} catch (Exception e) {
+			System.out.println("입고 검색을 실패했습니다. 메뉴로 돌아갑니다.");
+		}
+		
+		
+	}
+	
+	
 	public void delete_ingredient() {
 		System.out.println("\n✦ 재고 삭제 ︎✦");
 

@@ -11,6 +11,7 @@ public interface IngredientDAO {
 	public List<IngredientDTO> show_orderlist(); // 2.현재 재고와 vendor list
 	
 	public List<IngredientDTO> receiving_history(); // 3. 입고된 재료 수량 확인
+	public List<IngredientDTO> selectMonth(String receiving_date); //월 매출 검색
 
 	public int newIngredient(IngredientDTO dto) throws SQLException; // 4.새로운재료추가
 	public int newVendor(String vendorName, String managerName, String managerTel, String compRegisNum) throws SQLException; // 4. 납품업체 추가

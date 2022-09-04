@@ -218,6 +218,54 @@ public class IngredientImpl implements IngredientDAO{
 		}
 		return list;
 	}
+	
+	@Override
+	public List<IngredientDTO> selectMonth(String receiving_date) {
+		List<IngredientDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+
+		try {
+			sql = "SELECT TO_CHAR(receiving_date, 'YYYY-MM-DD') receiving_date, ingredient_name, receiving_qty "
+					+ "FROM receiving_ingredient "
+					+ "WHERE TO_CHAR(receiving_date,'YYYYMM') = ? "
+					+ "ORDER BY receiving_date DESC, receiving_num DESC";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, receiving_date);
+			rs = pstmt.executeQuery();
+			
+			
+			while(rs.next()) {
+				IngredientDTO dto = new IngredientDTO();
+				dto.setReceiving_date(rs.getString("receiving_date"));
+				dto.setIngredient_name(rs.getString("ingredient_name"));
+				dto.setReceiving_qty(rs.getInt("receiving_qty"));
+				list.add(dto);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return list;
+	}
 
 	
 	@Override
