@@ -252,7 +252,7 @@ public class MenuUI {
 			System.out.println("메뉴를 삭제 했습니다.");
 			
 		} catch (Exception e) {
-			System.out.println("메뉴 삭제 실패 !!");
+			e.printStackTrace();
 		}
 		
 		System.out.println();
