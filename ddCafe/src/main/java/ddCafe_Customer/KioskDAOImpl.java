@@ -120,7 +120,7 @@ public class KioskDAOImpl implements KioskDAO{
 	}
 	
 	@Override
-	public int orderMenues(List<MenuDTO> list, String takeout_togo,int member_code, String payment_method, int stampUse_price) throws SQLException{
+	public int orderMenues(List<MenuDTO> list, String takeout_togo,int member_code, String payment_method, int stampUse_price) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;
 		int result=0, final_price;
