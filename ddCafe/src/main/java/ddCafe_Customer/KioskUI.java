@@ -126,13 +126,14 @@ public class KioskUI {
 			} catch (Exception e) {
 			}
 			
+			MenuDTO dto = null;
 			try {
 				int ch2;
 				do {
 					System.out.print("\n메뉴를 골라주세요 [이전 : 0] => ");
 					ch2 = Integer.parseInt(br.readLine());
 					if(ch2==0) { return 567; }
-					MenuDTO dto = new MenuDTO();
+					dto = new MenuDTO();
 					dto = list.get(ch2-1);
 					if(dto.getStatus().equals("품절")) {
 						System.out.println("해당 메뉴는 품절입니다.");
@@ -140,34 +141,58 @@ public class KioskUI {
 					}
 				} while(ch2<1||ch2>list.size());
 				System.out.print("개수를 입력해주세요 [이전 : 0] => ");
-				qty = Integer.parseInt(br.readLine()); // 재료의개수가 충분한지 여부를 확인할 수 있게 해야함
-				if(qty!=0) { 
+				qty = Integer.parseInt(br.readLine());
+				if(qty==0) { return 567; }
+				// 장바구니에 있는 것인지 확인, 있으면 개수 추가
+				boolean b=true;
+				int n = 0;
+				for(MenuDTO mdto : shoppingList) {
+					if(mdto.getMenu_detail_code()==dto.getMenu_detail_code()) {
+						shoppingList.subList(n, n+1).clear();
+						qty += mdto.getQty();
+						MenuDTO pdto = new MenuDTO();
+						pdto.setMenu(mdto.getMenu());
+						pdto.setCategory(mdto.getCategory());
+						pdto.setQty(qty);
+						pdto.setSize(mdto.getSize());
+						pdto.setTakeout_togo(mdto.getTakeout_togo());
+						pdto.setMenu_detail_code(mdto.getMenu_detail_code());
+						pdto.setPrice(mdto.getPrice());
+						shoppingList.add(pdto);
+						b = false;
+						break;
+					} else {
+						b = true;
+					}
+					n++;
+				}
+				
+				if(b==true) {
 					dto2 = list.get(ch2 - 1);
 					menu_num = dto2.getMenu_detail_code();
 					menu = list2.get(ch2 - 1);
 					size = dto2.getSize();
 					price = dto2.getPrice();
-		
+					
 					dto3.setMenu(menu);
 					dto3.setQty(qty);
-					dto3.setSize(category);
+					dto3.setCategory(category);
 					dto3.setMenu_detail_code(menu_num);
 					dto3.setTakeout_togo(takeoutTogo);
 					dto3.setSize(size);
 					dto3.setPrice(price);
 					shoppingList.add(dto3);
+				}
 					
-					System.out.println("메뉴 추가가 완료되었습니다.");
-					System.out.println("\n🜚 장바구니 🜚");
-					System.out.println("------------------------");
-					for(MenuDTO dto : shoppingList) {
-						System.out.println(dto.getMenu()+" / "+dto.getSize()+" / "+dto.getQty()+"개");
-					}
-					System.out.println("총가격 : " + dao.totalPrice(shoppingList));
-					int result = afterchoice();
-					if(result == 987) {return 987;}
-					
-				} else { return 567; }
+				System.out.println("메뉴 추가가 완료되었습니다.");
+				System.out.println("\n🜚 장바구니 🜚");
+				System.out.println("------------------------");
+				for (MenuDTO mdto : shoppingList) {
+					System.out.println(mdto.getMenu() + " / " + mdto.getSize() + " / " + mdto.getQty() + "개");
+				}
+				System.out.println("총가격 : " + dao.totalPrice(shoppingList));
+				int result = afterchoice();
+				if (result == 987) { return 987;}
 			} catch (NumberFormatException e) {
 				System.out.println("숫자를 입력해주세요");
 			} catch (Exception e) {
