@@ -46,6 +46,7 @@ public class App {
 							case 4: member.menu(); break;
 							}
 							
+							
 						} catch (InputMismatchException e) {
 							sc.nextLine();
 						}
