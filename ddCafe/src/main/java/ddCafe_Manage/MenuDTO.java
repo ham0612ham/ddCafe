@@ -16,11 +16,7 @@ public class MenuDTO {
 	private String categoryName;
 	private int price;
 	private int qty;
-	private int menuDetailNum;
-	
-
-	
-	
+	private int menuDetailNum;	
 	private List<Integer> ingredients;
 	
 	public String getMenuName() {
@@ -113,13 +109,4 @@ public class MenuDTO {
 	public void setMenuDetailNum(int menuDetailNum) {
 		this.menuDetailNum = menuDetailNum;
 	}
-	
-	
-	
-	
-	
-	
-
-	
-	
 }

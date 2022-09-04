@@ -208,18 +208,39 @@ public class MenuDAOImpl implements MenuDAO{
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, code);
 			rs = pstmt.executeQuery();
-			while(rs.next()) {
+			if(rs.next()) {
 				dto.setMenuDetailNum(rs.getInt("menu_detail_code"));
 			}
 			pstmt.close();
 			pstmt = null;
 			
+			sql = "select order_detail_num from order_detail where menu_detail_code=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1,  dto.getMenuDetailNum());
+			rs = pstmt.executeQuery();
+			List<Integer> ii = new ArrayList<>();
+			
+			while(rs.next()) {
+				ii.add(rs.getInt("order_detail_num"));
+			}
+			pstmt.close();
+			pstmt = null;
+			
+			for(Integer l : ii) {
+				sql = "update order_detail set menu_detail_code = null where order_detail_num =?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, l);
+				pstmt.executeUpdate();
+				pstmt.close();
+				pstmt = null;
+			}
 			sql = "delete from menu_ingredient where menu_detail_code = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getMenuDetailNum());
 			pstmt.executeUpdate();
 			pstmt.close();
 			pstmt = null;
+			
 			
 			sql = "delete from menu_detail where menu_code = ?";
 			pstmt = conn.prepareStatement(sql);

@@ -132,7 +132,7 @@ public class MenuUI {
 			a = Integer.parseInt(br.readLine());
 			if(a==1) {
 				dao.addMenu(dto);
-				System.out.println("메뉴 추가 완료");
+				System.out.println("메뉴 추가 완료했습니다.");
 			}else {
 				return;
 			}
@@ -204,7 +204,7 @@ public class MenuUI {
 		         }
 			}
 		} catch (Exception e) {
-			System.out.println("메뉴 검색 실패");
+			System.out.println("메뉴 검색 실패했습니다.");
 		}
 		System.out.println();
 	}
@@ -252,7 +252,7 @@ public class MenuUI {
 			System.out.println("메뉴를 삭제 했습니다.");
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("메뉴 삭제가 실패되었습니다.");
 		}
 		
 		System.out.println();
@@ -283,7 +283,8 @@ public class MenuUI {
 			
 			System.out.println("메뉴 품절처리 완료");
 		} catch (Exception e) {
-			System.out.println("품절처리 실패!");
+			System.out.println("품절처리가 실패 되었습니다.");
 		}
 	}
 }
+
