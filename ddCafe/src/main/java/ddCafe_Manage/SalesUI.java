@@ -102,10 +102,16 @@ public class SalesUI {
 		List<SalesDTO> list = dao.listPanmai();
 		
 		int index = 1;
+		System.out.println("순번 / 메뉴명 / 사이즈 / 판매량");
+		System.out.println("-------------------------------");
 		for(SalesDTO dto : list) {
 			System.out.print(index+".");
 			System.out.print(dto.getMenu_name()+" / ");
-			System.out.print(dto.getMenu_size()+" / ");
+			if(dto.getMenu_size().equals("null")) {
+				System.out.print("사이즈 없음 / ");
+			} else {
+				System.out.print(dto.getMenu_size()+" / ");
+			}
 			System.out.println(dto.getQty());
 			
 			index++;
