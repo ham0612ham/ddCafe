@@ -33,7 +33,7 @@ public class App {
 					try {
 							int ch;
 							do {
-								System.out.print("\n1.메뉴관리 2.매출관리 3.재고관리 4.회원관리 5.종료 => ");
+								System.out.print("\n1.메뉴관리 2.매출관리 3.재고관리 4.회원관리 5.돌아가기 => ");
 								ch = sc.nextInt();
 							} while(ch<1||ch>5);
 							if(ch==5) break;
