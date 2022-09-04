@@ -102,7 +102,7 @@ public class SalesUI {
 		List<SalesDTO> list = dao.listPanmai();
 		
 		int index = 1;
-		System.out.println("순번 / 메뉴명 / 사이즈 / 판매량");
+		System.out.println("순번 / 메뉴명 / 사이즈 / 판매량 ");
 		System.out.println("-------------------------------");
 		for(SalesDTO dto : list) {
 			System.out.print(index+".");
