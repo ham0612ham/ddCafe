@@ -88,7 +88,6 @@ public class KioskUI {
 			MenuDTO dto2 = new MenuDTO();
 
 			System.out.println("\n🜚 "+category+" 🜚");
-			List<MenuDTO> list3 = dao.showMenues(category_num);
 			
 			try {
 				int n = 1;
@@ -98,7 +97,7 @@ public class KioskUI {
 					System.out.println("\n메뉴 / 사이즈 / 가격 / 주문");
 				}
 				System.out.println("--------------------------------");
-				for(MenuDTO dto : list3) {
+				for(MenuDTO dto : list) {
 					System.out.print(n+"."+dto.getMenu()+" / ");
 					if(dto.getSize()==null||dto.getSize().equals("null")) {
 						System.out.print("");

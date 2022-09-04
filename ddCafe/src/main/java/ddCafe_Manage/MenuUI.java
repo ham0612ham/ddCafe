@@ -185,9 +185,6 @@ public class MenuUI {
 	
 	public void read_menu() {
 		System.out.println("\n✦ 메뉴 검색 ✦");
-		System.out.println("메뉴번호 / 메뉴이름 / 카테고리번호 / 상태 / 가격 / 사이즈");
-		System.out.println("----------------------------------------------");
-		
 		String name;
 		
 		try {
@@ -200,6 +197,8 @@ public class MenuUI {
 				System.out.println("등록된 메뉴가 없습니다.");
 				return;
 			}
+			System.out.println("메뉴번호 / 메뉴이름 / 카테고리번호 / 상태 / 가격 / 사이즈");
+			System.out.println("----------------------------------------------");
 			for(MenuDTO dto : list) {
 				System.out.print(dto.getMenuNum()+". ");
 				System.out.print(dto.getMenuName()+" / ");
