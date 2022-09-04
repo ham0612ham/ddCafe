@@ -44,6 +44,8 @@ public class IngredientUI {
 	public void check_ingredient() {
 		System.out.println("\n✦ 재료 확인 ︎✦");
 
+		System.out.println("\n재료코드/재료이름/재료수량");
+		System.out.println("-----------------");
 		List<IngredientDTO> list = dao.left_ingredient();
 
 		for (IngredientDTO dto : list) {
@@ -57,6 +59,9 @@ public class IngredientUI {
 	
 	public void add_ingredietn() {
 		System.out.println("\n✦ 재료 추가 주문 ︎✦");
+		
+		System.out.println("\n재료코드 / 재료이름 / 재료단가 / 업체번호 / 업체이름 / 매니저이름 / 매니저번호");
+		System.out.println("------------------------------------------------------");
 		List<IngredientDTO> list = dao.show_orderlist();
 	
 		int n=0;
@@ -114,6 +119,8 @@ public class IngredientUI {
 	
 	public void newIngredient() { 
 	      System.out.println("\n✦ 새로운 재료 추가 ︎✦");
+			System.out.println("\n업체코드 / 업체이름 / 매니저이름 / 매니저번호");
+			System.out.println("--------------------------------");
 	      List<IngredientDTO> list1 = dao.vendorList();
 	      
 	      int n=0;
@@ -175,9 +182,8 @@ public class IngredientUI {
 	public void receiving_history() { 
 		System.out.println("\n✦ 입고 내역 ︎✦");
 		
-		System.out.println();
 		System.out.println("\n  입고날짜    / 재료이름 / 재료수량");
-		System.out.println("-----------------------------------------------");
+		System.out.println("--------------------------------");
 
 		List<IngredientDTO> list = dao.receiving_history();
 		
@@ -192,13 +198,16 @@ public class IngredientUI {
 	
 	public void delete_ingredient() {
 		System.out.println("\n✦ 재고 삭제 ︎✦");
+
+		
+		System.out.println("\n재료코드 / 재료이름 / 재료수량");
+		System.out.println("----------------------");
 		List<IngredientDTO> list = dao.trash_ingredientcode();
 		
-			
 		int n = 0;
 		for (IngredientDTO dto : list) {
 			System.out.print( (++n) + ".");
-			System.out.print(dto.getIngredient_name()+ "/");
+			System.out.print(dto.getIngredient_name()+ " / ");
 			System.out.println(dto.getIngredient_qty());
 		}
 		
@@ -297,6 +306,9 @@ public class IngredientUI {
 	
 	public void check_vendor() { 
 		System.out.println("\n\t✦ 납품업체 확인 ︎✦\n");
+		
+		System.out.println("\n업체코드 / 업체이름 / 매니저이름 / 매니저번호");
+		System.out.println("--------------------------------");
 
 		List<IngredientDTO> list = dao.vendorList();
 
