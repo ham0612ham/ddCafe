@@ -161,6 +161,7 @@ public class KioskUI {
 						shoppingList.add(pdto);
 						b = false;
 						break;
+						
 					} else {
 						b = true;
 					}

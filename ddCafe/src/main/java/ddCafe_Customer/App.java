@@ -36,17 +36,13 @@ public class App {
 								System.out.print("\n1.메뉴관리 2.매출관리 3.재고관리 4.회원관리 5.종료 => ");
 								ch = sc.nextInt();
 							} while(ch<1||ch>5);
-							
 							if(ch==5) break;
-							
 							switch(ch) {
 							case 1: menu.menu(); break;
 							case 2: sale.menu(); break;
 							case 3: in.menu(); break;
 							case 4: member.menu(); break;
 							}
-							
-							
 						} catch (InputMismatchException e) {
 							sc.nextLine();
 						}
