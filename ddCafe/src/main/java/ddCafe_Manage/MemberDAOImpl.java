@@ -268,6 +268,13 @@ public class MemberDAOImpl implements MemberDAO{
 			e.printStackTrace();
 			throw e;
 		} finally {
+			
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
 			if(pstmt != null) {
 				try {
 					pstmt.close();
