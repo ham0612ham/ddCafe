@@ -180,6 +180,7 @@ public class MemberDAOImpl implements MemberDAO{
 			
 			rs = pstmt.executeQuery();
 			
+			
 			while(rs.next()) {
 				MemberDTO dto = new MemberDTO();
 				
@@ -213,11 +214,41 @@ public class MemberDAOImpl implements MemberDAO{
 
 	@Override
 	public int deleteMember(String tel) throws SQLException {
+		List<Integer> list = new ArrayList<>();
+		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql;
 		
 		try {
+			conn.setAutoCommit(false);
+			
+			sql = " SELECT order_num "
+					+ " FROM menu_order mo "
+					+ " JOIN member m ON mo.member_code = m.member_code "
+					+ " WHERE mo.member_code = m.member_code ";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				int n = rs.getInt("order_num");
+				list.add(n);
+			}
+			
+			rs.close();
+			pstmt.close();
+			pstmt = null;
+			
+			for(Integer n : list) { 
+				sql = " UPDATE menu_order SET member_code = null WHERE order_num = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, n);
+				pstmt.executeUpdate();
+				pstmt.close();
+			}
+			
+			pstmt = null;
+		
 			sql = " DELETE FROM member WHERE member_tel = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -226,7 +257,14 @@ public class MemberDAOImpl implements MemberDAO{
 			
 			result = pstmt.executeUpdate();
 			
+			conn.commit();
+			
 		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
+			
 			e.printStackTrace();
 			throw e;
 		} finally {

@@ -55,7 +55,7 @@ public class MemberUI {
 
 			List<MemberDTO> list = null;
 
-			System.out.print("이름을 입력해주세요 [종료 : 0] => ");
+			System.out.print("이름을 입력해주세요 [이전 : 0] => ");
 			name = br.readLine();
 
 			if (name.equals("0")) {
@@ -95,7 +95,7 @@ public class MemberUI {
 			MemberDTO dto = new MemberDTO();
 
 			do {
-				System.out.print("전화번호를 입력해주세요 [종료 : 0] => ");
+				System.out.print("전화번호를 입력해주세요 [이전 : 0] => ");
 				tel = br.readLine();
 
 				if (tel.equals("0")) {
@@ -115,7 +115,7 @@ public class MemberUI {
 				return;
 			}
 
-			System.out.println("회원번호 / 회원이름 / 전화번호 / 회원등록일");
+			System.out.println("\n회원번호 / 회원이름 / 전화번호 / 회원등록일");
 			System.out.println("-----------------------------------------");
 
 			System.out.print(dto.getMemberNum() + ".");
@@ -160,7 +160,7 @@ public class MemberUI {
 			MemberDTO dto = new MemberDTO();
 
 			do {
-				System.out.print("기존 전화번호를 입력해주세요 [종료 : 0] => ");
+				System.out.print("기존 전화번호를 입력해주세요 [이전 : 0] => ");
 				old_tel = br.readLine();
 
 				if (old_tel.equals("0")) {
@@ -238,7 +238,7 @@ public class MemberUI {
 		try {
 
 			do {
-				System.out.println("삭제할 전화번를 입력해주세요 [종료 : 0] => ");
+				System.out.print("삭제할 전화번호를 입력해주세요 [이전 : 0] => ");
 				tel = br.readLine();
 
 				if (tel.equals("0")) {
@@ -262,6 +262,10 @@ public class MemberUI {
 				System.out.print(dto.getName() + "님(이/가) 맞습니까? [1.예/2.아니오] => ");
 				choice = Integer.parseInt(br.readLine());
 			} while (choice < 0 || choice > 2);
+			
+			if (choice == 2) {
+				return;
+			}
 
 			do {
 				System.out.println();
