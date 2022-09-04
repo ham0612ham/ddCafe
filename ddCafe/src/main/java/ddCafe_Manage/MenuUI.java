@@ -117,9 +117,10 @@ public class MenuUI {
 				System.out.println("\n✦ 재료 확인 ︎✦");
 
 				for (IngredientDTO dto1 : list) {
-
+					if(dto1.getIngredient_code() == 29 || dto1.getIngredient_code()==30) {
+						continue;
+					}
 					System.out.println(dto1.getIngredient_code()+ ". "+dto1.getIngredient_name());
-
 				}
 					
 				System.out.println();
