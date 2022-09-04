@@ -79,7 +79,7 @@ public class IngredientUI {
 		for (IngredientDTO dto : list) {
 			System.out.print((++n) + ".");
 			System.out.print(dto.getIngredient_name() + " / ");
-			System.out.print(dto.getReceiving_price() + " / ");
+			System.out.print(dto.getReceiving_price() + "원 / ");
 			System.out.print(dto.getVendor_code() + ".");
 			System.out.print(dto.getVendor_name() + " / ");
 			System.out.print(dto.getManager_name() + " / ");
