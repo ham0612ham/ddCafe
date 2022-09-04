@@ -5,6 +5,7 @@ public class MemberDTO {
 	private String name;
 	private String tel;
 	private String date;
+	private int order_num;
 	
 	public int getMemberNum() {
 		return memberNum;
@@ -29,6 +30,12 @@ public class MemberDTO {
 	}
 	public void setDate(String date) {
 		this.date = date;
+	}
+	public int getOrder_num() {
+		return order_num;
+	}
+	public void setOrder_num(int order_num) {
+		this.order_num = order_num;
 	}
 	
 }

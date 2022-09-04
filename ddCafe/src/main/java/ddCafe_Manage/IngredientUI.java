@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import ddCafe_Customer.MyDuplicationException;
+
 public class IngredientUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private IngredientDAO dao = new IngredientImpl();
@@ -38,7 +40,7 @@ public class IngredientUI {
 			} catch (Exception e) {
 			}
 		}
-	}  
+	} 
 
 	
 	public void check_ingredient() {
@@ -257,27 +259,25 @@ public class IngredientUI {
 	}
 
 	
-	public void new_vendor() {
+	public void new_vendor() throws MyDuplicationException {
 		while(true) {
 			System.out.println("\n✦ 새로운 업체 추가 ︎✦");
 			String vendorName, managerName, managerTel; 
 			String compRegisNum;
 			int result;
-			String n = "^[0-9][a-zA-Z][가-힣]*$";
 			String p = "010-\\d{4}-\\d{4}";
 			String r = "^[0-9]{10}$";
 			
 			try {
-				
 				do {
-					System.out.print("\n업체 이름 => ");
-					vendorName = br.readLine();
-					if(vendorName.matches(n)) {
-					} else if(!vendorName.matches(n)) {
-						System.out.println("\n업체 이름을 입력해주세요.");
-					}
-				} while (!vendorName.matches(n));
-				
+				System.out.print("\n업체 이름 => ");
+				vendorName = br.readLine();
+				if(vendorName.length()>=20) {
+					System.out.println("20자 이하로 입력해주세요.");
+				} else if (vendorName.length()<1) {
+					System.out.println("업체 이름을 입력해주세요.");
+				}
+				} while(!(vendorName.length()>0&&vendorName.length()<20));
 				System.out.print("\n매니저 이름 => ");
 				managerName = br.readLine();
 				
@@ -306,8 +306,8 @@ public class IngredientUI {
 				}
 				System.out.println("\n" + vendorName + " 업체가 등록 되었습니다. 메뉴로 돌아갑니다.");
 				return;
-
 			} catch (Exception e) {
+				System.out.println("업체추가에 실패했습니다.");
 				e.printStackTrace();
 			}
 		}

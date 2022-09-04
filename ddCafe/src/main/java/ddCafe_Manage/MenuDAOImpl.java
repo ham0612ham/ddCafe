@@ -12,7 +12,7 @@ import java.util.List;
 import db.util.DBConn;
 import oracle.jdbc.OracleTypes;
 
-public class MenuDAOmpl implements MenuDAO{
+public class MenuDAOImpl implements MenuDAO{
 	private Connection conn = DBConn.getConnection();
 	
 	
