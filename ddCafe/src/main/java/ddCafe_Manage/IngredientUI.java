@@ -38,7 +38,7 @@ public class IngredientUI {
 			} catch (Exception e) {
 			}
 		}
-	}
+	} 
 
 	
 	public void check_ingredient() {
