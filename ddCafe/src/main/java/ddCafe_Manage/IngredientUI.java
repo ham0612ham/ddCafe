@@ -124,7 +124,6 @@ public class IngredientUI {
 			return;
 		} catch (Exception e) {
 			System.out.println("재료 추가 실패하였습니다. 메뉴로 돌아갑니다.");
-//			e.printStackTrace();
 		}
 		System.out.println();
 	}
@@ -339,7 +338,7 @@ public class IngredientUI {
 	}
 
 	public void check_vendor() {
-		System.out.println("\n\t✦ 납품업체 확인 ︎✦\n");
+		System.out.println("\n\t✦ 납품업체 확인 ︎✦");
 
 		System.out.println("\n업체코드 / 업체이름 / 매니저이름 / 매니저번호");
 		System.out.println("--------------------------------");
