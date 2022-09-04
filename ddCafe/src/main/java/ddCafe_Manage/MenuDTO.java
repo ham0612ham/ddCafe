@@ -18,6 +18,8 @@ public class MenuDTO {
 	private int qty;
 	private int menuDetailNum;
 	
+
+	
 	
 	private List<Integer> ingredients;
 	

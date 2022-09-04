@@ -9,14 +9,17 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import db.util.DBConn;
 import oracle.jdbc.OracleTypes;
 
 public class MenuDAOmpl implements MenuDAO{
 	private Connection conn = DBConn.getConnection();
 	
-	@SuppressWarnings("unlikely-arg-type")
+	
+	public boolean equals(Object obj) {
+		return(this==obj);
+	}
+
 	@Override
 	public int addMenu(MenuDTO dto) throws SQLException {
 		int result = 0;
@@ -27,54 +30,27 @@ public class MenuDAOmpl implements MenuDAO{
 		
 		
 		try {
-/*			
-			sql = "{CALL insertMenu(menu_seq.nextval,menu_detail_seq.nextval,?,?,?,?,?,?)}";
-			cstmt = conn.prepareCall(sql);
-			
-			cstmt.setString(1, dto.getMenuName());
-			cstmt.setInt(2, dto.getCategoryNum());
-			cstmt.setString(3, dto.getStatus());
-			cstmt.setInt(4, dto.getMenuPrice());
-			cstmt.setString(5, dto.getMenuSize());
-			cstmt.setInt(6, dto.getIngredientNum());
-			
-			
-			cstmt.executeUpdate();
-			result = 1;
-			cstmt.close();
-			*/
 			conn.setAutoCommit(false);
 			
-			sql = "select menu_seq.nextval from dual";
-			int no=0;
-			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				no = rs.getInt(1);
-			}
-			rs.close();
-			pstmt.close();
-			pstmt = null;
-			
-			sql = "select menu_code from menu where menu_name = ?";
+			sql = "select menu_code from menu where menu_name = ?"; // 메뉴이름이 같은 메뉴코드 찾음
 			int no3=0;
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getMenuName());
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
 				no3 = rs.getInt("menu_code");
 			}
 			rs.close();
 			pstmt.close();
 			pstmt = null;
 			
-			sql = "select menu_name from menu";
+			sql = "select menu_name from menu"; // 메뉴들의 이름을 모음
 			String ss = null;
 			List<String> sss = new ArrayList<>();
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
 				ss = rs.getString("menu_name");
 				sss.add(ss);
 			}
@@ -82,53 +58,54 @@ public class MenuDAOmpl implements MenuDAO{
 			pstmt.close();
 			pstmt = null;
 			
-			
-			sql = "Insert into menu(menu_code,menu_name,category_num,status) values(?,?,?,?)";
-			pstmt = conn.prepareStatement(sql);
-			if(sss.equals(dto.getMenuName())) {
-				pstmt.setInt(1,no3);
+			boolean b = true;
+			for(String menu_name : sss) { // 메뉴 이름중에 같은 메뉴가 있는지 확인해봄
+				if(menu_name.equals(dto.getMenuName())) {
+					b = false; // 이전에 있던 메뉴일 경우
+					break;
+				} else{
+					b = true; // 이전에 있던 메뉴가 아닐 경우
+				}
 			}
-			pstmt.setInt(1, no);
 			
-			pstmt.setString(2, dto.getMenuName());
-			pstmt.setInt(3, dto.getCategoryNum());
-			pstmt.setString(4, dto.getStatus());
-			result = pstmt.executeUpdate();
-			
-			pstmt.close();
-			pstmt = null;
-			
-			sql = "select menu_detail_seq.nextval from dual";
-			int no2=0;
-			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				no2 = rs.getInt(1);
-			}
-			rs.close();
-			pstmt.close();
-			pstmt = null;
-			
-			sql = "Insert into menu_detail(menu_detail_code,menu_price,menu_code,menu_size) values(?,?,menu_seq.currval,?)";
-
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, no2);
-			pstmt.setInt(2,dto.getMenuPrice());
-			pstmt.setString(3,dto.getMenuSize());
-			pstmt.executeUpdate();
-			pstmt.close();
-			pstmt = null;
-			
-			
-			for(Integer n : dto.getIngredients()) {
-				sql = "Insert into menu_ingredient(ingredient_code,menu_detail_code) values(?,?)";
+			if(b==true) { // 이전에 있던 메뉴가 아닐 경우 
+				sql = "Insert into menu(menu_code,menu_name,category_num,status) values(menu_seq.NEXTVAL,?,?,?)";
 				pstmt = conn.prepareStatement(sql);
-				pstmt.setInt(1, n);
-				pstmt.setInt(2, no2);
+				pstmt.setString(1, dto.getMenuName());
+				pstmt.setInt(2, dto.getCategoryNum());
+				pstmt.setString(3, dto.getStatus());
+				result = pstmt.executeUpdate();
+				pstmt.close();
+				pstmt = null;
+				
+				sql = "Insert into menu_detail(menu_detail_code,menu_price,menu_code,menu_size) values(menu_detail_seq.NEXTVAL,?,menu_seq.currval,?)";
+
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1,dto.getMenuPrice());
+				pstmt.setString(2,dto.getMenuSize());
+				pstmt.executeUpdate();
+				pstmt.close();
+				pstmt = null;
+			} else { // 이전에 있던 메뉴일 경우 
+				sql = "Insert into menu_detail(menu_detail_code,menu_price,menu_code,menu_size) values(menu_detail_seq.NEXTVAL,?,?,?)";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1,dto.getMenuPrice());
+				pstmt.setInt(2,no3);
+				pstmt.setString(3,dto.getMenuSize());
 				pstmt.executeUpdate();
 				pstmt.close();
 				pstmt = null;
 			}
+			
+			for(Integer n : dto.getIngredients()) { // 모든 재료들을 추가함
+				sql = "Insert into menu_ingredient(ingredient_code,menu_detail_code) values(?,menu_detail_seq.CURRVAL)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, n);
+				pstmt.executeUpdate();
+				pstmt.close();
+			}
+			
 			conn.commit();
 		} catch (SQLIntegrityConstraintViolationException e) {
 			

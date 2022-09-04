@@ -141,11 +141,12 @@ public class MenuUI {
 			System.out.println("숫자만 가능합니다");
 		} catch (Exception e) {
 			System.out.println("메뉴 등록이 실패했습니다.");
+			e.printStackTrace();
 		}
 	}
 	
 	public void list_menu() {
-		System.out.println("\n메뉴 리스트 !!!");
+		System.out.println("\n✦ 메뉴 리스트 ✦");
 		System.out.println("메뉴번호 / 메뉴이름 / 카테고리번호 / 상태 / 가격 / 사이즈");
 		System.out.println("-----------------------------------------------------------------------");
 		
@@ -160,16 +161,18 @@ public class MenuUI {
 				System.out.print("주문가능/");
 			}
 			System.out.print(dto.getMenuPrice()+"/");
-			System.out.println(dto.getMenuSize());
-
-		
+			if(dto.getMenuSize()==null) {
+	            System.out.println("사이즈 없음");
+	         } else {
+	            System.out.println(dto.getMenuSize());
+	         }
 		}
 		System.out.println();
 		
 	}
 	
 	public void read_menu() {
-		System.out.println("\n메뉴 검색 !!!");
+		System.out.println("\n✦ 메뉴 검색 ✦");
 		
 		String name;
 		
@@ -190,6 +193,11 @@ public class MenuUI {
 				System.out.print(dto.getStatus()+"\t");
 				System.out.print(dto.getMenuPrice()+"\t");
 				System.out.println(dto.getMenuSize());
+				if(dto.getMenuSize()==null) {
+		            System.out.println("사이즈 없음");
+		         } else {
+		            System.out.println(dto.getMenuSize());
+		         }
 			}
 		} catch (Exception e) {
 			System.out.println("메뉴 검색 실패");
@@ -250,7 +258,7 @@ public class MenuUI {
 		
 	}
 	public void sold_out() {
-		System.out.println("\n 메뉴 품절 처리");
+		System.out.println("\n✦ 메뉴 품절 처리 ︎✦");
 		int code,c;
 		try {
 			List<MenuDTO> list=dao.showTwoMenu();
