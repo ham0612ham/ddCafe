@@ -73,7 +73,7 @@ public class MemberUI {
 			System.out.println("-----------------------------------------");
 
 			for (MemberDTO dto : list) {
-				System.out.print(dto.getMemberNum() + ". ");
+				System.out.print(dto.getMemberNum() + ".");
 				System.out.print(dto.getName() + " / ");
 				System.out.print(dto.getTel() + " / ");
 				System.out.println(dto.getDate());
@@ -118,7 +118,7 @@ public class MemberUI {
 			System.out.println("회원번호 / 회원이름 / 전화번호 / 회원등록일");
 			System.out.println("-----------------------------------------");
 
-			System.out.print(dto.getMemberNum() + ". ");
+			System.out.print(dto.getMemberNum() + ".");
 			System.out.print(dto.getName() + " / ");
 			System.out.print(dto.getTel() + " / ");
 			System.out.println(dto.getDate());
@@ -140,7 +140,7 @@ public class MemberUI {
 		List<MemberDTO> list = dao.listMember();
 
 		for (MemberDTO dto : list) {
-			System.out.print(dto.getMemberNum() + ". ");
+			System.out.print(dto.getMemberNum() + ".");
 			System.out.print(dto.getName() + " / ");
 			System.out.print(dto.getTel() + " / ");
 			System.out.println(dto.getDate());
