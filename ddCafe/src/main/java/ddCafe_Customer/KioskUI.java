@@ -180,9 +180,9 @@ public class KioskUI {
 			int ch, result = 0;
 			try {
 				do {
-					System.out.print("\n1.추가주문 2.메뉴삭제 3.개수변경 4.결제 5.장바구니 6.종료 => ");
+					System.out.print("\n1.추가주문 2.메뉴삭제 3.개수변경 4.결제 5.장바구니 [이전 : 0] => ");
 					ch = Integer.parseInt(br.readLine());
-					if(ch==6) {return 987;}
+					if(ch==0) {return 987;}
 					switch(ch) {
 					case 1 : 
 						result = selectMenu();
@@ -201,7 +201,7 @@ public class KioskUI {
 						if(result == 987) {return 987;} break;
 					}
 						
-				} while(ch < 1||ch > 6);
+				} while(ch < 1||ch > 5);
 				
 			} catch (NumberFormatException e) {
 				System.out.println("숫자를 입력해주세요.");
@@ -378,8 +378,13 @@ public class KioskUI {
 			String p = "010-\\d{4}-\\d{4}";
 			try {
 				do {
+					do {
 					System.out.print("이름 or 별명을 입력해주세요 => ");
 					name = br.readLine();
+					if(name.length()>=8) {
+						System.out.println("8자 이하로 입력해주세요.");
+					}
+					} while(!(name.length()>0&&name.length()<9));
 					System.out.print("휴대폰번호를 입력해주세요 [010-0000-0000] => ");
 					tel = br.readLine();
 					if(!tel.matches(p)) {
