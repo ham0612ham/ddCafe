@@ -6,8 +6,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import ddCafe_Manage.SalesDTO;
-
 public class KioskUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	List<MenuDTO> shoppingList = null;
@@ -94,10 +92,18 @@ public class KioskUI {
 			
 			try {
 				int n = 1;
-				System.out.println("\n메뉴 / 사이즈 / 가격");
+				if(category_num==6||category_num==7) {
+					System.out.println("\n메뉴 / 가격 / 주문");
+				} else {
+					System.out.println("\n메뉴 / 사이즈 / 가격 / 주문");
+				}
 				for(MenuDTO dto : list3) {
 					System.out.print(n+"."+dto.getMenu()+" / ");
-					System.out.print(dto.getSize()+" / ");
+					if(dto.getSize()==null) {
+						System.out.print("");
+					} else {
+						System.out.print(dto.getSize()+" / ");
+					}
 					System.out.print(nf.format(dto.getPrice())+" / ");
 					if(dto.getStatus().equals("품절")) {
 						System.out.print("품절");
@@ -105,7 +111,7 @@ public class KioskUI {
 						System.out.print("주문가능");
 					}
 					for(MenuDTO dto4 :bestList) {
-						if(dto.getMenu_detail_code()==dto4.getMenu_detail_code()) {
+						if(dto.getMenu().equals(dto4.getMenu())) {
 							System.out.print(" / 베스트 ");
 							System.out.print(dto4.getRank()+"위");
 						} else {

@@ -20,12 +20,6 @@ public class MenuDTO {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public String getName() {
-		return menu;
-	}
-	public void setName(String name) {
-		this.menu = name;
-	}
 	public int getQty() {
 		return qty;
 	}
