@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MenuUI {
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private MenuDAO dao = new MenuDAOmpl();
+	private MenuDAO dao = new MenuDAOImpl();
 	private IngredientDAO dio = new IngredientImpl();
 	
 	public void menu() {
