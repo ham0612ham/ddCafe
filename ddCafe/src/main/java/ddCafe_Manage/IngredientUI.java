@@ -19,7 +19,7 @@ public class IngredientUI {
 		while (true) {
 			try {
 				do {
-					System.out.print("\n1.재고확인 2.재료추가주문 3.입고내역 4.재고삭제 5.납품업체추가 6.납품업체확인 7.뒤로가기 => ");
+					System.out.print("\n1.재고확인 2.재료추가주문 3.입고내역 4.재고삭제 5.납품업체추가 6.납품업체확인 7.이전 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while (ch < 1 || ch > 7);
 
