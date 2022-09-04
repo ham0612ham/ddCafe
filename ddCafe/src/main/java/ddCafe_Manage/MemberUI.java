@@ -253,7 +253,7 @@ public class MemberUI {
 
 			MemberDTO dto = dao.readMemberByTel(tel);
 
-			if (dto == null) {
+			if (dto.getName() == null) {
 				System.out.println("등록된 회원정보가 없습니다.");
 				return;
 			}
