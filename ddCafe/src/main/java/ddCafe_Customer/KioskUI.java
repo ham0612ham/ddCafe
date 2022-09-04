@@ -97,6 +97,7 @@ public class KioskUI {
 				} else {
 					System.out.println("\n메뉴 / 사이즈 / 가격 / 주문");
 				}
+				System.out.println("------------------------------------------");
 				for(MenuDTO dto : list3) {
 					System.out.print(n+"."+dto.getMenu()+" / ");
 					if(dto.getSize()==null) {
@@ -158,7 +159,7 @@ public class KioskUI {
 					
 					System.out.println("메뉴 추가가 완료되었습니다.");
 					System.out.println("\n🜚 장바구니 🜚");
-					
+					System.out.println("--------------------------------");
 					for(MenuDTO dto : shoppingList) {
 						System.out.println(dto.getMenu()+" / "+dto.getSize()+" / "+dto.getQty()+"개");
 					}
@@ -212,6 +213,8 @@ public class KioskUI {
 	
 	public int showShoppingList() {
 		int n = 1;
+		System.out.println("\n🜚 장바구니 🜚");
+		
 		for(MenuDTO dto : shoppingList) {
 			System.out.println(n +". "+ dto.getMenu()+" / "+dto.getSize()+" / "+dto.getQty()+"개");
 			n++;
@@ -367,17 +370,29 @@ public class KioskUI {
 	public int add_member() {
 		while(true) {
 			System.out.println("\n🜚 회원가입 🜚");
-			String name, tel;
+			String name, tel, ch;
 			int result;
+			boolean b = true;
 			String p = "010-\\d{4}-\\d{4}";
 			try {
-				System.out.println("이름 or 별명을 입력해주세요 => ");
-				name = br.readLine();
-				System.out.println("휴대폰번호를 입력해주세요 [010-0000-0000] => ");
-				tel = br.readLine();
-				if(!tel.matches(p)) {
-					System.out.println("입력 형식이 일치하지 않습니다[010-0000-0000]");
-				} 
+				do {
+					System.out.println("이름 or 별명을 입력해주세요 => ");
+					name = br.readLine();
+					System.out.println("휴대폰번호를 입력해주세요 [010-0000-0000] => ");
+					tel = br.readLine();
+					if(!tel.matches(p)) {
+						System.out.println("입력 형식이 일치하지 않습니다[010-0000-0000]");
+						System.out.print("다시 시도하시겠습니까? [1.예/2.아니오] => ");
+						ch = br.readLine();
+						if(ch.equals("2")) {
+							return 567;
+						} else {
+							b = true;
+						}
+					} else {
+						b = false;
+					}
+				} while(b);
 				result = dao.addMember(name, tel);
 				if(result==0) {
 					System.out.println("회원 등록이 실패됐습니다.");
