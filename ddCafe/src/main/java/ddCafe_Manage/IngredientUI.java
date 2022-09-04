@@ -92,6 +92,7 @@ public class IngredientUI {
 			do {
 				System.out.print("\n추가할 재료를 입력해주세요. [새로운 재료 추가 : 0] => ");
 				ch = Integer.parseInt(br.readLine());
+				
 				if (ch == 0) {
 					newIngredient();
 					return;
@@ -122,7 +123,8 @@ public class IngredientUI {
 			}
 			return;
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("재료 추가 실패하였습니다. 메뉴로 돌아갑니다.");
+//			e.printStackTrace();
 		}
 		System.out.println();
 	}
@@ -149,13 +151,21 @@ public class IngredientUI {
 			do {
 				System.out.print("\n새로운 재료를 공급받을 업체를 입력해주세요. => ");
 				ch = Integer.parseInt(br.readLine());
+				
 			} while (ch < 1 || ch > list1.size());
 
+			
+			
 			dto1 = list1.get(ch - 1);
 
 			do {
 				System.out.print("\n" + dto1.getVendor_name() + "에서 추가 할 재료 이름 => ");
 				new_ingredient = br.readLine();
+				if (new_ingredient.length() >= 20) {
+					System.out.println("20자 이하로 입력해주세요.");
+				} else if (new_ingredient.length() < 1) {
+					System.out.println("재료 이름을 입력해주세요.");
+				}
 				System.out.print("\n단가 => ");
 				pri = Integer.parseInt(br.readLine());
 				System.out.print("\n" + new_ingredient + "(을)를 추가하시겠습니까? [1.예/2.아니오] => ");
@@ -182,8 +192,11 @@ public class IngredientUI {
 				System.out.println("\n재료 등록 취소. 메뉴로 돌아갑니다.");
 				return;
 			}
+		} catch (NumberFormatException e) {
+			System.out.println("필수사항을 입력하지 않았습니다. 메뉴로 돌아갑니다.");
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("새로운 재료 등록 실패하였습니다. 메뉴로 돌아갑니다.");
 		}
 		return;
 	}
@@ -256,7 +269,7 @@ public class IngredientUI {
 				return;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("재료 폐기를 실패하였습니다. 메뉴로 돌아갑니다.");
 		}
 		System.out.println();
 	}
@@ -272,7 +285,7 @@ public class IngredientUI {
 
 			try {
 				do {
-					System.out.print("\n업체 이름 => ");
+					System.out.print("\n업체 이름 [이전 : 0] => ");
 					vendorName = br.readLine();
 					List<IngredientDTO> list = dao.vendorList();
 					for (IngredientDTO dto : list) {
@@ -280,6 +293,9 @@ public class IngredientUI {
 							System.out.println("이미 등록된 업체입니다.");
 							return;
 						}
+					}
+					if (vendorName.equals("0")) {
+						return;
 					}
 					if (vendorName.length() >= 20) {
 						System.out.println("20자 이하로 입력해주세요.");
@@ -317,8 +333,7 @@ public class IngredientUI {
 				System.out.println("\n" + vendorName + " 업체가 등록 되었습니다. 메뉴로 돌아갑니다.");
 				return;
 			} catch (Exception e) {
-				System.out.println("업체추가에 실패했습니다.");
-				e.printStackTrace();
+				System.out.println("업체 등록이 실패했습니다. 메뉴로 돌아갑니다.");
 			}
 		}
 	}
