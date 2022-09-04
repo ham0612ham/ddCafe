@@ -68,7 +68,7 @@ public class SalesUI {
 
 			try {
 				do {
-					System.out.print("\n1.일 매출 2.주 매출 3.월 매출 4.년 매출 5.뒤로가기 => ");
+					System.out.print("\n1.일 매출 2.주 매출 3.월 매출 4.년 매출 5.이전 => ");
 					ch = Integer.parseInt(br.readLine());
 				} while (ch < 1 || ch > 5);
 
@@ -244,7 +244,7 @@ public class SalesUI {
 		try {
 
 			do {
-				System.out.println("1.매출리스트 2.월매출총합 [종료 : 0] => ");
+				System.out.print("1.매출리스트 2.월매출총합 [종료 : 0] => ");
 				ch = Integer.parseInt(br.readLine());
 			} while (ch < 0 || ch > 2);
 
@@ -294,7 +294,7 @@ public class SalesUI {
 		try {
 
 			do {
-				System.out.println("1.매출리스트 2.년매출총합 [종료 : 0] => ");
+				System.out.print("1.매출리스트 2.년매출총합 [종료 : 0] => ");
 				ch = Integer.parseInt(br.readLine());
 			} while (ch < 0 || ch > 2);
 
