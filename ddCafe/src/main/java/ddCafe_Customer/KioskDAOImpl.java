@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import db.util.DBConn;
-import ddCafe_Manage.SalesDTO;
 
 public class KioskDAOImpl implements KioskDAO{
 	private Connection conn = DBConn.getConnection();
@@ -235,12 +234,13 @@ public class KioskDAOImpl implements KioskDAO{
 		String sql;
 
 		try {
-			sql = " SELECT menu_code, rank FROM( "
-					+ " SELECT menu_name,SUM(order_qty) qty ,RANK() OVER(ORDER BY SUM(order_qty) DESC) rank, m2.menu_code "
-					+ " FROM order_detail o1 " + " JOIN menu_detail m1 ON o1.menu_detail_code = m1.menu_detail_code "
-					+ " JOIN menu m2 ON m1.menu_code = m2.menu_code " 
-					+ " GROUP BY menu_name, m2.menu_code "
-					+ " )WHERE rank <=3 ";
+			sql = "SELECT menu_name, rank, qty FROM( "
+					+ "SELECT menu_name,SUM(order_qty) qty ,RANK() OVER(ORDER BY SUM(order_qty) DESC) rank, m2.menu_code "
+					+ "FROM order_detail o1 "
+					+ "JOIN menu_detail m1 ON o1.menu_detail_code = m1.menu_detail_code "
+					+ "JOIN menu m2 ON m1.menu_code = m2.menu_code\n"
+					+ "GROUP BY menu_name, m2.menu_code "
+					+ ")WHERE rank <=3 ";
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -249,7 +249,7 @@ public class KioskDAOImpl implements KioskDAO{
 			while (rs.next()) {
 				MenuDTO dto = new MenuDTO();
 
-				dto.setMenu_detail_code(rs.getInt("menu_code"));
+				dto.setMenu(rs.getString("menu_name"));
 				dto.setRank(rs.getInt("rank"));
 
 				list.add(dto);

@@ -3,8 +3,6 @@ package ddCafe_Customer;
 import java.sql.SQLException;
 import java.util.List;
 
-import ddCafe_Manage.SalesDTO;
-
 public interface KioskDAO {
 	// public void choiceTogo(int a); // 포장, 매장 선택
 	public List<String> showCategory(); // 카테고리 불러오기
