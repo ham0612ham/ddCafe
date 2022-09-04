@@ -160,7 +160,7 @@ public class MenuUI {
 				System.out.print("주문가능 / ");
 			}
 			System.out.print(dto.getMenuPrice()+" / ");
-			if(dto.getMenuSize()==null) {
+			if(dto.getMenuSize().equals("null")) {
 	            System.out.println("사이즈 없음");
 	         } else {
 	            System.out.println(dto.getMenuSize());
@@ -197,7 +197,7 @@ public class MenuUI {
 					System.out.print("주문가능 / ");
 				}
 				System.out.print(dto.getMenuPrice()+" / ");
-				if(dto.getMenuSize()==null) {
+				if(dto.getMenuSize().equals("null")) {
 		            System.out.println("사이즈 없음");
 		         } else {
 		            System.out.println(dto.getMenuSize());
@@ -213,7 +213,7 @@ public class MenuUI {
 		System.out.println("\n✦ 품절 메뉴 보기 ︎✦");
 		
 		System.out.println("메뉴");
-		System.out.println("-------------------------");
+		System.out.println("--------------");
 		
 		List<MenuDTO> list = dao.listSoldout();
 		for(MenuDTO dto : list) {
