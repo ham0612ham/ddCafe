@@ -147,7 +147,7 @@ public class MenuUI {
 	public void list_menu() {
 		System.out.println("\n✦ 메뉴 리스트 ✦");
 		System.out.println("메뉴번호 / 메뉴이름 / 카테고리번호 / 상태 / 가격 / 사이즈");
-		System.out.println("-----------------------------------------------------------------------");
+		System.out.println("----------------------------------------------");
 		
 		List<MenuDTO> list = dao.listMenu();
 		for(MenuDTO dto : list) {
@@ -173,7 +173,7 @@ public class MenuUI {
 	public void read_menu() {
 		System.out.println("\n✦ 메뉴 검색 ✦");
 		System.out.println("메뉴번호 / 메뉴이름 / 카테고리번호 / 상태 / 가격 / 사이즈");
-		System.out.println("-----------------------------------------------------------------------");
+		System.out.println("----------------------------------------------");
 		
 		String name;
 		
