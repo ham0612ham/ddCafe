@@ -378,9 +378,9 @@ public class KioskUI {
 			String p = "010-\\d{4}-\\d{4}";
 			try {
 				do {
-					System.out.println("이름 or 별명을 입력해주세요 => ");
+					System.out.print("이름 or 별명을 입력해주세요 => ");
 					name = br.readLine();
-					System.out.println("휴대폰번호를 입력해주세요 [010-0000-0000] => ");
+					System.out.print("휴대폰번호를 입력해주세요 [010-0000-0000] => ");
 					tel = br.readLine();
 					if(!tel.matches(p)) {
 						System.out.println("입력 형식이 일치하지 않습니다[010-0000-0000]");
