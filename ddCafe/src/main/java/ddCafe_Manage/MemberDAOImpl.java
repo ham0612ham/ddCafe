@@ -24,7 +24,8 @@ public class MemberDAOImpl implements MemberDAO{
 		
 		try {
 			sql = " SELECT member_code, member_name, member_tel, member_date FROM member "
-					+" WHERE INSTR(member_name, ?) > 0";
+					+" WHERE INSTR(member_name, ?) > 0 "
+					+" ORDER BY member_code";
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -172,7 +173,8 @@ public class MemberDAOImpl implements MemberDAO{
 		
 		try {
 			sql = " SELECT member_code, member_name, member_tel, TO_CHAR(member_date,'YYYY-MM-DD') member_date FROM member "
-					+ " WHERE member_tel IS NOT NULL ";
+					+ " WHERE member_tel IS NOT NULL "
+					+ " ORDER BY member_code";
 			
 			pstmt = conn.prepareStatement(sql);
 			

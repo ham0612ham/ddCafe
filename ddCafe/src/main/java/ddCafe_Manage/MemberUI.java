@@ -11,7 +11,6 @@ public class MemberUI {
 	public void menu() {
 
 		int ch;
-		
 
 		while (true) {
 			System.out.println("\n✦ 회원 메뉴 ✦");
@@ -70,11 +69,11 @@ public class MemberUI {
 				return;
 			}
 
-			System.out.println();
 			System.out.println("회원번호 / 회원이름 / 전화번호 / 회원등록일");
+			System.out.println("-----------------------------------------");
 
 			for (MemberDTO dto : list) {
-				System.out.print(dto.getMemberNum() + " / ");
+				System.out.print(dto.getMemberNum() + ".");
 				System.out.print(dto.getName() + " / ");
 				System.out.print(dto.getTel() + " / ");
 				System.out.println(dto.getDate());
@@ -116,10 +115,10 @@ public class MemberUI {
 				return;
 			}
 
-			System.out.println();
 			System.out.println("회원번호 / 회원이름 / 전화번호 / 회원등록일");
+			System.out.println("-----------------------------------------");
 
-			System.out.print(dto.getMemberNum() + " / ");
+			System.out.print(dto.getMemberNum() + ".");
 			System.out.print(dto.getName() + " / ");
 			System.out.print(dto.getTel() + " / ");
 			System.out.println(dto.getDate());
@@ -135,13 +134,13 @@ public class MemberUI {
 	public void listMember() {
 		System.out.println("\n✦ 회원 리스트 ︎✦");
 
-		System.out.println();
 		System.out.println("회원번호 / 회원이름 / 전화번호 / 회원등록일");
+		System.out.println("-----------------------------------------");
 
 		List<MemberDTO> list = dao.listMember();
 
 		for (MemberDTO dto : list) {
-			System.out.print(dto.getMemberNum() + " / ");
+			System.out.print(dto.getMemberNum() + ".");
 			System.out.print(dto.getName() + " / ");
 			System.out.print(dto.getTel() + " / ");
 			System.out.println(dto.getDate());
