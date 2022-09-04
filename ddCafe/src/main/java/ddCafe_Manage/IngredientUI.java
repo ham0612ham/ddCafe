@@ -263,12 +263,21 @@ public class IngredientUI {
 			String vendorName, managerName, managerTel; 
 			String compRegisNum;
 			int result;
+			String n = "^[0-9][a-zA-Z][가-힣]*$";
 			String p = "010-\\d{4}-\\d{4}";
 			String r = "^[0-9]{10}$";
 			
 			try {
-				System.out.print("\n업체 이름 => ");
-				vendorName = br.readLine();
+				
+				do {
+					System.out.print("\n업체 이름 => ");
+					vendorName = br.readLine();
+					if(vendorName.matches(n)) {
+					} else if(!vendorName.matches(n)) {
+						System.out.println("\n업체 이름을 입력해주세요.");
+					}
+				} while (!vendorName.matches(n));
+				
 				System.out.print("\n매니저 이름 => ");
 				managerName = br.readLine();
 				
@@ -297,6 +306,7 @@ public class IngredientUI {
 				}
 				System.out.println("\n" + vendorName + " 업체가 등록 되었습니다. 메뉴로 돌아갑니다.");
 				return;
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
