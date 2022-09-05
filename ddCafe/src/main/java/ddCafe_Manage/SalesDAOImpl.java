@@ -101,8 +101,8 @@ public class SalesDAOImpl implements SalesDAO {
 	}
 
 	@Override
-	public List<SalesDTO> totalPanmai() {
-		List<SalesDTO> list = new ArrayList<>();
+	public int totalPanmai() {
+		int result=0;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
@@ -119,12 +119,10 @@ public class SalesDAOImpl implements SalesDAO {
 
 			rs = pstmt.executeQuery();
 
-			while (rs.next()) {
-				SalesDTO dto = new SalesDTO();
+			if (rs.next()) {
 
-				dto.setQty(rs.getInt("total_qty"));
+				result = rs.getInt("total_qty");
 
-				list.add(dto);
 
 			}
 		} catch (Exception e) {
@@ -145,8 +143,7 @@ public class SalesDAOImpl implements SalesDAO {
 				}
 			}
 		}
-		return list;
-
+		return result;
 	}
 
 	@Override

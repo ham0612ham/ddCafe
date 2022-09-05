@@ -116,10 +116,9 @@ public class SalesUI {
 			
 			index++;
 		}
-		List<SalesDTO> total = dao.totalPanmai();
-		for(SalesDTO dto : total) {
-			System.out.println("판매량 합계 : "+dto.getQty());
-		}
+		int total = dao.totalPanmai();
+		
+		System.out.println("판매량 합계 : "+total);
 
 	}
 
