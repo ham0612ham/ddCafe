@@ -242,7 +242,6 @@ public class KioskUI {
 	}
 	
 	public int showShoppingList() {
-		int n = 1;
 		System.out.println("\n🜚 장바구니 🜚");
 		System.out.println("------------------------");
 		for (MenuDTO mdto : shoppingList) {
@@ -263,7 +262,6 @@ public class KioskUI {
 			System.out.println("\n🜚 메뉴 삭제 🜚");
 			System.out.println("------------------------");
 			int ch;
-			int n = 1;
 			for (MenuDTO mdto : shoppingList) {
 				System.out.print(mdto.getMenu() + " / ");
 				if(mdto.getSize().equals("null")) {
@@ -298,7 +296,6 @@ public class KioskUI {
 			System.out.println("\n🜚 개수 변경 🜚");
 			System.out.println("------------------------");
 			int ch, qty;
-			int n = 1;
 			for (MenuDTO mdto : shoppingList) {
 				System.out.print(mdto.getMenu() + " / ");
 				if(mdto.getSize().equals("null")) {
