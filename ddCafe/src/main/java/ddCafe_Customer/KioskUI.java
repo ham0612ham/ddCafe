@@ -187,7 +187,13 @@ public class KioskUI {
 				System.out.println("\n🜚 장바구니 🜚");
 				System.out.println("------------------------");
 				for (MenuDTO mdto : shoppingList) {
-					System.out.println(mdto.getMenu() + " / " + mdto.getSize() + " / " + mdto.getQty() + "개");
+					System.out.print(mdto.getMenu() + " / ");
+					if(mdto.getSize().equals("null")) {
+						System.out.print("사이즈 없음");
+					} else {
+						System.out.print(mdto.getSize());
+					}
+					System.out.println(" / " + mdto.getQty() + "개");
 				}
 				System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 				int result = afterchoice();
@@ -239,9 +245,14 @@ public class KioskUI {
 		int n = 1;
 		System.out.println("\n🜚 장바구니 🜚");
 		System.out.println("------------------------");
-		for(MenuDTO dto : shoppingList) {
-			System.out.println(n +". "+ dto.getMenu()+" / "+dto.getSize()+" / "+dto.getQty()+"개");
-			n++;
+		for (MenuDTO mdto : shoppingList) {
+			System.out.print(mdto.getMenu() + " / ");
+			if(mdto.getSize().equals("null")) {
+				System.out.print("사이즈 없음");
+			} else {
+				System.out.print(mdto.getSize());
+			}
+			System.out.println(" / " + mdto.getQty() + "개");
 		}
 		System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 		return 567;
@@ -253,9 +264,14 @@ public class KioskUI {
 			System.out.println("------------------------");
 			int ch;
 			int n = 1;
-			for(MenuDTO dto : shoppingList) {
-				System.out.println(n +". "+ dto.getMenu()+" / "+dto.getSize()+" / "+dto.getQty()+"개");
-				n++;
+			for (MenuDTO mdto : shoppingList) {
+				System.out.print(mdto.getMenu() + " / ");
+				if(mdto.getSize().equals("null")) {
+					System.out.print("사이즈 없음");
+				} else {
+					System.out.print(mdto.getSize());
+				}
+				System.out.println(" / " + mdto.getQty() + "개");
 			}
 			System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 			try {
@@ -283,9 +299,14 @@ public class KioskUI {
 			System.out.println("------------------------");
 			int ch, qty;
 			int n = 1;
-			for(MenuDTO dto : shoppingList) {
-				System.out.println(n +". "+ dto.getMenu()+" / "+dto.getSize()+" / "+dto.getQty()+"개");
-				n++;
+			for (MenuDTO mdto : shoppingList) {
+				System.out.print(mdto.getMenu() + " / ");
+				if(mdto.getSize().equals("null")) {
+					System.out.print("사이즈 없음");
+				} else {
+					System.out.print(mdto.getSize());
+				}
+				System.out.println(" / " + mdto.getQty() + "개");
 			}
 			System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 			try {
@@ -454,8 +475,14 @@ public class KioskUI {
 					ch = Integer.parseInt(br.readLine());
 				} while (ch < 1 || ch > list.size());
 				payment_method = list.get(ch - 1);
-				for (MenuDTO dto : shoppingList) {
-					System.out.println(dto.getMenu() + " / " + dto.getSize() + " / " + dto.getQty() + "개");
+				for (MenuDTO mdto : shoppingList) {
+					System.out.print(mdto.getMenu() + " / ");
+					if(mdto.getSize().equals("null")) {
+						System.out.print("사이즈 없음");
+					} else {
+						System.out.print(mdto.getSize());
+					}
+					System.out.println(" / " + mdto.getQty() + "개");
 				}
 				System.out.println("총가격 : " + dao.totalPrice(shoppingList));
 				if (stampUse_price > 0) {
